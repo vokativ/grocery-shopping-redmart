@@ -1,0 +1,253 @@
+catalog_version: 1
+store:
+  name: RedMart on Lazada Singapore
+  country: Singapore
+  canonical_url_pattern: "https://www.lazada.sg/products/i<item_id>-s<sku_id>.html"
+  notes:
+    - Use canonical_url for shopping runs.
+    - Ignore long tracking and search parameters such as spm, priceCompare, search, request_id, and observed referrers.
+    - observed_price_sgd is a reference from 2026-07-07, not a buying rule.
+    - Prefer products available for delivery today or tomorrow. Two days from now is acceptable. More than two days from now needs human review.
+
+items:
+  - id: rice_crackers
+    category: pantry_snacks
+    default_quantity: 1
+    aliases:
+      - rice crackers
+      - black rice crackers
+      - crackers
+    preferred_products:
+      - rank: 1
+        title: "Ceres Organics Black Rice Crackers Thailand's Riceberry - By Optimo Foods"
+        item_id: "303784320"
+        sku_id: "537486360"
+        canonical_url: "https://www.lazada.sg/products/i303784320-s537486360.html"
+        pack_size: "115 g"
+        observed_price_sgd: 4.28
+    notes: "First preference from the 2026-07-07 cart."
+
+  - id: big_garbage_bags
+    category: household
+    default_quantity: 2
+    aliases:
+      - big garbage bags
+      - garbage bags
+      - trash bags
+      - bin bags
+      - black trash bags
+    preferred_products:
+      - rank: 1
+        title: "RedMart 50L HDPE Garbage Bag With Handle Ties - Black Trash Bag"
+        item_id: "303292174"
+        sku_id: "536598345"
+        canonical_url: "https://www.lazada.sg/products/i303292174-s536598345.html"
+        pack_size: "15 Per Pack"
+        observed_price_sgd: 2.44
+    notes: "Default quantity is 2 from the 2026-07-07 cart."
+
+  - id: persil_powder
+    category: household
+    default_quantity: 1
+    aliases:
+      - persil powder
+      - detergent
+      - laundry detergent
+      - persil detergent
+      - washing powder
+      - persil
+      - personal powder
+    preferred_products:
+      - rank: 1
+        title: "Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG"
+        item_id: "304106042"
+        sku_id: "538220611"
+        canonical_url: "https://www.lazada.sg/products/i304106042-s538220611.html"
+        pack_size: "4.5 kg"
+        observed_price_sgd: 15.29
+    notes: "Use this for whiteboard text like 'persil powder'."
+
+  - id: eggs
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - eggs
+      - egg
+    preferred_products:
+      - rank: 1
+        title: "RedMart 15 Eggs 15 X 60G"
+        item_id: "301088929"
+        sku_id: "527120220"
+        canonical_url: "https://www.lazada.sg/products/i301088929-s527120220.html"
+        pack_size: "15 x 60 g"
+        observed_price_sgd: 4.65
+    notes: "Family default for generic 'eggs'."
+
+  - id: capsicum
+    category: produce
+    default_quantity: 1
+    aliases:
+      - capsicum
+      - bell peppers
+      - peppers
+      - traffic light capsicum
+    preferred_products:
+      - rank: 1
+        title: "RedMart Traffic Light Capsicum Bell Peppers 3s"
+        item_id: "327262071"
+        sku_id: "692076794"
+        canonical_url: "https://www.lazada.sg/products/i327262071-s692076794.html"
+        pack_size: "450 g"
+        observed_price_sgd: 4.35
+    notes: "Three-color capsicum pack."
+
+  - id: tortilla_chips
+    category: pantry_snacks
+    default_quantity: 1
+    aliases:
+      - tortilla chips
+      - corn chips
+      - mission chips
+    preferred_products:
+      - rank: 1
+        title: "Mission Multigrain Corn Chips"
+        item_id: "303248836"
+        sku_id: "536550938"
+        canonical_url: "https://www.lazada.sg/products/i303248836-s536550938.html"
+        pack_size: "170 g"
+        observed_price_sgd: 4.17
+    notes: "Pack size confirmed during the 2026-07-07 cart-fill test run."
+
+  - id: ham
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - ham
+      - chicken ham
+      - smoked chicken ham
+    preferred_products:
+      - rank: 1
+        title: "RedMart Smoked Chicken Ham"
+        item_id: "318264428"
+        sku_id: "611366135"
+        canonical_url: "https://www.lazada.sg/products/i318264428-s611366135.html"
+        pack_size: "150 g"
+        observed_price_sgd: 4.40
+    notes: "Maps the whiteboard item 'HAM'."
+
+  - id: chicken_breast
+    category: chilled
+    default_quantity: 2
+    aliases:
+      - chicken breast
+      - chicken breasts
+      - boneless chicken breast
+    preferred_products:
+      - rank: 1
+        title: "FarmFresh Chicken Breast Boneless"
+        item_id: "787612808"
+        sku_id: "2590912925"
+        canonical_url: "https://www.lazada.sg/products/i787612808-s2590912925.html"
+        pack_size: "200 g"
+        observed_price_sgd: 2.62
+    notes: "Default quantity is 2 from the 2026-07-07 cart."
+
+  - id: papaya
+    category: produce
+    default_quantity: 1
+    aliases:
+      - papaya
+      - solo papaya
+    preferred_products:
+      - rank: 1
+        title: "Sumifru Solo Papaya"
+        item_id: "301130721"
+        sku_id: "527192914"
+        canonical_url: "https://www.lazada.sg/products/i301130721-s527192914.html"
+        pack_size: "730 g"
+        observed_price_sgd: 3.48
+    notes: "Maps generic 'papaya'."
+
+  - id: watermelon
+    category: produce
+    default_quantity: 1
+    aliases:
+      - watermelon
+      - small watermelon
+      - thai watermelon
+    preferred_products:
+      - rank: 1
+        title: "Small Thai Watermelon"
+        item_id: "301118012"
+        sku_id: "527094969"
+        canonical_url: "https://www.lazada.sg/products/i301118012-s527094969.html"
+        pack_size: "1.8 kg"
+        observed_price_sgd: 6.95
+    notes: "Maps generic 'watermelon'."
+
+  - id: coconut_oil
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - coconut oil
+      - cooking oil
+    preferred_products:
+      - rank: 1
+        title: "Marca Leon Coconut Oil 1 Ltr"
+        item_id: "303180934"
+        sku_id: "536444588"
+        canonical_url: "https://www.lazada.sg/products/i303180934-s536444588.html"
+        pack_size: "1 L"
+        observed_price_sgd: 9.65
+    notes: "Added to today's cart as cooking oil."
+
+  - id: olive_oil
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - olive oil
+      - extra virgin olive oil
+      - evoo
+    preferred_products:
+      - rank: 1
+        title: "RedMart Extra Virgin Olive Oil (EVOO)- 1L"
+        item_id: "301196092"
+        sku_id: "527266381"
+        canonical_url: "https://www.lazada.sg/products/i301196092-s527266381.html"
+        pack_size: "1 L"
+        observed_price_sgd: 18.81
+    notes: "Added to today's cart as an extra item."
+
+  - id: spring_onion_kimchi
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - spring onion kimchi
+      - green onion kimchi
+      - pa kimchi
+    preferred_products:
+      - rank: 1
+        title: "JIN Spring Onion Kimchi Korean Banchan"
+        item_id: "2124778809"
+        sku_id: "12060083764"
+        canonical_url: "https://www.lazada.sg/products/i2124778809-s12060083764.html"
+        pack_size: "345 g"
+        observed_price_sgd: 8.20
+    notes: "Optional known cart item from 2026-07-07; not on the whiteboard list."
+
+  - id: spicy_kimchi
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - spicy kimchi
+      - kimchi
+      - korean banchan
+    preferred_products:
+      - rank: 1
+        title: "JIN Spicy Kimchi Korean Banchan"
+        item_id: "2124781720"
+        sku_id: "12060189079"
+        canonical_url: "https://www.lazada.sg/products/i2124781720-s12060189079.html"
+        pack_size: "400 g"
+        observed_price_sgd: 6.90
+    notes: "Optional known cart item from 2026-07-07; not on the whiteboard list."
