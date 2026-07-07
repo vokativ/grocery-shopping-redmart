@@ -9,6 +9,15 @@ This is intentionally not a full home-automation system. The goal is simple:
 3. Have the agent prepare the RedMart cart in a logged-in browser.
 4. Stop before checkout so a human reviews delivery, payment, and the final order.
 
+## What This Requires
+
+This workflow needs a computer/browser session that can actually use RedMart:
+
+- Chrome or another controllable browser must already be logged into Lazada/RedMart.
+- The agent needs permission to use that browser session, because it relies on your existing cookies and cart.
+- The agent prepares the cart on the logged-in account. You can then review and checkout from that browser, or usually from another device/app logged into the same Lazada account if the cart syncs normally.
+- This does not bypass login, payment, delivery-slot selection, or human checkout.
+
 ## What Is In This Repo
 
 - `grocery-catalog.yaml` - the source of truth for grocery aliases, default quantities, and preferred RedMart/Lazada product URLs.
@@ -43,6 +52,29 @@ Text overrides work well. Examples:
 - `no detergent`
 - `add sparkling wine`
 - `skip chicken breast`
+
+## Example
+
+Here is the seed grocery-list image:
+
+![Example whiteboard grocery list](examples/grocery_list_example_20260707.jpg)
+
+With the current catalog, that image maps to this proposed RedMart cart:
+
+| List item | Product | Quantity |
+| --- | --- | ---: |
+| rice crackers | Ceres Organics Black Rice Crackers Thailand's Riceberry | 1 |
+| big garbage bags | RedMart 50L HDPE Garbage Bag With Handle Ties | 2 |
+| persil powder | Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG | 1 |
+| eggs | RedMart 15 Eggs 15 X 60G | 1 |
+| capsicum | RedMart Traffic Light Capsicum Bell Peppers 3s | 1 |
+| tortilla chips | Mission Multigrain Corn Chips | 1 |
+| ham | RedMart Smoked Chicken Ham | 1 |
+| chicken breast | FarmFresh Chicken Breast Boneless | 2 |
+| papaya | Sumifru Solo Papaya | 1 |
+| watermelon | Small Thai Watermelon | 1 |
+
+An agent should show a table like this before it touches the browser. After approval, it opens the canonical product URLs, checks delivery availability, adds the items, adjusts quantities, verifies the cart, and stops.
 
 ## Safety Rules
 
@@ -80,10 +112,6 @@ https://www.lazada.sg/products/i<item_id>-s<sku_id>.html
 ```
 
 Long tracking/search parameters such as `spm`, `priceCompare`, `search`, and `request_id` should not be stored as primary URLs.
-
-## Example
-
-The seed example is `examples/grocery_list_example_20260707.jpg`. It includes rice crackers, big garbage bags, Persil powder, eggs, capsicum, tortilla chips, ham, chicken breast, papaya, and watermelon.
 
 ## Notes
 
