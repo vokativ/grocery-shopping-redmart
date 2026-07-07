@@ -53,26 +53,63 @@ Text overrides work well. Examples:
 - `add sparkling wine`
 - `skip chicken breast`
 
+## Make It Yours
+
+This repository ships with one family's grocery catalog. To use the pattern for your own RedMart account, you can either edit the YAML by hand or ask an agent to rebuild it from your browser.
+
+The easiest setup path:
+
+1. Log into Lazada/RedMart in a browser the agent can control.
+2. Manually search RedMart and open product pages for the items you buy often.
+3. If you already have a representative cart, open the cart too.
+4. Tell the agent to reset or replace `grocery-catalog.yaml` with your own products.
+5. For each item, give the family-language aliases you actually use, such as `milk`, `eggs`, `trash bags`, or `dish soap`.
+6. Ask the agent to scrape product titles, canonical URLs, item IDs, SKU IDs, pack sizes, usual quantities, and price references.
+7. Review the generated catalog before using it for a real cart fill.
+
+Useful setup prompt:
+
+```text
+I want to adapt this RedMart grocery repo for my family.
+Use the RedMart product tabs and cart I have open.
+Replace grocery-catalog.yaml with my products.
+Use default quantities from the cart where possible.
+Ask me about aliases if they are not obvious.
+Do not checkout or place an order.
+```
+
+You do not need to finish the catalog in one sitting. A practical approach is to add items after normal grocery orders for a few weeks. After a couple of buys, most repeat items will be in the catalog.
+
 ## Example
 
-Here is the seed grocery-list image:
+The seed grocery-list image maps to this proposed RedMart cart:
 
-![Example whiteboard grocery list](examples/grocery_list_example_20260707.jpg)
-
-With the current catalog, that image maps to this proposed RedMart cart:
-
-| List item | Product | Quantity |
-| --- | --- | ---: |
-| rice crackers | Ceres Organics Black Rice Crackers Thailand's Riceberry | 1 |
-| big garbage bags | RedMart 50L HDPE Garbage Bag With Handle Ties | 2 |
-| persil powder | Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG | 1 |
-| eggs | RedMart 15 Eggs 15 X 60G | 1 |
-| capsicum | RedMart Traffic Light Capsicum Bell Peppers 3s | 1 |
-| tortilla chips | Mission Multigrain Corn Chips | 1 |
-| ham | RedMart Smoked Chicken Ham | 1 |
-| chicken breast | FarmFresh Chicken Breast Boneless | 2 |
-| papaya | Sumifru Solo Papaya | 1 |
-| watermelon | Small Thai Watermelon | 1 |
+<table>
+  <tr>
+    <td width="38%" valign="top">
+      <img src="examples/grocery_list_example_20260707.jpg" alt="Example whiteboard grocery list" width="280">
+    </td>
+    <td width="62%" valign="top">
+      <table>
+        <tr>
+          <th align="left">List item</th>
+          <th align="left">Product</th>
+          <th align="right">Qty</th>
+        </tr>
+        <tr><td>rice crackers</td><td>Ceres Organics Black Rice Crackers Thailand's Riceberry</td><td align="right">1</td></tr>
+        <tr><td>big garbage bags</td><td>RedMart 50L HDPE Garbage Bag With Handle Ties</td><td align="right">2</td></tr>
+        <tr><td>persil powder</td><td>Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG</td><td align="right">1</td></tr>
+        <tr><td>eggs</td><td>RedMart 15 Eggs 15 X 60G</td><td align="right">1</td></tr>
+        <tr><td>capsicum</td><td>RedMart Traffic Light Capsicum Bell Peppers 3s</td><td align="right">1</td></tr>
+        <tr><td>tortilla chips</td><td>Mission Multigrain Corn Chips</td><td align="right">1</td></tr>
+        <tr><td>ham</td><td>RedMart Smoked Chicken Ham</td><td align="right">1</td></tr>
+        <tr><td>chicken breast</td><td>FarmFresh Chicken Breast Boneless</td><td align="right">2</td></tr>
+        <tr><td>papaya</td><td>Sumifru Solo Papaya</td><td align="right">1</td></tr>
+        <tr><td>watermelon</td><td>Small Thai Watermelon</td><td align="right">1</td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
 
 An agent should show a table like this before it touches the browser. After approval, it opens the canonical product URLs, checks delivery availability, adds the items, adjusts quantities, verifies the cart, and stops.
 
