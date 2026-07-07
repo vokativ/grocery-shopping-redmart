@@ -99,7 +99,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i327262071-s692076794.html"
         pack_size: "450 g"
         observed_price_sgd: 4.35
-    notes: "Three-color capsicum pack."
+    notes: "Three-color capsicum pack. The 2026-07-03 Palermo capsicum order item now resolves to an unavailable product page."
 
   - id: tortilla_chips
     category: pantry_snacks
@@ -218,6 +218,502 @@ items:
         observed_price_sgd: 18.81
     notes: "Added to today's cart as an extra item."
 
+  - id: tomato_sauce
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - tomato sauce
+      - pasta sauce
+      - passata
+      - tomato puree
+    preferred_products:
+      - rank: 1
+        title: "Prego Tomato Pasta Sauce Traditional 350g Jar"
+        item_id: "305138179"
+        sku_id: "541230322"
+        canonical_url: "https://www.lazada.sg/products/i305138179-s541230322.html"
+        pack_size: "350 g"
+        observed_price_sgd: 3.60
+      - rank: 2
+        title: "Supervalu Signature Tastes Rustic Passata Tomato Puree"
+        item_id: "2679250236"
+        sku_id: "17544118041"
+        canonical_url: "https://www.lazada.sg/products/i2679250236-s17544118041.html"
+        pack_size: "690 g"
+        observed_price_sgd: 4.23
+    notes: "Maps the 2026-07-03 whiteboard item 'tomato sauce'; order included both pasta sauce and passata."
+
+  - id: ground_beef
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - ground beef
+      - minced beef
+      - beef mince
+    preferred_products:
+      - rank: 1
+        title: "RedMart Fresh Premium Minced Beef - Australia"
+        item_id: "301098923"
+        sku_id: "527128205"
+        canonical_url: "https://www.lazada.sg/products/i301098923-s527128205.html"
+        pack_size: "300 g"
+        observed_price_sgd: 9.10
+    notes: "Maps the 2026-07-03 whiteboard item 'ground beef'."
+
+  - id: ground_pork
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - ground pork
+      - minced pork
+      - pork mince
+    preferred_products:
+      - rank: 1
+        title: "RedMart Australian Chilled Minced Pork (Freezer Ready Packaging)"
+        item_id: "304074281"
+        sku_id: "538202297"
+        canonical_url: "https://www.lazada.sg/products/i304074281-s538202297.html"
+        pack_size: "500 g"
+        observed_price_sgd: 6.95
+    notes: "Maps the 2026-07-03 whiteboard item 'pork' in the ground meat line."
+
+  - id: ground_chicken
+    category: frozen
+    default_quantity: 1
+    aliases:
+      - ground chicken
+      - minced chicken
+      - chicken mince
+    preferred_products:
+      - rank: 1
+        title: "RedMart Minced Chicken IQF - Frozen"
+        item_id: "3464540910"
+        sku_id: "22966857377"
+        canonical_url: "https://www.lazada.sg/products/i3464540910-s22966857377.html"
+        pack_size: "500 g"
+        observed_price_sgd: 5.95
+    notes: "Maps the 2026-07-03 whiteboard item 'chicken' in the ground meat line."
+
+  - id: sliced_cheese
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - sliced cheese
+      - cheese slices
+      - cheddar slices
+      - edam slices
+    preferred_products:
+      - rank: 1
+        title: "RedMart Sliced Edam Cheese (100% Natural Cheese)"
+        item_id: "3089420229"
+        sku_id: "21052862487"
+        canonical_url: "https://www.lazada.sg/products/i3089420229-s21052862487.html"
+        pack_size: "125 g"
+        observed_price_sgd: 4.50
+      - rank: 2
+        title: "RedMart Australian Sliced Cheddar Cheese (100% Natural Cheese)"
+        item_id: "3089551336"
+        sku_id: "21053142027"
+        canonical_url: "https://www.lazada.sg/products/i3089551336-s21053142027.html"
+        pack_size: "125 g"
+        observed_price_sgd: 4.50
+    notes: "Generic sliced cheese uses Edam first and cheddar as the ranked fallback."
+
+  - id: shredded_mozzarella
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - shredded mozzarella
+      - shredded mozzarella cheese
+      - mozzarella
+      - mozzarella cheese
+    preferred_products:
+      - rank: 1
+        title: "Tradition Shredded Mozzarella Cheese"
+        item_id: "301170240"
+        sku_id: "527260609"
+        canonical_url: "https://www.lazada.sg/products/i301170240-s527260609.html"
+        pack_size: "225 g"
+        observed_price_sgd: 5.24
+    notes: "Maps the 2026-07-03 whiteboard item 'shredded mozzarella cheese'."
+
+  - id: cheese_sticks
+    category: chilled
+    default_quantity: 2
+    aliases:
+      - cheese sticks
+      - cheese stick
+      - kid cheese sticks
+    preferred_products:
+      - rank: 1
+        title: "Arla Cheese Kid Sticks 108G (6 x 18G)"
+        item_id: "301156968"
+        sku_id: "527256419"
+        canonical_url: "https://www.lazada.sg/products/i301156968-s527256419.html"
+        pack_size: "108 g"
+        observed_price_sgd: 7.85
+    notes: "Default quantity is 2 from the 2026-07-03 order."
+
+  - id: apple_juice
+    category: beverages
+    default_quantity: 1
+    aliases:
+      - apple juice
+      - big apple juice
+    preferred_products:
+      - rank: 1
+        title: "RedMart NFC 100% Apple Juice 1L (Not from concentrate)"
+        item_id: "2895095689"
+        sku_id: "20067927281"
+        canonical_url: "https://www.lazada.sg/products/i2895095689-s20067927281.html"
+        pack_size: "1 L"
+        observed_price_sgd: 4.50
+    notes: "Big fridge apple juice from the 2026-07-03 whiteboard."
+
+  - id: apple_juice_boxes
+    category: beverages
+    default_quantity: 2
+    aliases:
+      - apple juice boxes
+      - apple juice box
+      - boxed apple juice
+      - small apple juice packs
+      - small apple juice
+      - juice packs
+    preferred_products:
+      - rank: 1
+        title: "Marigold 100% Apple Juice (6 X 200ML)"
+        item_id: "303950799"
+        sku_id: "538088354"
+        canonical_url: "https://www.lazada.sg/products/i303950799-s538088354.html"
+        pack_size: "6 x 200 ml"
+        observed_price_sgd: 5.29
+    notes: "Small boxed apple juice packs; default quantity is 2 from the 2026-07-03 order."
+
+  - id: dishwashing_liquid
+    category: household
+    default_quantity: 1
+    aliases:
+      - dishwashing liquid
+      - dish washing liquid
+      - dish soap
+      - washing up liquid
+    preferred_products:
+      - rank: 1
+        title: "RedMart Antibacterial Dish Washing Liquid - Lemon Fragrance"
+        item_id: "301192074"
+        sku_id: "527276152"
+        canonical_url: "https://www.lazada.sg/products/i301192074-s527276152.html"
+        pack_size: "750 ml"
+        observed_price_sgd: 1.90
+    notes: "Maps the 2026-07-03 whiteboard item 'dish washing liquid'."
+
+  - id: toilet_wipes
+    category: household
+    default_quantity: 3
+    aliases:
+      - toilet wipes
+      - flushable wipes
+      - wet toilet wipes
+    preferred_products:
+      - rank: 1
+        title: "RedMart Wet & Moist Flushable Toilet Tissue Paper 60 Sheets - Safe to Flush"
+        item_id: "304170218"
+        sku_id: "538362363"
+        canonical_url: "https://www.lazada.sg/products/i304170218-s538362363.html"
+        pack_size: "60 Per Pack"
+        observed_price_sgd: 3.70
+    notes: "Default quantity is 3 from the 2026-07-03 order."
+
+  - id: tissue_box
+    category: household
+    default_quantity: 1
+    aliases:
+      - tissue box
+      - tissue boxes
+      - facial tissue
+      - box tissue
+    preferred_products:
+      - rank: 1
+        title: "Premier Classic 2-Ply Facial Tissue - 5 Boxes [Design may Vary]"
+        item_id: "1105492861"
+        sku_id: "4268640922"
+        canonical_url: "https://www.lazada.sg/products/i1105492861-s4268640922.html"
+        pack_size: "200 Per Pack"
+        observed_price_sgd: 7.10
+      - rank: 2
+        title: "Vinda Classic 2-Ply Facial Tissue Box - 5 Box"
+        item_id: "3345577093"
+        sku_id: "22380105291"
+        canonical_url: "https://www.lazada.sg/products/i3345577093-s22380105291.html"
+        pack_size: "90 Per Pack"
+        observed_price_sgd: 4.60
+    notes: "The 2026-07-03 order included both Premier and Vinda tissue boxes."
+
+  - id: kitchen_towel
+    category: household
+    default_quantity: 1
+    aliases:
+      - kitchen towel
+      - kitchen towels
+      - paper towel
+      - kitchen paper
+    preferred_products:
+      - rank: 1
+        title: "RedMart Strong and Absorbent 2Ply Kitchen Paper Towel - 6 Rolls"
+        item_id: "301082945"
+        sku_id: "527114260"
+        canonical_url: "https://www.lazada.sg/products/i301082945-s527114260.html"
+        pack_size: "6 x 60 Per Pack"
+        observed_price_sgd: 4.55
+    notes: "Maps the 2026-07-03 whiteboard item 'kitchen towel'."
+
+  - id: toilet_tissue
+    category: household
+    default_quantity: 1
+    aliases:
+      - toilet tissue
+      - toilet paper
+      - toilet rolls
+    preferred_products:
+      - rank: 1
+        title: "RedMart Luxuriously Soft 3Ply Toilet Tissue Paper - 10 Rolls"
+        item_id: "301096855"
+        sku_id: "527104735"
+        canonical_url: "https://www.lazada.sg/products/i301096855-s527104735.html"
+        pack_size: "10 x 200 Per Pack"
+        observed_price_sgd: 5.60
+    notes: "Maps the 2026-07-03 whiteboard item 'toilet tissue'."
+
+  - id: kimchi
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - kimchi
+      - cabbage kimchi
+      - sliced cabbage kimchi
+      - cj kimchi
+    preferred_products:
+      - rank: 1
+        title: "JIN Spicy Kimchi Korean Banchan"
+        item_id: "2124781720"
+        sku_id: "12060189079"
+        canonical_url: "https://www.lazada.sg/products/i2124781720-s12060189079.html"
+        pack_size: "400 g"
+        observed_price_sgd: 6.90
+      - rank: 2
+        title: "CJ Sliced Cabbage Kimchi Korean Banchan 500g (Tube)"
+        item_id: "1167012126"
+        sku_id: "4607296865"
+        canonical_url: "https://www.lazada.sg/products/i1167012126-s4607296865.html"
+        pack_size: "500 g"
+        observed_price_sgd: 8.90
+    notes: "Generic kimchi prefers JIN spicy kimchi; CJ cabbage kimchi is the delivery-slot or availability backup."
+
+  - id: lemon
+    category: produce
+    default_quantity: 1
+    aliases:
+      - lemon
+      - lemons
+      - unwaxed lemons
+    preferred_products:
+      - rank: 1
+        title: "RedMart Unwaxed Lemons"
+        item_id: "1548788612"
+        sku_id: "7249264792"
+        canonical_url: "https://www.lazada.sg/products/i1548788612-s7249264792.html"
+        pack_size: "650 g"
+        observed_price_sgd: 5.15
+    notes: "Maps the 2026-07-03 whiteboard item 'lemon'."
+
+  - id: avocado
+    category: produce
+    default_quantity: 1
+    aliases:
+      - avocado
+      - avocados
+      - hass avocado
+    preferred_products:
+      - rank: 1
+        title: "Mexico/USA Hass Avocado 4 pcs (Airflown)"
+        item_id: "301100809"
+        sku_id: "527084959"
+        canonical_url: "https://www.lazada.sg/products/i301100809-s527084959.html"
+        pack_size: "450 g"
+        observed_price_sgd: 8.95
+    notes: "Maps the 2026-07-03 whiteboard item 'avocado'."
+
+  - id: apples
+    category: produce
+    default_quantity: 1
+    aliases:
+      - apples
+      - apple
+      - green apples
+      - granny smith apples
+    preferred_products:
+      - rank: 1
+        title: "Granny Smith Green Apples"
+        item_id: "301072998"
+        sku_id: "527094932"
+        canonical_url: "https://www.lazada.sg/products/i301072998-s527094932.html"
+        pack_size: "1 kg"
+        observed_price_sgd: 4.95
+    notes: "Maps the 2026-07-03 whiteboard item 'apples'."
+
+  - id: pears
+    category: produce
+    default_quantity: 1
+    aliases:
+      - pears
+      - pear
+      - packham pears
+    preferred_products:
+      - rank: 1
+        title: "Australia Packham Pears"
+        item_id: "301073000"
+        sku_id: "527094935"
+        canonical_url: "https://www.lazada.sg/products/i301073000-s527094935.html"
+        pack_size: "1 kg"
+        observed_price_sgd: 4.95
+    notes: "Maps the 2026-07-03 whiteboard item 'pears'."
+
+  - id: kiwi
+    category: produce
+    default_quantity: 1
+    aliases:
+      - kiwi
+      - kiwis
+      - green kiwi
+      - green kiwi fruit
+    preferred_products:
+      - rank: 1
+        title: "Green Kiwi Fruit 6s"
+        item_id: "301108865"
+        sku_id: "527088978"
+        canonical_url: "https://www.lazada.sg/products/i301108865-s527088978.html"
+        pack_size: "440 g"
+        observed_price_sgd: 5.04
+    notes: "Maps the 2026-07-03 whiteboard item 'kiwi'."
+
+  - id: oranges
+    category: produce
+    default_quantity: 1
+    aliases:
+      - oranges
+      - orange
+      - mandarin oranges
+      - easy peel oranges
+    preferred_products:
+      - rank: 1
+        title: "RedMart Easy Peel Mandarin Orange"
+        item_id: "1142960678"
+        sku_id: "4461922707"
+        canonical_url: "https://www.lazada.sg/products/i1142960678-s4461922707.html"
+        pack_size: "500 g"
+        observed_price_sgd: 4.50
+    notes: "Maps the 2026-07-03 whiteboard item 'oranges'."
+
+  - id: cream_cheese
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - cream cheese
+    preferred_products:
+      - rank: 1
+        title: "Emborg Cream Cheese 200G (New Look)"
+        item_id: "301134724"
+        sku_id: "527214748"
+        canonical_url: "https://www.lazada.sg/products/i301134724-s527214748.html"
+        pack_size: "200 g"
+        observed_price_sgd: 4.33
+    notes: "Maps the 2026-07-03 whiteboard item 'cream cheese'."
+
+  - id: pepsi_black
+    category: beverages
+    default_quantity: 1
+    aliases:
+      - pepsi black
+      - pepsi zero
+      - pepsi zero sugar
+      - black pepsi
+    preferred_products:
+      - rank: 1
+        title: "Pepsi Zero Sugar Cola Soda (24 X 320ML) - Carton - Packaging may vary"
+        item_id: "303940576"
+        sku_id: "538054013"
+        canonical_url: "https://www.lazada.sg/products/i303940576-s538054013.html"
+        pack_size: "24 x 320 ml"
+        observed_price_sgd: 17.82
+    notes: "Maps the 2026-07-03 whiteboard item 'Pepsi black'."
+
+  - id: fresh_milk
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - fresh milk
+      - milk
+    preferred_products:
+      - rank: 1
+        title: "Farmhouse Fresh Milk 946ML"
+        item_id: "301076934"
+        sku_id: "527122109"
+        canonical_url: "https://www.lazada.sg/products/i301076934-s527122109.html"
+        pack_size: "946 ml"
+        observed_price_sgd: 3.73
+    notes: "Maps the 2026-07-03 whiteboard item 'fresh milk'."
+
+  - id: lettuce
+    category: produce
+    default_quantity: 2
+    aliases:
+      - lettuce
+      - butterhead lettuce
+    preferred_products:
+      - rank: 1
+        title: "Uncle Jack's Butterhead Lettuce"
+        item_id: "2367366756"
+        sku_id: "13842110206"
+        canonical_url: "https://www.lazada.sg/products/i2367366756-s13842110206.html"
+        pack_size: "200 g"
+        observed_price_sgd: 2.25
+    notes: "Default quantity is 2 from the 2026-07-03 order."
+
+  - id: feta_cheese
+    category: chilled
+    default_quantity: 3
+    aliases:
+      - feta cheese
+      - feta
+      - greek feta
+    preferred_products:
+      - rank: 1
+        title: "Supervalu Greek Feta Cheese 200G"
+        item_id: "2443619723"
+        sku_id: "14475877469"
+        canonical_url: "https://www.lazada.sg/products/i2443619723-s14475877469.html"
+        pack_size: "200 g"
+        observed_price_sgd: 8.02
+    notes: "Default quantity is 3 from the 2026-07-03 order."
+
+  - id: cucumber
+    category: produce
+    default_quantity: 3
+    aliases:
+      - cucumber
+      - cucumbers
+      - japanese cucumber
+    preferred_products:
+      - rank: 1
+        title: "RedMart Japanese Cucumber"
+        item_id: "327250341"
+        sku_id: "692072902"
+        canonical_url: "https://www.lazada.sg/products/i327250341-s692072902.html"
+        pack_size: "400 g"
+        observed_price_sgd: 1.80
+    notes: "Default quantity is 3 from the 2026-07-03 order."
+
   - id: spring_onion_kimchi
     category: chilled
     default_quantity: 1
@@ -240,7 +736,6 @@ items:
     default_quantity: 1
     aliases:
       - spicy kimchi
-      - kimchi
       - korean banchan
     preferred_products:
       - rank: 1

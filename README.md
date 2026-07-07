@@ -111,21 +111,24 @@ Text overrides work well:
 
 ## Make It Yours
 
-This repository ships with one family's grocery catalog. To adapt it for your own household, you do not need to edit YAML by hand. The easiest path is to let an AI agent rebuild the catalog from example RedMart tabs.
+This repository ships with one family's grocery catalog. To adapt it for your own household, you do not need to edit YAML by hand. The easiest path is to let an AI agent rebuild the catalog from recent RedMart orders, product pages, or a representative cart.
 
 1. Make or photograph an example grocery list.
 2. Log into Lazada/RedMart in the browser the agent can use.
-3. Do a normal grocery shop on the computer once.
-4. Open product pages for the items you buy often, or leave a representative cart open.
+3. Open one or two recent RedMart order-detail pages, click `Show All`, and leave those tabs open.
+4. If an order row does not expose enough detail, click the product title so the product page opens in a new tab.
 5. Ask an AI agent such as Codex, Claude Code, or another browser-capable coding agent to replace `grocery-catalog.yaml` with your products.
 6. Give the normal words your household uses, such as `milk`, `eggs`, `trash bags`, or `dish soap`.
 7. Review the generated catalog before using it for a real cart fill.
+
+Recent orders are a useful jumpstart because they already contain product titles, pack sizes, quantities, prices, and the products your household actually bought. The agent can match those rows back to the grocery-list words, use the order quantities as defaults, and open product titles to capture canonical RedMart/Lazada URLs and SKU IDs. If a product page is unavailable or the match is unclear, keep it out of the catalog or rank it as a fallback after human review.
 
 Useful setup prompt:
 
 ```text
 I want to adapt this RedMart grocery repo for my family.
-Use the RedMart product tabs and cart I have open.
+Use the recent RedMart order tabs I have open.
+Click Show All on each order, and open product titles when you need the product URL or SKU.
 Replace grocery-catalog.yaml with my products.
 Use default quantities from the cart where possible.
 Ask me about aliases if they are not obvious.
