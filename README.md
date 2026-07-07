@@ -1,88 +1,17 @@
 # RedMart Grocery Cart Helper
 
-A small, human-editable catalog for preparing repeat RedMart/Lazada grocery carts from a photo or typed grocery list.
+Turn a grocery-list photo into a prepared RedMart/Lazada cart, using your own usual products.
 
-This is intentionally not a full home-automation system. The goal is simple:
+This is a lightweight pattern, not a full home automation system:
 
-1. Keep a YAML catalog of the family’s usual grocery products.
-2. Let an agent such as Codex read a grocery-list photo.
-3. Have the agent prepare the RedMart cart in a logged-in browser.
-4. Stop before checkout so a human reviews delivery, payment, and the final order.
-
-## What This Requires
-
-This workflow needs a computer/browser session that can actually use RedMart:
-
-- Chrome or another controllable browser must already be logged into Lazada/RedMart.
-- The agent needs permission to use that browser session, because it relies on your existing cookies and cart.
-- The agent prepares the cart on the logged-in account. You can then review and checkout from that browser, or usually from another device/app logged into the same Lazada account if the cart syncs normally.
-- This does not bypass login, payment, delivery-slot selection, or human checkout.
-
-## What Is In This Repo
-
-- `grocery-catalog.yaml` - the source of truth for grocery aliases, default quantities, and preferred RedMart/Lazada product URLs.
-- `AGENTS.md` - instructions for browser-using agents that fill the cart.
-- `examples/` - example grocery-list photos used to test the flow.
-
-## Human Quick Start
-
-Use this when you want Codex to prepare a RedMart cart while you stay in control of final checkout.
-
-1. Put a grocery-list photo in this project, or attach it in the Codex prompt.
-2. Add any extras or overrides in plain language.
-3. Make sure Chrome is logged into Lazada/RedMart.
-4. Ask Codex to use this project’s RedMart grocery catalog.
-5. Review the proposed cart before browser actions.
-6. Let Codex add/update items and verify the cart.
-7. You choose delivery, pay, and place the order manually.
-
-Example prompt:
-
-```text
-Use this project's RedMart grocery catalog.
-Read the attached grocery-list photo and prepare the cart.
-Also add olive oil and coconut oil.
-Skip ham this time.
-Stop at the cart so I can review and checkout manually.
-```
-
-Text overrides work well. Examples:
-
-- `2 watermelons`
-- `no detergent`
-- `add sparkling wine`
-- `skip chicken breast`
-
-## Make It Yours
-
-This repository ships with one family's grocery catalog. To use the pattern for your own RedMart account, you can either edit the YAML by hand or ask an agent to rebuild it from your browser.
-
-The easiest setup path:
-
-1. Log into Lazada/RedMart in a browser the agent can control.
-2. Manually search RedMart and open product pages for the items you buy often.
-3. If you already have a representative cart, open the cart too.
-4. Tell the agent to reset or replace `grocery-catalog.yaml` with your own products.
-5. For each item, give the family-language aliases you actually use, such as `milk`, `eggs`, `trash bags`, or `dish soap`.
-6. Ask the agent to scrape product titles, canonical URLs, item IDs, SKU IDs, pack sizes, usual quantities, and price references.
-7. Review the generated catalog before using it for a real cart fill.
-
-Useful setup prompt:
-
-```text
-I want to adapt this RedMart grocery repo for my family.
-Use the RedMart product tabs and cart I have open.
-Replace grocery-catalog.yaml with my products.
-Use default quantities from the cart where possible.
-Ask me about aliases if they are not obvious.
-Do not checkout or place an order.
-```
-
-You do not need to finish the catalog in one sitting. A practical approach is to add items after normal grocery orders for a few weeks. After a couple of buys, most repeat items will be in the catalog.
+1. Take a photo of a grocery list, or type one out.
+2. Match each item to your usual RedMart products in `grocery-catalog.yaml`.
+3. Let an AI agent prepare the cart in a logged-in browser.
+4. Review delivery, payment, and the final order yourself.
 
 ## Example
 
-The seed grocery-list image maps to this proposed RedMart cart:
+This example whiteboard list maps to the cart on the right:
 
 <table>
   <tr>
@@ -111,7 +40,76 @@ The seed grocery-list image maps to this proposed RedMart cart:
   </tr>
 </table>
 
-An agent should show a table like this before it touches the browser. After approval, it opens the canonical product URLs, checks delivery availability, adds the items, adjusts quantities, verifies the cart, and stops.
+An agent should show a proposed cart like this before it touches the browser. After approval, it opens the saved product URLs, checks delivery availability, adds the items, adjusts quantities, verifies the cart, and stops.
+
+## One-Time Setup, Then Easier
+
+The first setup takes a bit of effort because the catalog needs to learn your family's preferred products and quantities. After that, normal runs are much easier: send a new photo, add a few text overrides, and let the agent prepare the cart.
+
+You usually only need to log into Lazada/RedMart once in the browser the agent uses. The login should continue working through that browser's cookies/session state unless you log out, switch browser/profile/device, clear cookies, or the session expires.
+
+After the initial catalog is built, update it only when your preferences change, RedMart changes a SKU, you want different default quantities, or you add fallback products.
+
+## What You Need
+
+- A RedMart/Lazada account.
+- A computer with a browser already logged into that account.
+- An AI agent that can read this repo and control that browser.
+- A human who reviews the cart, chooses delivery, pays, and places the order.
+
+For signed-in RedMart pages, a browser agent needs access to your real logged-in browser state. In Codex, the Chrome extension is the best fit for this because it uses your Chrome profile and cookies. Computer Use can also operate a browser visually on macOS or Windows; macOS needs Screen Recording and Accessibility permissions, while Windows uses the foreground desktop while it works.
+
+## Quick Start
+
+1. Put a grocery-list photo in this project, or attach it in the agent prompt.
+2. Add any extras or overrides in plain language.
+3. Make sure the browser is logged into Lazada/RedMart.
+4. Ask the agent to use this project's RedMart grocery catalog.
+5. Review the proposed cart before browser actions.
+6. Let the agent add/update items and verify the cart.
+7. Checkout manually.
+
+Example prompt:
+
+```text
+Use this project's RedMart grocery catalog.
+Read the attached grocery-list photo and prepare the cart.
+Also add olive oil and coconut oil.
+Skip ham this time.
+Stop at the cart so I can review and checkout manually.
+```
+
+Text overrides work well:
+
+- `2 watermelons`
+- `no detergent`
+- `add sparkling wine`
+- `skip chicken breast`
+
+## Make It Yours
+
+This repository ships with one family's grocery catalog. To adapt it for your own household, you do not need to edit YAML by hand. The easiest path is to let an AI agent rebuild the catalog from example RedMart tabs.
+
+1. Make or photograph an example grocery list.
+2. Log into Lazada/RedMart in the browser the agent can use.
+3. Open product pages for the items you buy often.
+4. If you already have a representative cart, open the cart too.
+5. Ask an AI agent such as Codex, Claude Code, or another browser-capable coding agent to replace `grocery-catalog.yaml` with your products.
+6. Give the normal words your household uses, such as `milk`, `eggs`, `trash bags`, or `dish soap`.
+7. Review the generated catalog before using it for a real cart fill.
+
+Useful setup prompt:
+
+```text
+I want to adapt this RedMart grocery repo for my family.
+Use the RedMart product tabs and cart I have open.
+Replace grocery-catalog.yaml with my products.
+Use default quantities from the cart where possible.
+Ask me about aliases if they are not obvious.
+Do not checkout or place an order.
+```
+
+You do not need to finish the catalog in one sitting. A practical approach is to add items after normal grocery orders for a few weeks. After a couple of buys, most repeat items will be in the catalog.
 
 ## Safety Rules
 
@@ -121,16 +119,11 @@ An agent should show a table like this before it touches the browser. After appr
 - If a product is only available more than two days from now, the agent should ask or report it instead of adding it automatically.
 - If handwriting or product matching is uncertain, the agent should show the uncertainty before adding that item.
 
-## Adding A New Regular Item
+## What Is In This Repo
 
-When the family starts buying something regularly:
-
-1. Manually find the preferred product on RedMart/Lazada once.
-2. Leave the product page open in Chrome, or add it to the cart once.
-3. Ask Codex to add the open RedMart product to `grocery-catalog.yaml`.
-4. Give the words you usually write on the board, such as `milk`, `dish soap`, or `sparkling wine`.
-
-Codex should capture the product title, canonical URL, item ID, SKU ID, pack size, usual quantity, and aliases.
+- `grocery-catalog.yaml` - the source of truth for grocery aliases, default quantities, and preferred RedMart/Lazada product URLs.
+- `AGENTS.md` - detailed instructions for browser-using agents that fill the cart.
+- `examples/` - example grocery-list photos used to test the flow.
 
 ## Catalog Format
 
