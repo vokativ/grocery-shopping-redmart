@@ -2,30 +2,6 @@
 
 Turn a grocery-list photo into a prepared RedMart/Lazada cart, using your own usual products.
 
-This is a lightweight pattern, not a full home automation system:
-
-1. Keep a desktop or laptop running with this repo and a RedMart/Lazada browser already logged in.
-2. From your phone, take or receive a grocery-list photo.
-3. Open a mobile app that can control the agent session on that computer.
-4. Send the photo and any overrides, such as `add olive oil` or `skip ham`.
-5. Let the agent prepare the cart in the logged-in browser on the computer.
-6. Review delivery, payment, and the final order yourself.
-
-The important unlock is that the photo can start on your phone while the shopping work still happens on the computer that has the repo, agent instructions, browser cookies, and RedMart session. You do not need to sit at the computer or manually transfer the image each time.
-
-## Phone-First Workflow
-
-The best everyday setup is a running Mac or Windows computer at home, plus a phone in your hand:
-
-1. On the computer, keep Codex or another browser-capable coding agent available in this repo.
-2. Keep Chrome logged into Lazada/RedMart on that computer.
-3. On your phone, open the matching mobile app, such as ChatGPT for Codex or Claude for Claude Code, and connect to the running computer session.
-4. Attach a grocery-list photo directly from the phone.
-5. Tell the agent what to add, skip, or change.
-6. The agent uses the catalog here, opens RedMart on the computer, fills the cart, verifies quantities and availability, and stops before checkout.
-
-Codex supports this with Codex mobile access through the ChatGPT app connected to a Mac or Windows Codex App host. Claude Code has a similar Remote Control flow: a local Claude Code session keeps running on your machine, while the Claude mobile app or browser can send messages, images, and files into that local session. In both cases, the practical requirement is the same: the computer must stay awake, online, and able to use the browser profile that is already logged into RedMart.
-
 ## Example
 
 This example whiteboard list maps to the cart on the right:
@@ -58,6 +34,30 @@ This example whiteboard list maps to the cart on the right:
 </table>
 
 An agent should show a proposed cart like this before it touches the browser. After approval, it opens the saved product URLs, checks delivery availability, adds the items, adjusts quantities, verifies the cart, and stops.
+
+## Phone-First Workflow
+
+This is a lightweight pattern, not a full home automation system:
+
+1. Keep a desktop or laptop running with this repo and a RedMart/Lazada browser already logged in.
+2. From your phone, take or receive a grocery-list photo.
+3. Open a mobile app that can control the agent session on that computer.
+4. Send the photo and any overrides, such as `add olive oil` or `skip ham`.
+5. Let the agent prepare the cart in the logged-in browser on the computer.
+6. Review delivery, payment, and the final order yourself.
+
+The important unlock is that the photo can start on your phone while the shopping work still happens on the computer that has the repo, agent instructions, browser cookies, and RedMart session. You do not need to sit at the computer or manually transfer the image each time.
+
+The best everyday setup is a running Mac or Windows computer at home, plus a phone in your hand:
+
+1. On the computer, keep Codex or another browser-capable coding agent available in this repo.
+2. Keep Chrome logged into Lazada/RedMart on that computer.
+3. On your phone, open the matching mobile app, such as ChatGPT for Codex or Claude for Claude Code, and connect to the running computer session.
+4. Attach a grocery-list photo directly from the phone.
+5. Tell the agent what to add, skip, or change.
+6. The agent uses the catalog here, opens RedMart on the computer, fills the cart, verifies quantities and availability, and stops before checkout.
+
+Codex supports this with Codex mobile access through the ChatGPT app connected to a Mac or Windows Codex App host. Claude Code has a similar Remote Control flow: a local Claude Code session keeps running on your machine, while the Claude mobile app or browser can send messages, images, and files into that local session. In both cases, the practical requirement is the same: the computer must stay awake, online, and able to use the browser profile that is already logged into RedMart.
 
 ## One-Time Setup, Then Easier
 
