@@ -1,10 +1,16 @@
 # RedMart Grocery Cart Helper
 
-Turn a grocery-list photo into a prepared RedMart/Lazada cart, using your own usual products.
+Turn a grocery list into a prepared RedMart/Lazada cart with your usual groceries. Use a whiteboard photo, a typed note, or a voice list from your AI app.
 
-## Example
+The agent reads the list, matches it to your saved grocery catalog, checks availability, fills the cart, and verifies quantities.
+**The agent stops before checkout.** You choose delivery, payment, and place the order yourself.
 
-This example whiteboard list maps to the cart on the right:
+> **AI agents:** Read this README and `AGENTS.md` before acting.
+> For first-time setup, start with [Instructions for AI agents setting this up](#instructions-for-ai-agents-setting-this-up).
+
+## 🧺 Example
+
+This example starts with a whiteboard photo. Typed and voice-dictated lists work the same way.
 
 <table>
   <tr>
@@ -33,71 +39,114 @@ This example whiteboard list maps to the cart on the right:
   </tr>
 </table>
 
-An agent should show a proposed cart like this before it touches the browser. After approval, it opens the saved product URLs, checks delivery availability, adds the items, adjusts quantities, verifies the cart, and stops.
+Before it touches the browser, the agent should show a proposed cart like this.
+**Review the proposed cart before browser actions.**
+After approval, the agent opens saved product URLs, checks delivery availability, adds items, adjusts quantities, verifies the cart, and stops.
 
-## Phone-First Workflow
+> [Future illustration: Agent matches family words to saved RedMart products.]
 
-This is a lightweight pattern, not a full home automation system:
+Common ways to send the list:
 
-1. Keep a desktop or laptop running with this repo and a RedMart/Lazada browser already logged in.
-2. From your phone, take or receive a grocery-list photo.
-3. Open a mobile app that can control the agent session on that computer.
-4. Send the photo and any overrides, such as `add olive oil` or `skip ham`.
-5. Let the agent prepare the cart in the logged-in browser on the computer.
-6. Review delivery, payment, and the final order yourself.
+| Input | Example |
+| --- | --- |
+| Photo | A whiteboard, paper list, or screenshot |
+| Voice | Dictate `eggs, milk, rice crackers, two watermelons` into your AI app |
+| Text | Type `add olive oil, no ham, 2 packs of eggs` |
 
-The important unlock is that the photo can start on your phone while the shopping work still happens on the computer that has the repo, agent instructions, browser cookies, and RedMart session. You do not need to sit at the computer or manually transfer the image each time.
+## 📱 Phone-First Workflow
 
-The best everyday setup is a running Mac or Windows computer at home, plus a phone in your hand:
+The simple version:
 
-1. On the computer, keep Codex or another browser-capable coding agent available in this repo.
+1. Your phone sends the list.
+2. The computer uses the logged-in RedMart/Lazada browser.
+3. The agent prepares the cart.
+4. You review delivery, payment, and the final order.
+
+> [Future illustration: Phone sends list → home computer session.]
+
+This is a lightweight pattern, not a full home automation system.
+The useful part is the handoff: the list starts on your phone, while the shopping work happens on the computer with this repo, browser cookies, and the RedMart session.
+
+The everyday setup is:
+
+1. Have a Mac or Windows computer awake with Codex, Claude Code, or another browser-capable agent.
 2. Keep Chrome logged into Lazada/RedMart on that computer.
-3. On your phone, open the matching mobile app, such as ChatGPT for Codex or Claude for Claude Code, and connect to the running computer session.
-4. Attach a grocery-list photo directly from the phone.
-5. Tell the agent what to add, skip, or change.
-6. The agent uses the catalog here, opens RedMart on the computer, fills the cart, verifies quantities and availability, and stops before checkout.
+3. On your phone, open the matching mobile app, such as ChatGPT for Codex or Claude for Claude Code.
+4. Go to the `grocery-shopping-redmart` project in the app.
+5. Send a grocery-list photo, dictate the list, or type it.
+6. Add plain-language changes like `add olive oil` or `skip ham`.
+7. Let the agent fill the cart and verify quantities.
+8. Check out yourself.
 
-Codex supports this with Codex mobile access through the ChatGPT app connected to a Mac or Windows Codex App host. Claude Code has a similar Remote Control flow: a local Claude Code session keeps running on your machine, while the Claude mobile app or browser can send messages, images, and files into that local session. In both cases, the practical requirement is the same: the computer must stay awake, online, and able to use the browser profile that is already logged into RedMart.
+Codex can do this through Codex mobile access in the ChatGPT app connected to a Mac or Windows Codex App host.
+Claude Code has a similar Remote Control flow.
+In both cases, the practical rule is the same: **the computer must stay awake, online, and logged in** to the browser profile that has RedMart access.
 
 ## One-Time Setup, Then Easier
 
-The first setup is mostly the grocery shopping you would do anyway, just done on a computer instead of only in the mobile app. While you shop, leave the product pages or cart open so the agent can learn your preferred products and default quantities.
+The first setup is mostly the grocery shopping you would do anyway, done once with an agent watching recent RedMart history.
+Start with [Make It Yours](#make-it-yours): open your Lazada `My Orders` page, let the agent find RedMart orders, and review the catalog it proposes.
 
-After that, normal runs are much easier: send a new photo, add a few text overrides, and let the agent prepare the cart.
+After that, normal runs are short. Send a new photo, voice list, or typed list. Add a few overrides. Let the agent prepare the cart.
 
-You usually only need to log into Lazada/RedMart once in the browser the agent uses. The login should continue working through that browser's cookies/session state unless you log out, switch browser/profile/device, clear cookies, or the session expires.
+You usually only need to log into Lazada/RedMart once in the browser the agent uses.
+The login should keep working through browser cookies unless you log out, switch browser/profile/device, clear cookies, or the session expires.
 
-After the initial catalog is built, update it only when your preferences change, RedMart changes a SKU, you want different default quantities, or you add fallback products.
+Update the catalog when your preferences change, RedMart changes a SKU, you want different default quantities, or you add fallback products.
 
 ## What You Need
 
 - A RedMart/Lazada account.
-- A Mac or Windows computer with a browser already logged into that account.
-- A mobile-to-desktop agent workflow, if you want to start the order from your phone.
-- An AI agent that can read this repo and control the logged-in browser on that computer.
+- A Mac or Windows computer with Chrome installed.
+- A browser profile already logged into that account.
+- Codex, Claude Desktop, Claude Code, or another browser-capable AI agent that can read this repo.
+- A mobile-to-desktop agent workflow, if you want to start from your phone.
 - A human who reviews the cart, chooses delivery, pays, and places the order.
 
-For signed-in RedMart pages, the important requirement is browser access with your real logged-in state. The tested path for this repo is Codex mobile access plus the Codex Chrome extension on the computer, because the phone can steer the session while Codex uses your Chrome profile and cookies. Computer Use can also operate a browser visually on macOS or Windows; macOS needs Screen Recording and Accessibility permissions, while Windows uses the foreground desktop while it works.
+## Use An Old Laptop As The Home Grocery Server
 
-Claude Code Remote Control plus Claude's Chrome integration is another documented fit for the same idea. Google Antigravity or other local browser-capable coding agents may also work when they can read this repo and operate the logged-in browser. The key test is simple: can the agent open RedMart in your logged-in browser, add an item, edit cart quantities, and stop before checkout?
+This does not need to be your main computer.
+A spare Mac or Windows laptop can work well if it stays plugged in, awake, online, and signed into the browser profile with Lazada/RedMart access.
 
-## Quick Start
+As practical examples, check whether the computer can run the agent path you want:
 
-1. On the computer, open this repo in Codex, Claude Code, or another suitable agent.
-2. Make sure the computer's browser is logged into Lazada/RedMart.
-3. From your phone, connect to that running computer session.
-4. Attach or take a grocery-list photo in the mobile app.
-5. Add extras or overrides in plain language.
-6. Ask the agent to use this project's RedMart grocery catalog.
-7. Review the proposed cart before browser actions.
-8. Let the agent add/update items and verify the cart.
-9. Checkout manually.
+- Claude Desktop or Claude-style local workflow: macOS 13 Ventura or newer, or Windows 10 version 1809 or newer.
+- Windows machines should have at least 8 GB RAM.
+
+These are examples, not a full compatibility matrix.
+The real test is simple: can the computer run Chrome, open this repo in the agent, and let the agent use the logged-in browser without sleeping?
+
+For signed-in RedMart pages, browser access matters more than the tool name.
+The tested path for this repo is Codex mobile access plus the Codex Chrome extension on the computer.
+The phone can steer the session while Codex uses your Chrome profile and cookies.
+
+Computer Use can also operate a browser visually on macOS or Windows.
+macOS needs Screen Recording and Accessibility permissions.
+Windows uses the foreground desktop while it works.
+
+Claude Code Remote Control plus Claude's Chrome integration is another documented fit.
+Google Antigravity or other local browser-capable coding agents may also work.
+The key test is this: can the agent open RedMart in your logged-in browser, add an item, edit cart quantities, and stop before checkout?
+
+## 🛒 Everyday Grocery Run
+
+Use this after setup, when the catalog reflects your household's usual products.
+
+1. On the computer, open the `grocery-shopping-redmart` folder in Codex, Claude Code, or another suitable agent.
+2. From your phone, connect to that running computer session.
+3. Attach a grocery-list photo, dictate the list, or type it into the mobile app.
+4. Add extras or overrides in plain language.
+5. Ask the agent to use this project's RedMart grocery catalog.
+6. **Review the proposed cart before browser actions.**
+7. Let the agent add/update items and verify the cart.
+8. Review the final cart in the mobile app or on the computer.
+9. Choose delivery, payment, and check out manually.
 
 Example prompt:
 
 ```text
 Use this project's RedMart grocery catalog.
-Read the attached grocery-list photo and prepare the cart.
+Read this grocery list and prepare the cart.
 Also add olive oil and coconut oil.
 Skip ham this time.
 ```
@@ -109,45 +158,67 @@ Text overrides work well:
 - `add sparkling wine`
 - `skip chicken breast`
 
-## Make It Yours
+<a id="make-it-yours"></a>
 
-This repository ships with one family's grocery catalog. To adapt it for your own household, you do not need to edit YAML by hand. The easiest path is to let an AI agent rebuild the catalog from recent RedMart orders, product pages, or a representative cart.
+## 🏠 Make It Yours
 
-1. Make or photograph an example grocery list.
+This repo ships with one family's grocery catalog.
+To adapt it for your household, let an AI agent rebuild the catalog from your Lazada `My Orders` page.
+You do not need to edit YAML by hand.
+If you do not know what YAML is, you can ignore that word; it is just the catalog file the agent edits for you.
+
+1. Optional: have an example grocery list ready. It can be a photo, typed list, or voice list.
 2. Log into Lazada/RedMart in the browser the agent can use.
-3. Open one or two recent RedMart order-detail pages, click `Show All`, and leave those tabs open.
-4. If an order row does not expose enough detail, click the product title so the product page opens in a new tab.
-5. Ask an AI agent such as Codex, Claude Code, or another browser-capable coding agent to replace `grocery-catalog.yaml` with your products.
-6. Give the normal words your household uses, such as `milk`, `eggs`, `trash bags`, or `dish soap`.
-7. Review the generated catalog before using it for a real cart fill.
+3. Open the Lazada `My Orders` page: `https://my.lazada.sg/customer/order/index/`.
+4. Ask an AI agent such as Codex, Claude Code, or another browser-capable agent to read that page and update this repo's grocery catalog with your products.
+5. Review the generated catalog before using it for a real cart fill.
 
-Recent orders are a useful jumpstart because they already contain product titles, pack sizes, quantities, prices, and the products your household actually bought. The agent can match those rows back to the grocery-list words, use the order quantities as defaults, and open product titles to capture canonical RedMart/Lazada URLs and SKU IDs. If a product page is unavailable or the match is unclear, keep it out of the catalog or rank it as a fallback after human review.
+Recent orders are a strong starting point. They already contain product titles, pack sizes, quantities, prices, and the products your household actually bought.
 
-Useful setup prompt:
+On the `My Orders` overview, RedMart order cards may expose enough visible row data for a draft catalog.
+That can include product title, pack size or SKU label, quantity, observed price, and refund or warranty labels.
+The agent can match those rows back to grocery-list words and use order quantities as defaults.
+
+<a id="instructions-for-ai-agents-setting-this-up"></a>
+
+### Instructions for AI agents setting this up
+
+> **AI agents:** Read this README and `AGENTS.md` before setup. Follow `AGENTS.md` for catalog seeding rules, RedMart-only order filtering, and cart-filling safety rules.
+
+If you do not know how to set up the repo yourself, start by giving your agent this prompt:
 
 ```text
-I want to adapt this RedMart grocery repo for my family.
-Use the recent RedMart order tabs I have open.
-Click Show All on each order, and open product titles when you need the product URL or SKU.
-Replace grocery-catalog.yaml with my products.
-Use default quantities from the cart where possible.
-Ask me about aliases if they are not obvious.
+I want to set up this RedMart grocery helper for my household.
+Please inspect this repository first, then guide me through anything missing on this computer.
+I have Chrome available and can log into Lazada/RedMart there.
+Use the Lazada My Orders page to seed my grocery catalog from RedMart orders only.
+Ignore Taobao and other Lazada seller orders unless I ask for them.
+Ask me about aliases or unclear products before finalizing the catalog.
+Do not place an order or go to checkout.
 ```
 
-You do not need to finish the catalog in one sitting. A practical approach is to add items after normal grocery orders for a few weeks. After a couple of buys, most repeat items will be in the catalog. After that, you only need to update it when your preferred SKUs, default quantities, or fallback products change.
+During setup, **use RedMart orders only** unless you explicitly want Taobao or other Lazada sellers included.
 
-## Safety Rules
+You do not need to finish the catalog in one sitting.
+A practical path is to add items after normal grocery orders for a few weeks.
+After a couple of buys, most repeat items will be in the catalog.
+After that, update it only when preferred SKUs, default quantities, or fallback products change.
+
+## 🔒 Safety Rules
+
+> [Future illustration: Cart is ready → human reviews delivery, payment, and order.]
 
 - The agent should not place the order.
 - The agent should not submit payment or save payment details.
-- The agent should stop at the cart unless explicitly asked otherwise.
+- **The agent stops before checkout** unless explicitly asked otherwise.
+- The agent should not choose delivery slots or confirm purchase steps.
 - If a product is only available more than two days from now, the agent should ask or report it instead of adding it automatically.
 - If handwriting or product matching is uncertain, the agent should show the uncertainty before adding that item.
 
 ## What Is In This Repo
 
 - `grocery-catalog.yaml` - the source of truth for grocery aliases, default quantities, and preferred RedMart/Lazada product URLs.
-- `AGENTS.md` - detailed instructions for browser-using agents that fill the cart.
+- `AGENTS.md` - detailed instructions for browser-using agents that seed the catalog and fill the cart.
 - `examples/` - example grocery-list photos used to test the flow.
 
 ## Catalog Format
