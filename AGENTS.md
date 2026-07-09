@@ -1,10 +1,30 @@
 # Agent Instructions
 
-Use these instructions when filling a RedMart/Lazada cart from this repository.
+Use these instructions when setting up this repository for a household or filling a RedMart/Lazada cart from this repository.
+
+## Initial Catalog Seeding
+
+Use this flow when adapting the repo for a new household before normal cart filling.
+
+1. Start from the logged-in Chrome session.
+2. Open the Lazada `My Orders` page: `https://my.lazada.sg/customer/order/index/`.
+3. Use only order cards whose visible shop or store name is `RedMart`.
+4. Click `Show All` on RedMart cards when present.
+5. Ignore Taobao and other Lazada seller orders unless the user explicitly asks to include them.
+6. Build draft catalog entries from visible order-row data: product title, pack size or SKU label, quantity, and observed price.
+7. Ask the user about aliases or unclear product matches before finalizing entries.
+8. Open RedMart order detail pages or product pages only when needed to capture canonical URLs, item IDs, SKU IDs, or resolve unclear products.
+9. Replace or update `grocery-catalog.yaml` with the household's products after user review.
+
+The `My Orders` overview is the discovery page, not always the final source of canonical product IDs. During testing, overview product links appeared as JavaScript/hash links rather than stable `https://www.lazada.sg/products/i<item_id>-s<sku_id>.html` URLs. After drafting entries from the overview, open RedMart order details or product pages only when needed to capture canonical RedMart/Lazada URLs, item IDs, and SKU IDs. If a product page is unavailable or the match is unclear, keep it out of the catalog or rank it as a fallback after human review.
+
+For RedMart filtering, prefer visible page text over brittle CSS selectors. The most reliable signal is the visible shop or detail-page seller name `RedMart`. In inspected order-detail URLs, `shopGroupKey=ORDERLOGIC_<tradeOrderId>_99197_...` appeared on RedMart orders, while non-RedMart examples used other IDs and visible names such as `Living Crazy`, `Bike Terminal`, and `Taobao`; treat that URL token as a supporting hint, not a permanent rule.
+
+Never place an order, choose delivery slots, confirm payment, save payment details, or go past cart/review steps while seeding the catalog.
 
 ## Core Flow
 
-1. Read a whiteboard image or typed grocery list.
+1. Read a whiteboard image, typed grocery list, or voice-dictated list.
 2. Match each item to `items[].aliases` in `grocery-catalog.yaml`.
 3. Show a proposed cart table before browser actions.
 4. Check product availability before adding.
@@ -43,7 +63,7 @@ The page structure can change. Do not depend on a single fragile CSS selector fo
 
 Before touching the browser:
 
-- Parse the image or typed list.
+- Parse the image, typed list, or voice-dictated list.
 - Normalize quantities from explicit text if present; otherwise use `default_quantity`.
 - Produce a proposed cart table with matched item, product title, quantity, and uncertain matches.
 - Ask for approval if there are uncertain matches, unknown items, or surprising quantities.
