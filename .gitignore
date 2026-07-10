@@ -1,2 +1,5 @@
 .DS_Store
+.superpowers/
+redmart-catalog-review-*.html
+redmart-catalog-approval-*.json
 .worktrees/
