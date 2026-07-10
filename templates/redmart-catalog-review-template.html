@@ -495,8 +495,12 @@
       }
     }
 
-    function candidateKey(candidate, index) {
+    function candidatePayloadId(candidate, index) {
       return String(candidate.candidate_id ?? `candidate-${index + 1}`);
+    }
+
+    function candidateKey(candidate, index) {
+      return `${index}:${candidatePayloadId(candidate, index)}`;
     }
 
     function initialState(candidate, key) {
@@ -505,8 +509,8 @@
         candidate,
         key,
         include: included,
-        usual_quantity: included ? asPositiveQuantity(candidate.usual_quantity ?? candidate.observed_quantity, 1) : 0,
-        family_words: included && Array.isArray(candidate.family_words) ? candidate.family_words.map(String) : []
+        usual_quantity: asPositiveQuantity(candidate.usual_quantity ?? candidate.observed_quantity, 1),
+        family_words: Array.isArray(candidate.family_words) ? candidate.family_words.map(String) : []
       };
     }
 
@@ -597,9 +601,6 @@
         if (!entry.family_words.length && Array.isArray(entry.candidate.family_words)) {
           entry.family_words = entry.candidate.family_words.map(String);
         }
-      } else {
-        entry.usual_quantity = 0;
-        entry.family_words = [];
       }
       renderRows();
     }
@@ -618,10 +619,11 @@
     function buildApprovedPayload() {
       const candidates = reviewData.candidates.map((candidate, index) => {
         const key = candidateKey(candidate, index);
+        const payloadCandidateId = candidatePayloadId(candidate, index);
         const entry = state.get(key) ?? initialState(candidate, key);
         if (!entry.include) {
           return {
-            candidate_id: key,
+            candidate_id: payloadCandidateId,
             title: candidate.title ?? "",
             pack_size: candidate.pack_size ?? null,
             observed_price_sgd: candidate.observed_price_sgd ?? null,
@@ -635,7 +637,7 @@
         }
 
         return {
-          candidate_id: key,
+          candidate_id: payloadCandidateId,
           title: candidate.title ?? "",
           pack_size: candidate.pack_size ?? null,
           observed_price_sgd: candidate.observed_price_sgd ?? null,

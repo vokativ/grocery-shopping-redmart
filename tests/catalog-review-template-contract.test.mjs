@@ -5,6 +5,30 @@ import test from "node:test";
 const templatePath = new URL("../templates/redmart-catalog-review-template.html", import.meta.url);
 const template = await readFile(templatePath, "utf8");
 
+function extractFunctionBody(source, signature) {
+  const signatureIndex = source.indexOf(signature);
+  assert.notEqual(signatureIndex, -1, `${signature} should exist`);
+
+  const bodyStart = source.indexOf("{", signatureIndex);
+  assert.notEqual(bodyStart, -1, `${signature} should have a body`);
+
+  let depth = 0;
+  for (let index = bodyStart; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === "{") {
+      depth += 1;
+    }
+    if (char === "}") {
+      depth -= 1;
+    }
+    if (depth === 0) {
+      return source.slice(bodyStart + 1, index);
+    }
+  }
+
+  assert.fail(`${signature} body should close`);
+}
+
 test("template contains required data and approval hooks", () => {
   assert.match(template, /__CATALOG_REVIEW_DATA__/);
   assert.match(template, /id="catalog-review-data"/);
@@ -47,4 +71,49 @@ test("template uses system fonts and no external assets", () => {
   assert.doesNotMatch(template, /@import/);
   assert.doesNotMatch(template, /<link\b[^>]*rel=["']stylesheet["']/i);
   assert.doesNotMatch(template, /<script\b[^>]*\bsrc=/i);
+});
+
+test("candidate state uses index-qualified keys while preserving payload ids", () => {
+  assert.match(
+    template,
+    /function candidatePayloadId\(candidate, index\) \{\s*return String\(candidate\.candidate_id \?\? `candidate-\$\{index \+ 1\}`\);\s*\}/s
+  );
+  assert.match(
+    template,
+    /function candidateKey\(candidate, index\) \{\s*return `\$\{index\}:\$\{candidatePayloadId\(candidate, index\)\}`;\s*\}/s
+  );
+  assert.doesNotMatch(
+    template,
+    /function candidateKey\(candidate, index\) \{\s*return String\(candidate\.candidate_id/
+  );
+  assert.match(
+    template,
+    /const payloadCandidateId = candidatePayloadId\(candidate, index\);[\s\S]*?candidate_id: payloadCandidateId/
+  );
+  assert.doesNotMatch(template, /candidate_id: key/);
+});
+
+test("not-included rows preserve state but approval payload excludes edits", () => {
+  const initialStateBody = extractFunctionBody(template, "function initialState(candidate, key)");
+  assert.doesNotMatch(initialStateBody, /usual_quantity:\s*included\s*\?/);
+  assert.doesNotMatch(initialStateBody, /family_words:\s*included\s*&&/);
+
+  const setIncludedBody = extractFunctionBody(template, "function setIncluded(row, include)");
+  assert.doesNotMatch(setIncludedBody, /entry\.family_words\s*=\s*\[\]/);
+  assert.doesNotMatch(setIncludedBody, /entry\.usual_quantity\s*=\s*0/);
+
+  assert.match(
+    template,
+    /if \(!entry\.include\) \{\s*return \{[\s\S]*?include: false,[\s\S]*?usual_quantity: 0,[\s\S]*?family_words: \[\],[\s\S]*?\};\s*\}/
+  );
+});
+
+test("candidate-provided row values are escaped before insertion", () => {
+  assert.match(template, /<span class="\$\{statusClass\}">\$\{escapeHtml\(statusText\)\}<\/span>/);
+  assert.match(template, /const domId = `\$\{safeDomId\(key\)\}-\$\{index\}`;/);
+  assert.match(template, /data-candidate-key="\$\{escapeAttribute\(key\)\}"/);
+  assert.match(template, /for="words-\$\{escapeAttribute\(domId\)\}"/);
+  assert.match(template, /id="quantity-\$\{escapeAttribute\(domId\)\}"/);
+  assert.match(template, /value="\$\{escapeAttribute\(wordsValue\)\}"/);
+  assert.match(template, /value="\$\{escapeAttribute\(quantityValue\)\}"/);
 });
