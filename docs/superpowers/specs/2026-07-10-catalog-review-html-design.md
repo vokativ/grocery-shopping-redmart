@@ -169,6 +169,20 @@ Fallback behavior:
 - If the agent cannot read the approved page state, it may ask the user to keep the page open and retry.
 - A manual export/download fallback may exist for debugging, but it should not be visible in the normal UI.
 
+## Reusable Template Deliverables
+
+The implementation should not depend on each agent inventing a new review page from scratch.
+
+V1 should add a reusable HTML template or example file to the repo. The template should define the page structure, visual style, row states, approval behavior, and machine-readable approved payload location. During seeding, the agent should slot discovered candidate data into this established structure and write a temporary review page from it.
+
+The repo should also document how agents use the template:
+
+- `AGENTS.md` should describe when to generate the HTML review page, how to populate it, how to ask the user to approve it, and how to read the approved payload before editing `grocery-catalog.yaml`.
+- `README.md` should describe the user-facing review step at a high level, without exposing template internals or JSON mechanics.
+- Any generated per-run review page remains temporary and should be removed at the end of the seeding/update flow unless the user asks to keep it.
+
+The reusable template or example is the project asset. The filled-in review page is only a per-run approval surface.
+
 ## Generated Approval Payload
 
 The approved payload should include:
