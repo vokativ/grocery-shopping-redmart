@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RedMart Catalog Review</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f7f3ed;
+      --surface: #fffdf9;
+      --surface-soft: #faf7f1;
+      --text: #253028;
+      --muted: #66736b;
+      --border: #ded6ca;
+      --accent: #2f6f4e;
+      --accent-strong: #1f5a3c;
+      --accent-soft: #e3f0e8;
+      --warning-bg: #fff3cf;
+      --warning-text: #73520b;
+      --inactive-bg: #ece8e1;
+      --inactive-text: #777067;
+      --danger: #8b3a2f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      letter-spacing: 0;
+      color: var(--text);
+      background: var(--page);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+      letter-spacing: 0;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled,
+    input:disabled {
+      cursor: not-allowed;
+    }
+
+    .page-header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 22px 32px;
+      background: rgba(255, 253, 249, 0.97);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 4px rgba(36, 49, 40, 0.08);
+    }
+
+    .header-copy {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.85rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 310px;
+      gap: 24px;
+      width: min(1220px, 100%);
+      margin: 0 auto;
+      padding: 26px 30px 34px;
+    }
+
+    .rows {
+      display: grid;
+      gap: 16px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 196px;
+      gap: 22px;
+      align-items: start;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: 0 1px 2px rgba(36, 49, 40, 0.04);
+    }
+
+    .row.not-included {
+      background: var(--inactive-bg);
+      color: var(--inactive-text);
+      opacity: 0.74;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .pill.attention {
+      background: var(--warning-bg);
+      color: var(--warning-text);
+    }
+
+    .row.not-included .pill {
+      background: #ddd8cf;
+      color: var(--inactive-text);
+    }
+
+    .title {
+      margin: 0 0 14px;
+      font-size: 1.16rem;
+      line-height: 1.35;
+      font-weight: 760;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 170px;
+      gap: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.94rem;
+      font-weight: 500;
+    }
+
+    .words-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    .words-input:disabled {
+      color: var(--inactive-text);
+      background: #e2ddd5;
+    }
+
+    .quantity-control {
+      display: grid;
+      grid-template-columns: 42px minmax(48px, 1fr) 42px;
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #ffffff;
+    }
+
+    .quantity-control button {
+      min-height: 44px;
+      border: 0;
+      color: var(--accent-strong);
+      background: var(--surface-soft);
+      font-size: 1.18rem;
+      font-weight: 800;
+    }
+
+    .quantity-control button:disabled {
+      color: var(--inactive-text);
+      background: #ded8cf;
+    }
+
+    .quantity-control input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      border-right: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+      text-align: center;
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    .quantity-control input:disabled {
+      color: var(--inactive-text);
+      background: #e2ddd5;
+    }
+
+    .row-actions {
+      display: grid;
+      gap: 12px;
+      justify-items: stretch;
+    }
+
+    .row-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .secondary-action,
+    .approve-action {
+      min-height: 46px;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: 760;
+    }
+
+    .secondary-action {
+      border: 1px solid var(--border);
+      color: var(--danger);
+      background: #ffffff;
+    }
+
+    .row.not-included .secondary-action {
+      color: #ffffff;
+      border-color: var(--accent-strong);
+      background: var(--accent);
+    }
+
+    .approve-action {
+      border: 1px solid var(--accent-strong);
+      color: #ffffff;
+      background: var(--accent);
+      box-shadow: 0 1px 2px rgba(36, 49, 40, 0.12);
+      white-space: nowrap;
+    }
+
+    .summary {
+      position: sticky;
+      top: 118px;
+      display: grid;
+      gap: 16px;
+      align-self: start;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .summary p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .footer-approval {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 20px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .footer-approval p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .approved-panel {
+      display: none;
+      width: min(760px, calc(100% - 40px));
+      margin: 70px auto;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 2px 10px rgba(36, 49, 40, 0.08);
+    }
+
+    .approved-panel h2 {
+      margin: 0 0 14px;
+      font-size: 1.7rem;
+      line-height: 1.25;
+    }
+
+    .approved-panel p {
+      margin: 10px 0 0;
+      font-size: 1.1rem;
+    }
+
+    .approved-panel .do-not-close {
+      color: var(--danger);
+      font-weight: 850;
+    }
+
+    .offscreen {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 860px) {
+      .page-header,
+      .layout,
+      .row,
+      .fields,
+      .footer-approval {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .page-header {
+        padding: 18px;
+      }
+
+      .layout {
+        padding: 18px;
+      }
+
+      .summary {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script type="application/json" id="catalog-review-data">__CATALOG_REVIEW_DATA__</script>
+
+  <textarea id="catalog-review-approved-payload" class="offscreen" aria-hidden="true" tabindex="-1"></textarea>
+
+  <main id="review-ui">
+    <header class="page-header">
+      <div class="header-copy">
+        <p class="eyebrow">RedMart catalog setup</p>
+        <h1>Review products to remember</h1>
+        <p class="subtitle">Everything is included unless you mark it as not included.</p>
+      </div>
+      <button class="approve-action" type="button" data-approve-top>Approve 0 products</button>
+    </header>
+
+    <div class="layout">
+      <section aria-label="Candidate products">
+        <div id="candidate-rows" class="rows"></div>
+        <div class="footer-approval">
+          <p data-bottom-summary>0 products will be remembered. Not-included rows will be skipped.</p>
+          <button class="approve-action" type="button" data-approve-bottom>Approve 0 products</button>
+        </div>
+      </section>
+
+      <aside class="summary" aria-label="Review notes">
+        <p><strong>Family words</strong></p>
+        <p>Family words are optional.</p>
+        <p>Use the words your household would naturally write on a grocery list.</p>
+      </aside>
+    </div>
+  </main>
+
+  <section id="approved-panel" class="approved-panel" aria-live="polite">
+    <h2>Approved. Go back to the agent to continue.</h2>
+    <p class="do-not-close">DO NOT CLOSE THIS TAB.</p>
+    <p>The agent will close it for you when it is done.</p>
+  </section>
+
+  <script>
+    const dataNode = document.getElementById("catalog-review-data");
+    const approvedPayloadNode = document.getElementById("catalog-review-approved-payload");
+    const reviewUi = document.getElementById("review-ui");
+    const approvedPanel = document.getElementById("approved-panel");
+    const rowContainer = document.getElementById("candidate-rows");
+    const approveButtons = [
+      document.querySelector("[data-approve-top]"),
+      document.querySelector("[data-approve-bottom]")
+    ];
+    const bottomSummary = document.querySelector("[data-bottom-summary]");
+
+    let reviewData = { source: null, candidates: [] };
+    const state = new Map();
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value).replace(/`/g, "&#96;");
+    }
+
+    function safeDomId(value) {
+      const safe = String(value ?? "candidate")
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      return safe || "candidate";
+    }
+
+    function asPositiveQuantity(value, fallback) {
+      const parsed = Number.parseInt(value, 10);
+      if (!Number.isFinite(parsed) || parsed < 1) {
+        return fallback;
+      }
+      return parsed;
+    }
+
+    function familyWordsFromText(value) {
+      return String(value ?? "")
+        .split(",")
+        .map((word) => word.trim())
+        .filter(Boolean);
+    }
+
+    function pluralizedProductText(count) {
+      return `${count} product${count === 1 ? "" : "s"}`;
+    }
+
+    function formatMeta(candidate) {
+      const parts = [];
+      if (candidate.pack_size) {
+        parts.push(candidate.pack_size);
+      }
+      if (candidate.observed_price_sgd !== undefined && candidate.observed_price_sgd !== null && candidate.observed_price_sgd !== "") {
+        parts.push(`S$${candidate.observed_price_sgd}`);
+      }
+      if (candidate.observed_quantity !== undefined && candidate.observed_quantity !== null && candidate.observed_quantity !== "") {
+        parts.push(`Observed qty ${candidate.observed_quantity}`);
+      }
+      if (candidate.purchase_hint) {
+        parts.push(candidate.purchase_hint);
+      }
+      return parts;
+    }
+
+    function readData() {
+      const raw = dataNode.textContent.trim();
+      if (!raw || raw === "__CATALOG_REVIEW_DATA__") {
+        return { source: null, candidates: [] };
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        return {
+          source: parsed.source ?? null,
+          candidates: Array.isArray(parsed.candidates) ? parsed.candidates : []
+        };
+      } catch (error) {
+        rowContainer.innerHTML = `<article class="row"><div><p class="title">Could not read review data.</p><p class="row-note">${escapeHtml(error.message)}</p></div></article>`;
+        return { source: null, candidates: [] };
+      }
+    }
+
+    function candidateKey(candidate, index) {
+      return String(candidate.candidate_id ?? `candidate-${index + 1}`);
+    }
+
+    function initialState(candidate, key) {
+      const included = candidate.include !== false;
+      return {
+        candidate,
+        key,
+        include: included,
+        usual_quantity: included ? asPositiveQuantity(candidate.usual_quantity ?? candidate.observed_quantity, 1) : 0,
+        family_words: included && Array.isArray(candidate.family_words) ? candidate.family_words.map(String) : []
+      };
+    }
+
+    function renderRows() {
+      rowContainer.innerHTML = reviewData.candidates.map((candidate, index) => {
+        const key = candidateKey(candidate, index);
+        const entry = state.get(key) ?? initialState(candidate, key);
+        state.set(key, entry);
+
+        const domId = `${safeDomId(key)}-${index}`;
+        const isIncluded = entry.include;
+        const rowClass = isIncluded ? "row" : "row not-included";
+        const statusText = isIncluded ? (candidate.attention_tag || "Included") : "Not included";
+        const statusClass = isIncluded && candidate.attention_tag ? "pill attention" : "pill";
+        const metaText = formatMeta(candidate).map(escapeHtml).join(" · ");
+        const wordsValue = isIncluded ? entry.family_words.join(", ") : "";
+        const quantityValue = isIncluded ? entry.usual_quantity : 0;
+        const actionText = isIncluded ? "Do not include" : "Include";
+
+        return `
+          <article class="${rowClass}" data-candidate-key="${escapeAttribute(key)}">
+            <div>
+              <div class="meta">
+                <span class="${statusClass}">${escapeHtml(statusText)}</span>
+                <span>${metaText}</span>
+              </div>
+              <h2 class="title">${escapeHtml(candidate.title)}</h2>
+              <div class="fields">
+                <label for="words-${escapeAttribute(domId)}">
+                  <span>Family words</span>
+                  <input class="words-input" id="words-${escapeAttribute(domId)}" type="text" value="${escapeAttribute(wordsValue)}" ${isIncluded ? "" : "disabled"}>
+                  <span class="hint">Family words are optional.</span>
+                </label>
+                <label for="quantity-${escapeAttribute(domId)}">
+                  <span>Usual quantity</span>
+                  <span class="quantity-control">
+                    <button type="button" data-quantity-minus aria-label="Decrease usual quantity" ${isIncluded ? "" : "disabled"}>-</button>
+                    <input id="quantity-${escapeAttribute(domId)}" type="text" inputmode="numeric" value="${escapeAttribute(quantityValue)}" ${isIncluded ? "" : "disabled"}>
+                    <button type="button" data-quantity-plus aria-label="Increase usual quantity" ${isIncluded ? "" : "disabled"}>+</button>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="row-actions">
+              <button class="secondary-action" type="button" data-toggle-include>${actionText}</button>
+              <p class="row-note">${escapeHtml(candidate.notes || "")}</p>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      updateApprovalCopy();
+    }
+
+    function updateApprovalCopy() {
+      const includedCount = Array.from(state.values()).filter((entry) => entry.include).length;
+      const productText = pluralizedProductText(includedCount);
+      approveButtons.forEach((button) => {
+        button.textContent = `Approve ${productText}`;
+      });
+      bottomSummary.textContent = `${productText} will be remembered. Not-included rows will be skipped.`;
+    }
+
+    function syncRowState(row) {
+      const entry = state.get(row.dataset.candidateKey);
+      if (!entry || !entry.include) {
+        return;
+      }
+      const wordsInput = row.querySelector(".words-input");
+      const quantityInput = row.querySelector(".quantity-control input");
+      entry.family_words = familyWordsFromText(wordsInput.value);
+      entry.usual_quantity = asPositiveQuantity(quantityInput.value, 1);
+      quantityInput.value = String(entry.usual_quantity);
+      updateApprovalCopy();
+    }
+
+    function setIncluded(row, include) {
+      const entry = state.get(row.dataset.candidateKey);
+      if (!entry) {
+        return;
+      }
+      if (entry.include) {
+        syncRowState(row);
+      }
+      entry.include = include;
+      if (include) {
+        entry.usual_quantity = asPositiveQuantity(entry.usual_quantity || entry.candidate.usual_quantity || entry.candidate.observed_quantity, 1);
+        if (!entry.family_words.length && Array.isArray(entry.candidate.family_words)) {
+          entry.family_words = entry.candidate.family_words.map(String);
+        }
+      } else {
+        entry.usual_quantity = 0;
+        entry.family_words = [];
+      }
+      renderRows();
+    }
+
+    function adjustQuantity(row, delta) {
+      const entry = state.get(row.dataset.candidateKey);
+      if (!entry || !entry.include) {
+        return;
+      }
+      const input = row.querySelector(".quantity-control input");
+      const next = Math.max(1, asPositiveQuantity(input.value, entry.usual_quantity || 1) + delta);
+      entry.usual_quantity = next;
+      input.value = String(next);
+    }
+
+    function buildApprovedPayload() {
+      const candidates = reviewData.candidates.map((candidate, index) => {
+        const key = candidateKey(candidate, index);
+        const entry = state.get(key) ?? initialState(candidate, key);
+        if (!entry.include) {
+          return {
+            candidate_id: key,
+            title: candidate.title ?? "",
+            pack_size: candidate.pack_size ?? null,
+            observed_price_sgd: candidate.observed_price_sgd ?? null,
+            observed_quantity: candidate.observed_quantity ?? null,
+            include: false,
+            usual_quantity: 0,
+            family_words: [],
+            attention_tag: candidate.attention_tag ?? null,
+            notes: candidate.notes ?? null
+          };
+        }
+
+        return {
+          candidate_id: key,
+          title: candidate.title ?? "",
+          pack_size: candidate.pack_size ?? null,
+          observed_price_sgd: candidate.observed_price_sgd ?? null,
+          observed_quantity: candidate.observed_quantity ?? null,
+          include: true,
+          usual_quantity: asPositiveQuantity(entry.usual_quantity, 1),
+          family_words: entry.family_words.slice(),
+          attention_tag: candidate.attention_tag ?? null,
+          notes: candidate.notes ?? null
+        };
+      });
+
+      return {
+        review_schema_version: 1,
+        source: reviewData.source,
+        approved_at: new Date().toISOString(),
+        included_count: candidates.filter((candidate) => candidate.include).length,
+        candidates
+      };
+    }
+
+    rowContainer.addEventListener("input", (event) => {
+      const row = event.target.closest("[data-candidate-key]");
+      if (row) {
+        syncRowState(row);
+      }
+    });
+
+    rowContainer.addEventListener("click", (event) => {
+      const row = event.target.closest("[data-candidate-key]");
+      if (!row) {
+        return;
+      }
+      if (event.target.matches("[data-toggle-include]")) {
+        const entry = state.get(row.dataset.candidateKey);
+        setIncluded(row, !entry.include);
+      }
+      if (event.target.matches("[data-quantity-minus]")) {
+        adjustQuantity(row, -1);
+      }
+      if (event.target.matches("[data-quantity-plus]")) {
+        adjustQuantity(row, 1);
+      }
+    });
+
+    approveButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-candidate-key]").forEach(syncRowState);
+        approvedPayloadNode.value = JSON.stringify(buildApprovedPayload(), null, 2);
+        reviewUi.style.display = "none";
+        approvedPanel.style.display = "block";
+        approvedPanel.focus();
+      });
+    });
+
+    reviewData = readData();
+    reviewData.candidates.forEach((candidate, index) => {
+      const key = candidateKey(candidate, index);
+      state.set(key, initialState(candidate, key));
+    });
+    renderRows();
+  </script>
+</body>
+</html>
