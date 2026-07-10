@@ -1,0 +1,49 @@
+{
+  "review_schema_version": 1,
+  "source": {
+    "kind": "redmart-order-history",
+    "generated_at": "2026-07-10T00:00:00+08:00",
+    "notes": "Sample data for the reusable catalog review template."
+  },
+  "candidates": [
+    {
+      "candidate_id": "cand_redmart_cherry_tomato",
+      "title": "RedMart Cherry Tomato",
+      "pack_size": "250g",
+      "observed_price_sgd": 1.85,
+      "observed_quantity": 2,
+      "purchase_hint": "Bought once",
+      "include": true,
+      "usual_quantity": 2,
+      "family_words": ["cherry tomatoes", "tomatoes"],
+      "attention_tag": null,
+      "notes": "Visible RedMart order row candidate."
+    },
+    {
+      "candidate_id": "cand_chobani_kids_strawberry",
+      "title": "Chobani Kids Pouch Greek Yogurt Strawberry 100G",
+      "pack_size": "100g",
+      "observed_price_sgd": 2.95,
+      "observed_quantity": 4,
+      "purchase_hint": "Bought 5 times",
+      "include": true,
+      "usual_quantity": 4,
+      "family_words": ["kids yogurt", "strawberry yogurt", "chobani"],
+      "attention_tag": "Needs words",
+      "notes": "Several yogurt variants may need distinct family words."
+    },
+    {
+      "candidate_id": "cand_white_castle_butter_cookies",
+      "title": "White Castle Butter Cookies",
+      "pack_size": "454g",
+      "observed_price_sgd": 6.8,
+      "observed_quantity": 1,
+      "purchase_hint": "Bought once",
+      "include": true,
+      "usual_quantity": 1,
+      "family_words": [],
+      "attention_tag": null,
+      "notes": "Sample one-off product for not-included row testing."
+    }
+  ]
+}
