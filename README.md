@@ -171,7 +171,9 @@ If you do not know what YAML is, you can ignore that word; it is just the catalo
 2. Log into Lazada/RedMart in the browser the agent can use.
 3. Open the Lazada `My Orders` page: `https://my.lazada.sg/customer/order/index/`.
 4. Ask an AI agent such as Codex, Claude Code, or another browser-capable agent to read that page and update this repo's grocery catalog with your products.
-5. Review the generated catalog before using it for a real cart fill.
+5. Review the generated catalog page. It keeps discovered products included by default, lets you mark one-offs as `Do not include`, adjust `Usual quantity`, and optionally edit `Family words`.
+6. Click `Approve N products` when the page looks right.
+7. When the page says `Approved. Go back to the agent to continue.` and `DO NOT CLOSE THIS TAB.`, return to your agent. The agent will read the approved page, update the catalog, and close or clean up the temporary review page.
 
 Recent orders are a strong starting point. They already contain product titles, pack sizes, quantities, prices, and the products your household actually bought.
 
@@ -219,6 +221,7 @@ After that, update it only when preferred SKUs, default quantities, or fallback 
 
 - `grocery-catalog.yaml` - the source of truth for grocery aliases, default quantities, and preferred RedMart/Lazada product URLs.
 - `AGENTS.md` - detailed instructions for browser-using agents that seed the catalog and fill the cart.
+- `templates/redmart-catalog-review-template.html` - reusable local review page template for catalog seeding and substantial catalog updates.
 - `examples/` - example grocery-list photos used to test the flow.
 
 ## Catalog Format
