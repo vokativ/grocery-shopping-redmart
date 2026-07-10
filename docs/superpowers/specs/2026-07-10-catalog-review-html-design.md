@@ -64,6 +64,22 @@ For long lists, repeat the approval action at the bottom with plain summary text
 
 The count is the number of included products, not the sum of usual quantities.
 
+## Visual Tone
+
+The page should feel warm, calm, and household-friendly, not like an IT department form.
+
+Use a soft off-white page background with white or near-white product rows. A subtle warm neutral is acceptable, but avoid making the whole interface beige, brown, or monochrome. The page still needs enough contrast for easy scanning during a long 50-100 item review.
+
+Product rows should look like approachable review cards rather than spreadsheet cells. Use gently rounded corners, soft borders, comfortable spacing, and clear separation between rows. Avoid sharp table-grid styling, heavy black borders, dense spreadsheet lines, and cramped controls.
+
+Interactive controls should be large and obvious:
+
+- Quantity plus/minus buttons should be easy to click.
+- `Do not include`, `Include`, and `Approve N products` should look like actions, not tiny table controls.
+- Dimmed not-included rows should remain readable while clearly feeling inactive.
+
+The overall tone should be simple and adult, not playful or childish. It should feel like a practical family tool: friendly enough to trust, quiet enough to review carefully.
+
 ## Copy And Labels
 
 Use plain, household-friendly wording.
