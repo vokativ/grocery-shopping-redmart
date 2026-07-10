@@ -32,6 +32,8 @@ Never place an order, choose delivery slots, confirm payment, save payment detai
 6. Add or update quantities in the logged-in browser cart.
 7. Stop before final checkout, delivery-slot confirmation, payment, or purchase confirmation.
 
+If an item does not match `grocery-catalog.yaml`, do not add it and do not search for or guess a substitute unless the user explicitly asks to search, add a new catalog item, or expand the catalog. Report unmatched items for human handling.
+
 ## Product Choice And Availability
 
 Rank is a preference, not an absolute rule. For each requested grocery item:
@@ -45,18 +47,32 @@ Rank is a preference, not an absolute rule. For each requested grocery item:
 
 The page structure can change. Do not depend on a single fragile CSS selector for availability. A reliable computer-use fallback is to visually inspect the right-side product details area near `Delivery Options` and `Product Availability`, then read date labels such as `Today`, `Tomorrow`, or weekday/date chips.
 
+## Existing Cart Handling
+
+Before browser actions that will add or update items, inspect the current cart when practical. Classify existing cart rows by product title and item/SKU pair:
+
+- `requested`: the row matches an item on the current grocery list after catalog matching.
+- `unrequested`: the row is in the cart but is not on the current grocery list.
+
+Default behavior is to add or update requested items and leave unrequested rows alone. If unrequested rows are present, tell the user they are already in the cart and ask whether to keep them or remove them before filling the current list; keeping them is the default.
+
+If the user asks to start fresh, rebuild, fill the cart again after a bad attempt, clean up a weird previous attempt, or otherwise indicates that the cart should reflect only the current list, remove unrequested rows before or while filling the cart. Still report what was removed.
+
 ## Browser Navigation Notes
 
 - Use the logged-in Chrome session.
 - Prefer `canonical_url` over search.
 - Product pages usually have a visible `Add to cart` button near the product details and price.
-- If the add button is missing, disabled, or the page says the item is unavailable, try the next ranked product or report the issue.
+- If the main add button is missing, distinguish "already in cart" from "not available." A quantity stepper, quantity input, or `Go to cart` control usually means the product is already in the cart; verify the cart row quantity instead of adding again.
+- If the main add button is disabled or the page says the item is unavailable, try the next ranked product or report the issue.
+- Ignore recommendation, carousel, and sponsored-item `Add to Cart` buttons on product pages. Use only the main product add or quantity controls for the requested product.
 - Cart rows contain the product title, pack size, price, and a quantity text field.
 - To change quantity, find the cart row whose product link contains the item/sku pair, focus its quantity input, replace the number, and press Enter.
 - Re-read the cart row after changing quantity.
 - Avoid relying on exact class names. Prefer visible text, product title, canonical URL IDs, and row-level matching.
-- After adding items, always open the cart and verify product titles and quantities.
-- The header cart count alone is not enough because quantity and line count are different things.
+- After adding items, always open the cart and verify product titles, item/SKU pairs, pack sizes, and quantities from the actual cart rows.
+- The header cart count, checkout selected count, subtotal, and order summary are not enough to verify cart contents. Lazada can show cart rows while the selected checkout count or subtotal is zero.
+- Do not select checkout checkboxes merely to verify cart contents.
 - Never click checkout, choose delivery slots, confirm payment, save payment details, or place the order.
 
 ## Cart-Fill Checklist
@@ -66,13 +82,15 @@ Before touching the browser:
 - Parse the image, typed list, or voice-dictated list.
 - Normalize quantities from explicit text if present; otherwise use `default_quantity`.
 - Produce a proposed cart table with matched item, product title, quantity, and uncertain matches.
-- Ask for approval if there are uncertain matches, unknown items, or surprising quantities.
+- Ask for approval if there are uncertain matches, unknown items, surprising quantities, or existing cart rows that are not on the current list.
 
 During browser work:
 
+- Identify which existing cart rows are requested versus unrequested when practical.
 - Check product-page availability dates before adding.
 - Prefer today/tomorrow, accept two days from now, and try the next ranked product when rank 1 is later than two days from now.
-- Verify final cart line items and quantities.
+- Treat product-page quantity controls or `Go to cart` as likely already-in-cart state, then verify the cart row.
+- Verify final cart line items and quantities from row-level cart data.
 
 After browser work:
 
