@@ -173,7 +173,9 @@ Fallback behavior:
 
 The implementation should not depend on each agent inventing a new review page from scratch.
 
-V1 should add a reusable HTML template or example file to the repo. The template should define the page structure, visual style, row states, approval behavior, and machine-readable approved payload location. During seeding, the agent should slot discovered candidate data into this established structure and write a temporary review page from it.
+V1 should add a reusable, self-contained HTML template file to the repo. This should be an already-wired review page, not just a visual example. The template should include the page structure, visual style, row states, client-side interaction behavior, approval behavior, and machine-readable approved payload location.
+
+During seeding or catalog update, the agent should copy or instantiate that template into a temporary per-run review file and insert the discovered product candidates into the template's data slot. The agent should not hand-write a new page design or new interaction logic for each run.
 
 The repo should also document how agents use the template:
 
@@ -181,7 +183,7 @@ The repo should also document how agents use the template:
 - `README.md` should describe the user-facing review step at a high level, without exposing template internals or JSON mechanics.
 - Any generated per-run review page remains temporary and should be removed at the end of the seeding/update flow unless the user asks to keep it.
 
-The reusable template or example is the project asset. The filled-in review page is only a per-run approval surface.
+The reusable HTML template is the project asset and stays in the repo. The filled-in review page is only a per-run approval surface.
 
 ## Generated Approval Payload
 
