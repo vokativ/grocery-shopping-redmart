@@ -101,6 +101,11 @@ test("not-included rows preserve state but approval payload excludes edits", () 
   const setIncludedBody = extractFunctionBody(template, "function setIncluded(row, include)");
   assert.doesNotMatch(setIncludedBody, /entry\.family_words\s*=\s*\[\]/);
   assert.doesNotMatch(setIncludedBody, /entry\.usual_quantity\s*=\s*0/);
+  assert.doesNotMatch(setIncludedBody, /!entry\.family_words\.length/);
+  assert.doesNotMatch(
+    setIncludedBody,
+    /entry\.family_words\s*=\s*entry\.candidate\.family_words\.map\(String\)/
+  );
 
   assert.match(
     template,
