@@ -27,6 +27,11 @@ test("normalizeReviewData preserves candidate review fields", () => {
   assert.equal(normalized.candidates[0].usual_quantity, 2);
   assert.deepEqual(normalized.candidates[0].family_words, ["cherry tomatoes", "tomatoes"]);
   assert.equal(normalized.candidates[0].observed_price_sgd, 1.85);
+
+  const defaulted = normalizeReviewData({
+    candidates: [{ candidate_id: "cand_1", title: "Title" }]
+  });
+  assert.equal(defaulted.candidates[0].purchase_hint, "Bought in RedMart order history");
 });
 
 test("normalizeReviewData rejects missing required fields", () => {
