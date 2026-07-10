@@ -6,19 +6,64 @@ Use these instructions when setting up this repository for a household or fillin
 
 Use this flow when adapting the repo for a new household before normal cart filling.
 
+### Before Seeding
+
+1. Read this file before using the browser and briefly restate the intended seeding workflow in the thread.
+2. For initial catalog seeding or substantial cart/catalog updating, keep a temporary scratch file while working.
+3. Use the scratch file to track page-reading progress, challenge prompts, stale state, title drift, and unresolved decisions.
+4. At the end of the process, summarize the useful outcome to the user and remove the scratch file. Do not make scratch files part of the user's normal workflow.
+5. Use a `redmart-catalog-candidates-*.md` review file as the approval boundary before editing `grocery-catalog.yaml`.
+6. Do not update `grocery-catalog.yaml` until the user has reviewed the candidate list.
+
+### Discovery Pass
+
 1. Start from the logged-in Chrome session.
 2. Open the Lazada `My Orders` page: `https://my.lazada.sg/customer/order/index/`.
 3. Use only order cards whose visible shop or store name is `RedMart`.
 4. Click `Show All` on RedMart cards when present.
 5. Ignore Taobao and other Lazada seller orders unless the user explicitly asks to include them.
-6. Build draft catalog entries from visible order-row data: product title, pack size or SKU label, quantity, and observed price.
-7. Ask the user about aliases or unclear product matches before finalizing entries.
-8. Open RedMart order detail pages or product pages only when needed to capture canonical URLs, item IDs, SKU IDs, or resolve unclear products.
-9. Replace or update `grocery-catalog.yaml` with the household's products after user review.
+6. Build draft catalog candidates from visible order-row data: product title, pack size or SKU label, quantity, and observed price.
+7. Ask the user to remove one-offs, choose which candidates belong in the household catalog, and clarify aliases or unclear product matches.
 
-The `My Orders` overview is the discovery page, not always the final source of canonical product IDs. During testing, overview product links appeared as JavaScript/hash links rather than stable `https://www.lazada.sg/products/i<item_id>-s<sku_id>.html` URLs. After drafting entries from the overview, open RedMart order details or product pages only when needed to capture canonical RedMart/Lazada URLs, item IDs, and SKU IDs. If a product page is unavailable or the match is unclear, keep it out of the catalog or rank it as a fallback after human review.
+The `My Orders` overview is the discovery page, not the final source of canonical product IDs. During testing, overview product links appeared as JavaScript/hash links rather than stable `https://www.lazada.sg/products/i<item_id>-s<sku_id>.html` URLs. Overview SKU titles and photos may not navigate to product pages. Do not treat overview rows as canonical product identity.
 
-For RedMart filtering, prefer visible page text over brittle CSS selectors. The most reliable signal is the visible shop or detail-page seller name `RedMart`. In inspected order-detail URLs, `shopGroupKey=ORDERLOGIC_<tradeOrderId>_99197_...` appeared on RedMart orders, while non-RedMart examples used other IDs and visible names such as `Living Crazy`, `Bike Terminal`, and `Taobao`; treat that URL token as a supporting hint, not a permanent rule.
+Lazada overview pagination can update visible order cards while leaving embedded app state such as `window.__initData__`, detail/header anchors, or previously parsed order IDs stale. If visible page text and parsed state disagree, trust the visible page for candidate drafting only, record the mismatch in the scratch file, and switch to order-detail pages for canonical item IDs.
+
+For RedMart filtering, prefer visible page text over brittle CSS selectors. The most reliable signal is the visible shop or detail-page seller name `RedMart`. Detail-row data can also expose `bizCode: ali.global.lazada.trade.redmart`, which is a stronger RedMart signal than checking whether the overall page body contains the word `RedMart`. In inspected order-detail URLs, `shopGroupKey=ORDERLOGIC_<tradeOrderId>_99197_...` appeared on RedMart orders, while non-RedMart examples used other IDs and visible names such as `Living Crazy`, `Bike Terminal`, and `Taobao`; treat that URL token as a supporting hint, not a permanent rule.
+
+### Detail And Product Resolution Pass
+
+1. For retained candidates, open RedMart order detail pages in new tabs, ideally from the order card's order title, order number, logo, or another visible detail-opening control.
+2. Verify each tab is an order detail page such as `https://my.lazada.sg/customer/order/view/?tradeOrderId=...`.
+3. Process SKU rows from the order detail page, not from the order overview.
+4. From each order detail page, click the SKU title or product photo to reach the product page when possible.
+5. If a detail-page SKU click fails but the detail page exposes `itemUrl`, `itemId`, and `skuId`, use those fields as a recorded fallback instead of generic product search.
+6. Open canonical product URLs to confirm current title and pack size before inserting catalog entries.
+7. Offer to close agent-opened order and product tabs when catalog seeding or catalog updating is done.
+
+### Gentle Browser Use And Verification Prompts
+
+This is legitimate user-assisted shopping from a logged-in household account, but still behave like a careful human browser session rather than a scraper.
+
+- Do not rapid-fire clicks, reloads, pagination actions, API calls, or product-page opens.
+- Use one overview tab plus one detail/product tab by default. Avoid opening many order or product tabs at once.
+- After pagination, navigation, or `Show All`, wait for visible page state to settle before the next action.
+- Process orders in small batches, for example 5-10 orders, then pause to summarize scratch notes and reassess.
+- Prefer normal visible UI navigation over direct API probing. Do not repeatedly POST to Lazada order APIs.
+- If page state is stale, record the issue and change strategy instead of retrying quickly.
+- If Lazada shows a slider, CAPTCHA, "unusual traffic", or similar verification modal, stop immediately and ask the user to clear it in Chrome. Do not bypass or automate the challenge.
+
+### Catalog Insertion Rules
+
+1. Compare `item_id` + `sku_id` before relying on title matching.
+2. If a retained candidate resolves to an item/SKU already in `grocery-catalog.yaml` under a different title, do not add a duplicate. Record the title drift in the temporary scratch file.
+3. If a product is the same household concept but a different pack size, add it as another ranked product under the existing item instead of creating a duplicate household item.
+4. If a product page is unavailable or the match is unclear, keep it out of the catalog or rank it as a fallback only after human review.
+5. After editing the catalog, validate that `grocery-catalog.yaml` parses and check that newly added item/SKU pairs do not collide with existing entries.
+
+### Catalog Aliases
+
+Use aliases that match what the family would naturally write or say, not only the exact SKU title. Prefer general household terms such as `cream cheese`, `mayo`, `cherry tomatoes`, or `fabric softener`; add brand names only when they are likely to be spoken, such as `downy` or `anchor butter`. Include useful singular, plural, and shorthand forms. Avoid aliases that are too broad and likely to collide with other catalog items; for example, use `cream cheese` instead of `cheese` when the catalog has several cheeses. Ask the user before finalizing aliases that are unclear.
 
 Never place an order, choose delivery slots, confirm payment, save payment details, or go past cart/review steps while seeding the catalog.
 
@@ -95,6 +140,7 @@ During browser work:
 After browser work:
 
 - Report added, skipped, unavailable, duplicate, and uncertain items.
+- Offer to close agent-opened product/order tabs, while keeping the cart open if the user still needs it.
 - Leave the cart open for human checkout, delivery slot selection, payment, and purchase confirmation.
 
 ## Adding Future Items

@@ -646,7 +646,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303940576-s538054013.html"
         pack_size: "24 x 320 ml"
         observed_price_sgd: 17.82
-    notes: "Maps the 2026-07-03 whiteboard item 'Pepsi black'."
+      - rank: 2
+        title: "Pepsi Zero Sugar Cola Soda (4 x 320ML)"
+        item_id: "303966008"
+        sku_id: "538036500"
+        canonical_url: "https://www.lazada.sg/products/i303966008-s538036500.html"
+        pack_size: "4 x 320 ml"
+        observed_price_sgd: 3.80
+    notes: "Maps the 2026-07-03 whiteboard item 'Pepsi black'. Rank 2 was resolved from the 2026-07-10 order-detail pass."
 
   - id: fresh_milk
     category: chilled
@@ -746,3 +753,108 @@ items:
         pack_size: "400 g"
         observed_price_sgd: 6.90
     notes: "Optional known cart item from 2026-07-07; not on the whiteboard list."
+
+  - id: cherry_tomatoes
+    category: produce
+    default_quantity: 2
+    aliases:
+      - cherry tomatoes
+      - cherry tomato
+      - tomatoes
+      - redmart cherry tomato
+    preferred_products:
+      - rank: 1
+        title: "RedMart Cherry Tomato"
+        item_id: "327264049"
+        sku_id: "692104083"
+        canonical_url: "https://www.lazada.sg/products/i327264049-s692104083.html"
+        pack_size: "250 g"
+        observed_price_sgd: 1.85
+    notes: "Resolved from RedMart order detail 168669334178810 during the 2026-07-10 catalog seeding pass."
+
+  - id: mayonnaise
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - mayonnaise
+      - mayo
+      - real mayonnaise
+    preferred_products:
+      - rank: 1
+        title: "Supervalu Real Mayonnaise Free Range Eggs"
+        item_id: "2679295018"
+        sku_id: "17544099221"
+        canonical_url: "https://www.lazada.sg/products/i2679295018-s17544099221.html"
+        pack_size: "425 ml"
+        observed_price_sgd: 5.06
+    notes: "Resolved from RedMart order detail 168669334178810 during the 2026-07-10 catalog seeding pass."
+
+  - id: remedy_sodaly_yuzu
+    category: beverages
+    default_quantity: 2
+    aliases:
+      - remedy yuzu
+      - yuzu soda
+      - yuzu sodaly
+      - remedy sodaly yuzu
+    preferred_products:
+      - rank: 1
+        title: "Remedy Sodaly Yuzu Lemon - 4 x 250ml"
+        item_id: "3182702274"
+        sku_id: "21649460937"
+        canonical_url: "https://www.lazada.sg/products/i3182702274-s21649460937.html"
+        pack_size: "4 x 250 ml"
+        observed_price_sgd: 9.40
+    notes: "Default quantity follows the repeated order-detail quantity seen in order 169017571878810."
+
+  - id: dragonfruit
+    category: produce
+    default_quantity: 1
+    aliases:
+      - dragonfruit
+      - dragon fruit
+      - dragonfruits
+    preferred_products:
+      - rank: 1
+        title: "Dragonfruits 2s"
+        item_id: "301118003"
+        sku_id: "527094938"
+        canonical_url: "https://www.lazada.sg/products/i301118003-s527094938.html"
+        pack_size: "2 per pack"
+        observed_price_sgd: 3.15
+    notes: "Resolved from RedMart order detail 168190435878810 during the 2026-07-10 catalog seeding pass."
+
+  - id: fabric_softener
+    category: household
+    default_quantity: 1
+    aliases:
+      - fabric softener
+      - softener
+      - downy
+      - downy sunrise
+    preferred_products:
+      - rank: 1
+        title: "Downy Sunrise Fresh Concentrate Fabric Softener 3.5L"
+        item_id: "2250924577"
+        sku_id: "12960073965"
+        canonical_url: "https://www.lazada.sg/products/i2250924577-s12960073965.html"
+        pack_size: "3.5 L"
+        observed_price_sgd: 14.58
+    notes: "Resolved from RedMart order detail 168190435878810 during the 2026-07-10 catalog seeding pass."
+
+  - id: butter
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - butter
+      - unsalted butter
+      - anchor butter
+    preferred_products:
+      - rank: 1
+        title: "Anchor Unsalted Pure Butter 227G"
+        item_id: "301076866"
+        sku_id: "527078857"
+        canonical_url: "https://www.lazada.sg/products/i301076866-s527078857.html"
+        pack_size: "227 g"
+        observed_price_sgd: 5.70
+    notes: "Resolved from RedMart order detail 168190435878810 during the 2026-07-10 catalog seeding pass."
