@@ -69,8 +69,24 @@ test("renderCatalogReview writes static html with escaped embedded data", async 
   assert.deepEqual(result, { outputPath, candidateCount: 1 });
   assert.match(html, /id="catalog-review-data"/);
   assert.doesNotMatch(html, /__CATALOG_REVIEW_DATA__/);
+  assert.doesNotMatch(html, /raw === "\{"review_schema_version"/);
   assert.match(html, /Safe \\u003cscript> Title/);
   assert.match(html, /catalog-review-approved-payload/);
+});
+
+test("renderCatalogReview does not replace the JavaScript placeholder comparison", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "catalog-review-render-"));
+  const outputPath = join(tempDir, "review.html");
+  const inputPath = new URL(
+    "../examples/redmart-catalog-review-candidates.sample.json",
+    import.meta.url
+  );
+
+  await renderCatalogReview({ inputPath, outputPath });
+  const html = await readFile(outputPath, "utf8");
+
+  assert.doesNotMatch(html, /__CATALOG_REVIEW_DATA__/);
+  assert.doesNotMatch(html, /raw === "\{"review_schema_version"/);
 });
 
 test("renderCatalogReview rejects templates without the data placeholder", async () => {
