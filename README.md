@@ -212,7 +212,7 @@ After that, update it only when preferred SKUs, default quantities, or fallback 
 
 - The agent should not place the order.
 - The agent should not submit payment or save payment details.
-- **The agent stops before checkout** unless explicitly asked otherwise.
+- **The agent stops before checkout.** The human checks out manually.
 - The agent should not choose delivery slots or confirm purchase steps.
 - If a product is only available more than two days from now, the agent should ask or report it instead of adding it automatically.
 - If handwriting or product matching is uncertain, the agent should show the uncertainty before adding that item.
