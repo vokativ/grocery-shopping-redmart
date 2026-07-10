@@ -27,7 +27,11 @@ The page contains the candidate data and all review behavior inline. It is opene
 
 On approval, the page stores the final reviewed data in the page state and shows a prominent completion message:
 
-`Approved. You can return to the agent you're using to continue.`
+`Approved. Go back to the agent to continue.`
+
+`DO NOT CLOSE THIS TAB.`
+
+`The agent will close it for you when it is done.`
 
 The agent then reads the approved data from the open page through browser control and writes any temporary approval JSON it needs. Only after that does the agent update `grocery-catalog.yaml`.
 
@@ -74,7 +78,9 @@ Use:
 - `Do not include`
 - `Include`
 - `Approve N products`
-- `Approved. You can return to the agent you're using to continue.`
+- `Approved. Go back to the agent to continue.`
+- `DO NOT CLOSE THIS TAB.`
+- `The agent will close it for you when it is done.`
 
 Avoid:
 
@@ -130,6 +136,8 @@ The page should work as a local static HTML file opened in Chrome.
 The page stores review state client-side and, on approval, writes a serialized JSON payload into a hidden or offscreen DOM element that the agent can read through browser control.
 
 The user should never need to interact with the serialized payload.
+
+After approval, the page must clearly tell the user not to close the tab. The agent needs the approved page to remain open long enough to read the payload. Once the agent has read the payload, the agent can close the tab or offer to close it.
 
 Fallback behavior:
 
