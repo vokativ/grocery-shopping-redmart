@@ -70,6 +70,15 @@ The page should feel warm, calm, and household-friendly, not like an IT departme
 
 Use a soft off-white page background with white or near-white product rows. A subtle warm neutral is acceptable, but avoid making the whole interface beige, brown, or monochrome. The page still needs enough contrast for easy scanning during a long 50-100 item review.
 
+Use the default operating-system UI fonts so the page feels native in Chrome on macOS and Windows without requiring downloads. The CSS should use a system stack such as `system-ui`, `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, and common sans-serif fallbacks. Do not import web fonts or depend on network access.
+
+Typography should prioritize review comfort:
+
+- Body and form text should be large enough for sustained desktop review, generally 16px or larger.
+- Product titles should be prominent without feeling like marketing hero text.
+- Labels and metadata can be smaller, but must remain legible and should not look like dense admin-table fine print.
+- Use normal letter spacing and comfortable line height.
+
 Product rows should look like approachable review cards rather than spreadsheet cells. Use gently rounded corners, soft borders, comfortable spacing, and clear separation between rows. Avoid sharp table-grid styling, heavy black borders, dense spreadsheet lines, and cramped controls.
 
 Interactive controls should be large and obvious:
