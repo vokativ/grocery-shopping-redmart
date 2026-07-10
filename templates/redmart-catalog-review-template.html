@@ -598,9 +598,6 @@
       entry.include = include;
       if (include) {
         entry.usual_quantity = asPositiveQuantity(entry.usual_quantity || entry.candidate.usual_quantity || entry.candidate.observed_quantity, 1);
-        if (!entry.family_words.length && Array.isArray(entry.candidate.family_words)) {
-          entry.family_words = entry.candidate.family_words.map(String);
-        }
       }
       renderRows();
     }
