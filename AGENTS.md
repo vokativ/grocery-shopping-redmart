@@ -13,7 +13,7 @@ Use this flow when adapting the repo for a new household before normal cart fill
 3. Use the scratch file to track page-reading progress, challenge prompts, stale state, title drift, and unresolved decisions.
 4. At the end of the process, summarize the useful outcome to the user and remove the scratch file. Do not make scratch files part of the user's normal workflow.
 5. For initial seeding or substantial catalog updates, use the reusable HTML review template as the approval boundary before editing `grocery-catalog.yaml`.
-6. Generate a temporary per-run review page by inserting discovered candidate data into `templates/redmart-catalog-review-template.html`.
+6. Do not manually edit or reinvent `templates/redmart-catalog-review-template.html` during normal seeding. Prepare candidate JSON in the shape shown by `examples/redmart-catalog-review-candidates.sample.json`, then render the temporary page with `tools/render-catalog-review.mjs`.
 7. Ask the user to review the page in Chrome and click `Approve N products`.
 8. After approval, read the approved payload from the open page's `#catalog-review-approved-payload` field before editing `grocery-catalog.yaml`.
 9. Do not update `grocery-catalog.yaml` until the user has approved the HTML review page.
@@ -35,13 +35,23 @@ Lazada overview pagination can update visible order cards while leaving embedded
 
 For RedMart filtering, prefer visible page text over brittle CSS selectors. The most reliable signal is the visible shop or detail-page seller name `RedMart`. Detail-row data can also expose `bizCode: ali.global.lazada.trade.redmart`, which is a stronger RedMart signal than checking whether the overall page body contains the word `RedMart`. In inspected order-detail URLs, `shopGroupKey=ORDERLOGIC_<tradeOrderId>_99197_...` appeared on RedMart orders, while non-RedMart examples used other IDs and visible names such as `Living Crazy`, `Bike Terminal`, and `Taobao`; treat that URL token as a supporting hint, not a permanent rule.
 
-After drafting candidates, prepare candidate JSON with stable `candidate_id` values and render a temporary review page:
+### Review Page Generation
+
+After drafting candidates, prepare candidate JSON using `examples/redmart-catalog-review-candidates.sample.json` as the structure reference. Include `review_schema_version`, `source`, and a `candidates` array.
+
+For each candidate, include a stable `candidate_id`, `title`, and any available `pack_size`, `observed_price_sgd`, `observed_quantity`, `usual_quantity`, `family_words`, `attention_tag`, and `notes`. Use `include: true` by default unless there is a clear reason to start an item as not included.
+
+Render the temporary review page with the provided tool:
 
 ```bash
 node tools/render-catalog-review.mjs --input <candidate-json> --output redmart-catalog-review-<date>.html
 ```
 
+The renderer uses `templates/redmart-catalog-review-template.html`. Do not hand-edit the reusable template or create a one-off review UI unless the user explicitly asks for a template change.
+
 Open the generated page for the user. The page keeps all items included by default. The user can mark one-offs as `Do not include`, adjust `Usual quantity`, optionally edit `Family words`, and approve the included product count.
+
+When the user returns after seeing `Approved. Go back to the agent to continue.`, read the approved JSON from the open page's `#catalog-review-approved-payload` field. Treat that approved payload as the approval boundary for catalog insertion.
 
 ### Detail And Product Resolution Pass
 
