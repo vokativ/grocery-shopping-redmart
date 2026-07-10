@@ -12,8 +12,12 @@ Use this flow when adapting the repo for a new household before normal cart fill
 2. For initial catalog seeding or substantial cart/catalog updating, keep a temporary scratch file while working.
 3. Use the scratch file to track page-reading progress, challenge prompts, stale state, title drift, and unresolved decisions.
 4. At the end of the process, summarize the useful outcome to the user and remove the scratch file. Do not make scratch files part of the user's normal workflow.
-5. Use a `redmart-catalog-candidates-*.md` review file as the approval boundary before editing `grocery-catalog.yaml`.
-6. Do not update `grocery-catalog.yaml` until the user has reviewed the candidate list.
+5. For initial seeding or substantial catalog updates, use the reusable HTML review template as the approval boundary before editing `grocery-catalog.yaml`.
+6. Generate a temporary per-run review page by inserting discovered candidate data into `templates/redmart-catalog-review-template.html`.
+7. Ask the user to review the page in Chrome and click `Approve N products`.
+8. After approval, read the approved payload from the open page's `#catalog-review-approved-payload` field before editing `grocery-catalog.yaml`.
+9. Do not update `grocery-catalog.yaml` until the user has approved the HTML review page.
+10. After reading the payload, offer to close the review tab and remove the temporary per-run review page unless the user asks to keep it.
 
 ### Discovery Pass
 
@@ -31,6 +35,14 @@ Lazada overview pagination can update visible order cards while leaving embedded
 
 For RedMart filtering, prefer visible page text over brittle CSS selectors. The most reliable signal is the visible shop or detail-page seller name `RedMart`. Detail-row data can also expose `bizCode: ali.global.lazada.trade.redmart`, which is a stronger RedMart signal than checking whether the overall page body contains the word `RedMart`. In inspected order-detail URLs, `shopGroupKey=ORDERLOGIC_<tradeOrderId>_99197_...` appeared on RedMart orders, while non-RedMart examples used other IDs and visible names such as `Living Crazy`, `Bike Terminal`, and `Taobao`; treat that URL token as a supporting hint, not a permanent rule.
 
+After drafting candidates, prepare candidate JSON with stable `candidate_id` values and render a temporary review page:
+
+```bash
+node tools/render-catalog-review.mjs --input <candidate-json> --output redmart-catalog-review-<date>.html
+```
+
+Open the generated page for the user. The page keeps all items included by default. The user can mark one-offs as `Do not include`, adjust `Usual quantity`, optionally edit `Family words`, and approve the included product count.
+
 ### Detail And Product Resolution Pass
 
 1. For retained candidates, open RedMart order detail pages in new tabs, ideally from the order card's order title, order number, logo, or another visible detail-opening control.
@@ -40,6 +52,8 @@ For RedMart filtering, prefer visible page text over brittle CSS selectors. The 
 5. If a detail-page SKU click fails but the detail page exposes `itemUrl`, `itemId`, and `skuId`, use those fields as a recorded fallback instead of generic product search.
 6. Open canonical product URLs to confirm current title and pack size before inserting catalog entries.
 7. Offer to close agent-opened order and product tabs when catalog seeding or catalog updating is done.
+
+For HTML-reviewed catalog updates, treat the approved payload as the candidate source of truth. Do not re-add products the user marked as not included. Resolve canonical item IDs and SKU IDs only for approved included products, unless a skipped row is needed to detect a duplicate or title drift.
 
 ### Gentle Browser Use And Verification Prompts
 
