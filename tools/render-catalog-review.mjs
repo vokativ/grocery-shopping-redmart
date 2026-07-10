@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const DATA_PLACEHOLDER = "__CATALOG_REVIEW_DATA__";
+const DEFAULT_PURCHASE_HINT = "Bought in RedMart order history";
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultTemplatePath = path.resolve(
   moduleDir,
@@ -84,7 +85,7 @@ function normalizeCandidate(candidate, index) {
     pack_size: normalizeOptionalString(candidate.pack_size),
     observed_price_sgd: finiteNumberOrNull(candidate.observed_price_sgd),
     observed_quantity: observedQuantity,
-    purchase_hint: normalizeOptionalString(candidate.purchase_hint),
+    purchase_hint: normalizeOptionalString(candidate.purchase_hint) ?? DEFAULT_PURCHASE_HINT,
     include: candidate.include === undefined ? true : Boolean(candidate.include),
     usual_quantity: usualQuantity,
     family_words: normalizeFamilyWords(candidate.family_words),
