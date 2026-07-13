@@ -1,0 +1,19 @@
+{
+  "name": "redmart-grocery-cart-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reliable repeat-shopping tools for a household RedMart catalog.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node tools/validate-catalog.mjs",
+    "dry-run": "node tools/dry-run.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "yaml": "^2.8.1"
+  },
+  "license": "MIT"
+}

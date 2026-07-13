@@ -1,0 +1,37 @@
+name: Retailer collaboration
+description: Propose co-developing a workflow for another Singapore grocery retailer.
+title: "[Retailer]: "
+labels: ["retailer-collaboration"]
+body:
+  - type: input
+    id: retailer
+    attributes:
+      label: Retailer and shopping channel
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Household workflow
+      description: Why you use it, typical repeat order, and list format. Do not include private account data.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, computer, and agent environment
+    validations:
+      required: true
+  - type: checkboxes
+    id: commitment
+    attributes:
+      label: Collaboration commitment
+      options:
+        - label: I can use my own logged-in session for development and testing.
+          required: true
+        - label: I can join several focused working sessions.
+          required: true
+        - label: I can validate matching, availability, quantities, cart behavior, and safety.
+          required: true
+        - label: I can help re-test future breakage when practical.
+          required: true

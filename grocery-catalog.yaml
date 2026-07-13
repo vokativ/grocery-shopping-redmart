@@ -493,6 +493,8 @@ items:
       - cabbage kimchi
       - sliced cabbage kimchi
       - cj kimchi
+      - spicy kimchi
+      - korean banchan
     preferred_products:
       - rank: 1
         title: "JIN Spicy Kimchi Korean Banchan"
@@ -736,22 +738,6 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2124778809-s12060083764.html"
         pack_size: "345 g"
         observed_price_sgd: 8.20
-    notes: "Optional known cart item from 2026-07-07; not on the whiteboard list."
-
-  - id: spicy_kimchi
-    category: chilled
-    default_quantity: 1
-    aliases:
-      - spicy kimchi
-      - korean banchan
-    preferred_products:
-      - rank: 1
-        title: "JIN Spicy Kimchi Korean Banchan"
-        item_id: "2124781720"
-        sku_id: "12060189079"
-        canonical_url: "https://www.lazada.sg/products/i2124781720-s12060189079.html"
-        pack_size: "400 g"
-        observed_price_sgd: 6.90
     notes: "Optional known cart item from 2026-07-07; not on the whiteboard list."
 
   - id: cherry_tomatoes
