@@ -844,3 +844,21 @@ items:
         pack_size: "227 g"
         observed_price_sgd: 5.70
     notes: "Resolved from RedMart order detail 168190435878810 during the 2026-07-10 catalog seeding pass."
+
+  - id: 100plus_zero_sugar_isotonic
+    category: beverages
+    default_quantity: 1
+    aliases:
+      - 100plus
+      - 100plus isotonic
+      - 100plus zero
+      - zero sugar isotonic drink
+    preferred_products:
+      - rank: 1
+        title: "100PLUS Zero Sugar Isotonic Drink 325ML x 24"
+        item_id: "303720249"
+        sku_id: "537408441"
+        canonical_url: "https://www.lazada.sg/products/i303720249-s537408441.html"
+        pack_size: "24 x 325 ml"
+        observed_price_sgd: 13.90
+    notes: "Approved from the newest RedMart order 168317639378810 on 2026-07-13."
