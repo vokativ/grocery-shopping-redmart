@@ -1,5 +1,10 @@
 .DS_Store
+node_modules/
 .superpowers/
 /redmart-catalog-review-*.html
 /redmart-catalog-approval-*.json
+/redmart-catalog-candidates-*.json
+/redmart-catalog-candidates-*.md
+/redmart-order-reading-scratch*
+/redmart-*-scratch*
 .worktrees/
