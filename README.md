@@ -103,6 +103,18 @@ update the catalog. Do not choose delivery, go to checkout, or pay.
 
 You do not need to build the entire catalog in one sitting. Start with recent repeat purchases and let it improve as your family shops normally.
 
+### Add products from a later order
+
+The same review page also supports small catalog updates. Ask the agent to inspect the last RedMart order, compare it with the existing catalog, and show only the useful additions or changes for approval.
+
+```text
+Add useful products from my last RedMart order to the household catalog.
+Reuse the existing catalog review page, focus only on that order, and let me
+approve the candidates before you edit grocery-catalog.yaml.
+```
+
+The agent should reuse the existing candidate JSON and HTML renderer, resolve canonical item/SKU IDs only for approved products, avoid duplicates, validate the catalog, and clean up temporary review files afterward.
+
 ## 🛒 Prepare the everyday cart
 
 Once your family catalog is ready:
@@ -130,7 +142,7 @@ Useful changes can be as simple as:
 - `add sparkling wine`
 - `skip chicken breast`
 
-If something on the list is not in your family catalog, the agent reports it instead of guessing what you might want.
+If something on the list is not in your family catalog, the agent reports it instead of guessing what you might want. Confidently matched items can still be added; an unmatched item does not hold up the rest of the cart.
 
 ## How it stays consistent
 

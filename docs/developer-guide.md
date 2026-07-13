@@ -34,7 +34,7 @@ The dry run is a developer and diagnostic tool. Normal household users should wo
 - `tools/catalog.mjs` — catalog loading, validation, and exact alias matching.
 - `tools/dry-run.mjs` — credential-free proposed-cart diagnostic.
 - `tools/validate-catalog.mjs` — catalog integrity checks.
-- `tools/render-catalog-review.mjs` — renderer for the first-time catalog approval page.
+- `tools/render-catalog-review.mjs` — renderer for the shared catalog seeding and incremental-update approval page.
 - `templates/redmart-catalog-review-template.html` — reusable local approval UI.
 - `tests/` — catalog, renderer, and template contract tests.
 - `.github/workflows/ci.yml` — credential-free CI.
