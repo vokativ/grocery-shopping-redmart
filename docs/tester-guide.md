@@ -4,10 +4,10 @@ Thank you for testing. The goal is to learn where a busy household gets blocked,
 
 ## Before testing
 
-- Use a computer and browser profile you trust.
+- Use a computer and built-in browser profile you trust.
 - Read the README safety and privacy sections.
 - Remove addresses, names, order numbers, payment details, and cookies from anything you share.
-- Start with `npm run dry-run -- --file examples/grocery-list.txt` before connecting a logged-in browser.
+- Start with `npm run dry-run -- --file examples/grocery-list.txt` before connecting the signed-in built-in browser.
 
 ## Suggested sessions
 
@@ -19,7 +19,9 @@ Thank you for testing. The goal is to learn where a busy household gets blocked,
 
 ```text
 Operating system and version:
-Agent and browser used:
+ChatGPT desktop app version:
+Browser surface (built-in, Chrome fallback, or other):
+Direct desktop or Remote:
 Which session did you attempt?
 Did you reach a proposed cart? yes/no
 Did you reach a correctly verified live cart? yes/no/not attempted
@@ -29,6 +31,8 @@ What you expected:
 What happened instead:
 Unmatched items or incorrect quantities:
 Any intervention the agent needed:
+Any website-access or operating-system firewall prompt:
+For Lazada/RedMart access, was a persistent or Always allow option offered and selected?
 Did this feel faster or less burdensome than ordering normally? Why?
 Sanitized logs or screenshots, if useful:
 May anonymized feedback be quoted publicly? yes/no
