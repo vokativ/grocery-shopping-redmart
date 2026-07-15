@@ -19,7 +19,8 @@ body:
   - type: input
     id: environment
     attributes:
-      label: Browser, computer, and agent environment
+      label: Computer, agent, browser, and Remote environment
+      description: Include the operating system, desktop-app or agent version, built-in/fallback browser, and whether you will work directly or through Remote.
     validations:
       required: true
   - type: checkboxes

@@ -4,7 +4,7 @@ This document contains the technical and open-source details intentionally kept 
 
 ## Project status
 
-RedMart/Lazada Singapore is the maintained reference workflow. The tested path is ChatGPT for Desktop with access to a logged-in Chrome session on Mac or Windows. Other browser-capable agents may work but are not equally verified.
+RedMart/Lazada Singapore is the maintained reference workflow. The easiest and tested path is Codex in the ChatGPT desktop app using its own signed-in built-in browser on Mac or Windows. Direct use and Remote control of a Windows host have both been exercised. Chrome and its control extension remain optional fallbacks for existing Chrome profiles or other agents, but require more setup and are not the primary onboarding path.
 
 The project is currently being hardened for a small tester cohort and will then move to best-effort maintenance. There is no response-time, retailer, browser, operating-system, or agent compatibility guarantee.
 
@@ -25,7 +25,7 @@ npm run validate
 npm run dry-run -- --file examples/grocery-list.txt
 ```
 
-The dry run is a developer and diagnostic tool. Normal household users should work through ChatGPT for Desktop or Claude and do not need to run it themselves.
+The dry run is a developer and diagnostic tool. Normal household users should work through Codex in the ChatGPT desktop app and do not need to run it themselves.
 
 ## Repository map
 
@@ -35,6 +35,7 @@ The dry run is a developer and diagnostic tool. Normal household users should wo
 - `tools/dry-run.mjs` — credential-free proposed-cart diagnostic.
 - `tools/validate-catalog.mjs` — catalog integrity checks.
 - `tools/render-catalog-review.mjs` — renderer for the shared catalog seeding and incremental-update approval page.
+- `tools/serve-catalog-review.mjs` — loopback-only server that makes the generated approval page available to the built-in browser.
 - `templates/redmart-catalog-review-template.html` — reusable local approval UI.
 - `tests/` — catalog, renderer, and template contract tests.
 - `.github/workflows/ci.yml` — credential-free CI.
@@ -52,7 +53,7 @@ The dry run is a developer and diagnostic tool. Normal household users should wo
 - Canonical URLs match the stored item and SKU IDs.
 - Item/SKU pairs do not collide across the catalog.
 
-Live RedMart behavior cannot be tested in CI because it depends on a household's logged-in browser. Perform a careful live smoke test before meaningful releases or after credible breakage reports.
+Live RedMart behavior cannot be tested in CI because it depends on a household's logged-in browser. Perform a careful built-in-browser smoke test before meaningful releases or after credible breakage reports. Record whether the task ran directly on the desktop host or through Remote.
 
 ## Contribution boundaries
 
@@ -90,7 +91,9 @@ Use the retailer collaboration issue template or include:
 ```text
 Retailer and shopping channel:
 Why my household uses it:
-Browser, computer, and agent environment:
+Operating system and ChatGPT desktop app version:
+Browser surface (built-in, Chrome fallback, or other):
+Direct desktop or Remote:
 Typical repeat-order workflow and list format:
 I can join several two-hour working sessions: yes/no
 I can validate matching, availability, quantities, cart behavior, and safety: yes/no

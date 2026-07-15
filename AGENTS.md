@@ -2,6 +2,18 @@
 
 Use these instructions when setting up this repository for a household or filling a RedMart/Lazada cart from this repository.
 
+## Browser Surface, Sign-In, And Remote
+
+Use the ChatGPT desktop app's built-in browser by default on Mac and Windows. It has a browser profile and login state separate from Chrome. The same rules apply when the user starts or continues the task through Remote: browser actions run on the connected host, which must stay awake and online. Keep a Windows host unlocked while it performs browser work.
+
+1. Open Lazada/RedMart in the built-in browser and let visible page state settle.
+2. When ChatGPT asks to access a new website, show the request to the user and have them verify the hostname before approving it. Lazada/RedMart and the loopback catalog review URL are expected for this workflow. For a verified Lazada/RedMart hostname, recommend the persistent or `Always allow` option when offered so later runs do not prompt again. Do not recommend permanent access for an unexpected hostname.
+3. If authentication is required, ask the user to sign in directly in the visible built-in browser and tell you when it is ready. Never ask them to paste a password, OTP, or other credential into chat.
+4. Reuse the built-in browser's signed-in state. A fresh agent-controlled tab in the same built-in browser should retain that state unless the user logged out, the site expired it, or browser data was cleared.
+5. If a controlled tab becomes stale or disappears, obtain a fresh tab from the same built-in browser instead of reselecting a browser or claiming the user is signed out.
+6. Use Chrome and its control extension only when the user explicitly chooses Chrome, needs an existing Chrome profile, the built-in browser is unavailable, or another agent lacks an equivalent internal browser. Do not silently switch surfaces; Chrome and the built-in browser have separate sessions.
+7. Distinguish ChatGPT's per-website access request from an operating-system firewall alert. Never disable the firewall or open a public port. The catalog review helper binds only to `127.0.0.1`; if an unexpected OS firewall alert appears, stop and ask the user to verify the named process and requested network scope.
+
 ## Catalog Seeding And Updating
 
 Use this flow both when adapting the repo for a new household and when adding products from a later RedMart order. Both paths use the same candidate JSON, reusable HTML review page, approval payload, canonical-product resolution, and catalog validation.
@@ -21,14 +33,14 @@ Do not invent a separate update UI or bypass review just because the catalog alr
 4. At the end of the process, summarize the useful outcome to the user and remove the scratch file. Do not make scratch files part of the user's normal workflow.
 5. For initial seeding or substantial catalog updates, use the reusable HTML review template as the approval boundary before editing `grocery-catalog.yaml`.
 6. Do not manually edit or reinvent `templates/redmart-catalog-review-template.html` during normal seeding or updating. Prepare candidate JSON in the shape shown by `examples/redmart-catalog-review-candidates.sample.json`, then render the temporary page with `tools/render-catalog-review.mjs`.
-7. Ask the user to review the page in Chrome and click `Approve N products`.
+7. Ask the user to review the page in the active controlled browser and click `Approve N products`.
 8. After approval, read the approved payload from the open page's `#catalog-review-approved-payload` field before editing `grocery-catalog.yaml`.
 9. Do not update `grocery-catalog.yaml` until the user has approved the HTML review page.
-10. After reading the payload, offer to close the review tab and remove the temporary per-run review page unless the user asks to keep it.
+10. After reading the payload, stop the temporary loopback review server, offer to close the review tab, and remove the temporary per-run review page unless the user asks to keep it.
 
 ### Discovery Pass
 
-1. Start from the logged-in Chrome session.
+1. Start from the signed-in built-in browser session on the active desktop or Remote host.
 2. Open the Lazada `My Orders` page: `https://my.lazada.sg/customer/order/index/`.
 3. Use only order cards whose visible shop or store name is `RedMart`.
 4. Click `Show All` on RedMart cards when present.
@@ -65,9 +77,15 @@ node tools/render-catalog-review.mjs --input <candidate-json> --output redmart-c
 
 The renderer uses `templates/redmart-catalog-review-template.html`. Do not hand-edit the reusable template or create a one-off review UI unless the user explicitly asks for a template change.
 
-Open the generated page for the user. The page keeps all items included by default. The user can mark one-offs as `Do not include`, adjust `Usual quantity`, optionally edit `Family words`, and approve the included product count.
+Start the temporary loopback-only review server in a background/helper process:
 
-When the user returns after seeing `Approved. Go back to the agent to continue.`, read the approved JSON from the open page's `#catalog-review-approved-payload` field. Treat that approved payload as the approval boundary for catalog insertion.
+```bash
+node tools/serve-catalog-review.mjs --file redmart-catalog-review-<date>.html
+```
+
+Record the process and printed `http://127.0.0.1:<port>/` URL in the scratch file. Open that URL in the built-in browser; do not replace `127.0.0.1` with `0.0.0.0`, a LAN address, or a public host. The user may need to approve first-time website access for `127.0.0.1`. The page keeps all items included by default. The user can mark one-offs as `Do not include`, adjust `Usual quantity`, optionally edit `Family words`, and approve the included product count.
+
+When the user returns after seeing `Approved. Go back to the agent to continue.`, read the approved JSON from the open page's `#catalog-review-approved-payload` field. Treat that approved payload as the approval boundary for catalog insertion. Keep the server running until the payload has been read, then stop it during cleanup even if later catalog resolution fails.
 
 ### Detail And Product Resolution Pass
 
@@ -91,7 +109,7 @@ This is legitimate user-assisted shopping from a logged-in household account, bu
 - Process orders in small batches, for example 5-10 orders, then pause to summarize scratch notes and reassess.
 - Prefer normal visible UI navigation over direct API probing. Do not repeatedly POST to Lazada order APIs.
 - If page state is stale, record the issue and change strategy instead of retrying quickly.
-- If Lazada shows a slider, CAPTCHA, "unusual traffic", or similar verification modal, stop immediately and ask the user to clear it in Chrome. Do not bypass or automate the challenge.
+- If Lazada shows a slider, CAPTCHA, "unusual traffic", or similar verification modal, stop immediately and ask the user to clear it in the visible active browser. Do not bypass or automate the challenge.
 
 ### Catalog Insertion Rules
 
@@ -154,9 +172,10 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 
 ## Browser Navigation Notes
 
-- Use the logged-in Chrome session.
-- Treat browser connection, Chrome installation, extension availability, and Lazada authentication as separate states. A transient extension connection failure does not prove Chrome is absent, and a helper's failure to open a hard-coded macOS app path does not prove the user's actual Chrome installation is missing.
-- When the browser extension initially reports unavailable, retry the lightweight connection once after a short pause. If Chrome appears to be running but the retry still fails, ask the user to open or focus the correct Chrome installation/profile and retry; do not claim the account is signed out.
+- Use the signed-in built-in browser by default, including for tasks initiated through Remote.
+- Treat desktop-app availability, Browser plugin availability, tab connection, website permission, and Lazada authentication as separate states. A missing or stale tab does not prove the built-in browser is unavailable or the account is signed out.
+- Recover a missing tab by opening a fresh tab in the same built-in browser. If the whole browser surface is unavailable, check whether Browser is enabled for the user's app, plan, and workspace before offering Chrome as an explicit fallback.
+- For an explicitly chosen Chrome fallback, treat Chrome installation, extension availability, profile selection, and Lazada authentication as separate states. Retry a lightweight extension connection once; if it still fails, ask the user to focus the correct Chrome profile rather than claiming they are signed out.
 - After navigating to Lazada or RedMart, allow the visible page state to settle before deciding whether the account or cart is available. A header `login` link by itself is not authoritative because the outer Lazada shell may render before account and cart content.
 - Before reporting sign-out, make a second settled read and look for an explicit blocking login gate. Account-name text, real cart rows, and row-level item/SKU links are stronger signed-in signals than an early shell link. If signals conflict, record stale state in scratch notes and re-read the same claimed tab rather than rapidly reloading or switching profiles.
 - Prefer `canonical_url` over search.
@@ -201,7 +220,7 @@ After browser work:
 To add a new item later:
 
 1. Search or add the preferred product manually once in RedMart/Lazada.
-2. Leave the product page or cart open in Chrome.
+2. Leave the product page or cart open in the active controlled browser.
 3. Scrape the title, item ID, SKU ID, canonical URL, pack size, current quantity, price reference, and aliases.
 4. Add a new item to `grocery-catalog.yaml`, or add another ranked product under an existing item.
 

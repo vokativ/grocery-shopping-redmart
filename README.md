@@ -2,7 +2,7 @@
 
 Turn your family grocery list into a prepared RedMart cart—with the products you already know and buy.
 
-Send a whiteboard photo, dictate the list, or type it into ChatGPT for Desktop or Claude. The agent matches your family’s words to your usual groceries, checks availability, fills the cart, and verifies the quantities.
+Send a whiteboard photo, dictate the list, or type it into the ChatGPT desktop app. Its built-in browser keeps the whole workflow in one app: the agent matches your family’s words to your usual groceries, checks availability, fills the cart, and verifies the quantities.
 
 **You stay in control.** The agent stops with the cart ready. You choose the delivery slot, pay, and place the order yourself.
 
@@ -57,24 +57,25 @@ That is the idea behind this project: **the family makes the decisions once; the
 
 The practical everyday flow is simple:
 
-1. Leave your Mac or Windows computer awake with [ChatGPT for Desktop](https://chatgpt.com/download/) or [Claude](https://claude.com/download) and [Google Chrome](https://www.google.com/chrome/) available.
-2. Keep Chrome logged into Lazada/RedMart on that computer.
-3. From the matching app on your phone, send a photo, dictate the list, or type it.
-4. Review the proposed cart.
-5. Let the computer prepare and verify the RedMart cart.
-6. Choose delivery and check out yourself when convenient.
+1. Install the [ChatGPT desktop app](https://chatgpt.com/download/) on the Mac or Windows computer that will prepare the cart.
+2. Open this project in Codex mode and use **Set up Remote** to pair the ChatGPT mobile app with that computer.
+3. In the desktop app’s built-in browser, open Lazada/RedMart. When ChatGPT asks for website access, verify that the hostname belongs to Lazada/RedMart and choose the persistent or **Always allow** option if it is offered. Then sign in once. Enter credentials only in the browser, never in chat.
+4. Leave the desktop app running and the computer awake. Keep a Windows host unlocked while it is doing browser work.
+5. From **Remote** in the mobile app, send a photo, dictate the list, or type it, then review the proposed cart.
+6. Let the connected computer prepare and verify the cart. Choose delivery and check out yourself when convenient.
 
-This is useful because the list can start wherever family life happens, while the repetitive browser work happens on the computer that already has your RedMart session.
+This is useful because the list can start wherever family life happens, while the repetitive browser work happens on the connected computer that already has your RedMart session. This workflow has been exercised with the built-in browser on both Mac and Windows, including Remote control of a Windows host.
 
-The computer needs to stay awake, online, and logged into the right Chrome profile while the agent works.
+The computer needs to stay awake, online, and signed into the right built-in browser profile while the agent works. Remote stops when the app closes or the host loses network access.
 
 ## What you need
 
 - A RedMart/Lazada Singapore account.
-- A Mac or Windows computer with Chrome.
-- Chrome already logged into your RedMart/Lazada account.
-- ChatGPT for Desktop, Claude Code/Desktop, or another AI agent that can use your logged-in browser and read this project.
-- The matching mobile app if you want to send lists from your phone.
+- A Mac or Windows computer with the [ChatGPT desktop app](https://chatgpt.com/download/). On Mac, the current app requires macOS 14 and Apple Silicon (M1 or newer).
+- The built-in Browser available in Codex. Availability can depend on your ChatGPT plan and workspace settings.
+- The ChatGPT mobile app if you want to use Remote from your phone.
+
+Chrome and its control extension are optional fallbacks, not requirements. They can still be useful with another agent that lacks an equally capable internal browser or when you deliberately want to use an existing Chrome profile.
 
 You do **not** need to understand the code or edit the grocery catalog yourself. Give the project to your agent and ask it to guide you.
 
@@ -86,10 +87,10 @@ This project includes one family’s catalog as an example. Your agent can creat
 
 Recent orders are a good starting point because they contain the products, pack sizes, and quantities your household actually chose. You review everything before it becomes part of your family catalog.
 
-1. Open this project in ChatGPT for Desktop or Claude on the computer with your logged-in Chrome profile.
-2. Open Lazada [My Orders](https://my.lazada.sg/customer/order/index/).
+1. Open this project in Codex mode in the ChatGPT desktop app.
+2. Ask the agent to open Lazada [My Orders](https://my.lazada.sg/customer/order/index/) in the built-in browser, then sign in there if prompted.
 3. Paste the prompt below into your agent.
-4. The agent finds your RedMart purchases and prepares a simple review page.
+4. The agent finds your RedMart purchases and prepares a simple review page served only to your computer at `127.0.0.1`.
 5. Mark one-off purchases as `Do not include`, adjust usual quantities, and add the words your family normally uses.
 6. Click `Approve N products`, then return to the agent so it can finish.
 
@@ -170,15 +171,17 @@ Your catalog and grocery-list photos describe household preferences. Keep the pr
 
 ## If something gets stuck
 
-- **Lazada asks you to sign in:** sign in manually in the same Chrome profile, then ask the agent to continue.
+- **ChatGPT asks to access a website:** check the hostname, then allow Lazada/RedMart or the local `127.0.0.1` review page. For Lazada/RedMart, choose the persistent or **Always allow** option if offered so future grocery runs do not need the same approval. Use one-time access for any hostname you do not recognize or do not expect. You can manage allowed and blocked sites under **Settings > Browser**.
+- **Lazada asks you to sign in:** sign in manually in the visible built-in browser, then ask the agent to continue. Its login state is separate from Chrome.
 - **A saved product has disappeared:** the agent can try a product you previously approved as a backup or ask you to choose a replacement.
 - **An item is not recognised:** tell the agent which product you mean and ask it to add the family wording for next time.
 - **The cart count looks strange:** ask the agent to verify each cart row and quantity. Header totals are not always reliable.
 - **A verification challenge appears:** complete it yourself; the agent should not try to bypass it.
+- **A real Windows or macOS firewall alert appears:** do not disable the firewall or open a public port. The catalog review server is loopback-only. Stop and verify the alert identifies the expected ChatGPT or Node process before allowing anything.
 
 ## Use an old laptop if you like
 
-This does not need to run on your main computer. A spare Mac or Windows laptop can act as the family grocery computer if it can run Chrome and your AI agent, stays plugged in and awake, and remains logged into RedMart.
+This does not need to run on your main computer. A spare Mac or Windows laptop can act as the family grocery computer if it can run the ChatGPT desktop app, stays plugged in and awake, and remains logged into RedMart in the built-in browser. Keep a Windows host unlocked while it performs browser work.
 
 ## Want to improve it or add another retailer?
 
