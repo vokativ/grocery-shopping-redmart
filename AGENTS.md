@@ -4,15 +4,67 @@ Use these instructions when setting up this repository for a household or fillin
 
 ## Browser Surface, Sign-In, And Remote
 
-Use the ChatGPT desktop app's built-in browser by default on Mac and Windows. It has a browser profile and login state separate from Chrome. The same rules apply when the user starts or continues the task through Remote: browser actions run on the connected host, which must stay awake and online. Keep a Windows host unlocked while it performs browser work.
+Use the ChatGPT desktop app's built-in browser by default on Mac and Windows. It has a browser profile and login state separate from Chrome. All browser work for this repository, including cart inspection, availability checks, adding or removing items, catalog discovery, and fallback-browser preflights, must be visibly shown to the user through the ChatGPT desktop app. Do not perform shopping browser work in a hidden, background-only, or headless surface. Before the first navigation, expose the active browser or Computer Use view in the desktop app and keep it visible for the browser portion of the task so a person at the computer can follow progress or help with sign-in, permissions, stale state, or challenges. If the user begins interacting with the visible browser, pause browser automation, let them finish, and obtain a fresh settled page read before resuming. If a browser surface cannot be presented visibly in the ChatGPT desktop app, stop and ask the user instead of continuing invisibly. The same rules apply when the user starts or continues the task through Remote: browser actions run on the connected host, which must stay awake and online. Keep a Windows host unlocked while it performs browser work.
 
-1. Open Lazada/RedMart in the built-in browser and let visible page state settle.
+1. Use the built-in browser's visibility control to show the browser in the ChatGPT desktop app. Treat inability to expose the visible browser as a blocker. Then open Lazada/RedMart and let visible page state settle.
 2. When ChatGPT asks to access a new website, show the request to the user and have them verify the hostname before approving it. Lazada/RedMart and the loopback catalog review URL are expected for this workflow. For a verified Lazada/RedMart hostname, recommend the persistent or `Always allow` option when offered so later runs do not prompt again. Do not recommend permanent access for an unexpected hostname.
-3. If authentication is required, ask the user to sign in directly in the visible built-in browser and tell you when it is ready. Never ask them to paste a password, OTP, or other credential into chat.
+3. On the first household run, or whenever the built-in browser has no retained Lazada session, perform the `First-Time Sign-In And Signed-Out Recovery` flow below. Never ask the user to paste a password, OTP, or other credential into chat.
 4. Reuse the built-in browser's signed-in state. A fresh agent-controlled tab in the same built-in browser should retain that state unless the user logged out, the site expired it, or browser data was cleared.
 5. If a controlled tab becomes stale or disappears, obtain a fresh tab from the same built-in browser instead of reselecting a browser or claiming the user is signed out.
-6. Use Chrome and its control extension only when the user explicitly chooses Chrome, needs an existing Chrome profile, the built-in browser is unavailable, or another agent lacks an equivalent internal browser. Do not silently switch surfaces; Chrome and the built-in browser have separate sessions.
+6. Use Chrome and its control extension only when the user explicitly chooses Chrome, needs an existing Chrome profile, the built-in browser is unavailable, the signed-out recovery flow below reaches the Chrome fallback, or another agent lacks an equivalent internal browser. Do not silently switch surfaces; announce every fallback, because Chrome and the built-in browser have separate sessions.
 7. Distinguish ChatGPT's per-website access request from an operating-system firewall alert. Never disable the firewall or open a public port. The catalog review helper binds only to `127.0.0.1`; if an unexpected OS firewall alert appears, stop and ask the user to verify the named process and requested network scope.
+
+### Deterministic Browser Selection
+
+Treat these as three separate facts: which browser applications are installed, which browser-control surfaces ChatGPT can currently use, and which browser profile is visibly signed in to Lazada. Do not infer one from another.
+
+1. For Lazada/RedMart, explicitly select ChatGPT's in-app browser surface (`iab`) when the Browser plugin is available. Do not use automatic or URL-based browser selection such as a default-browser or `getForUrl` choice; it can select an external extension surface instead.
+2. Before navigating, verify that the selected surface identifies itself as the in-app browser with type `iab`. If it does not, stop instead of continuing in the unexpected browser.
+3. If the in-app browser is unavailable, report that exact condition and follow the deterministic fallback preflight in `First-Time Sign-In And Signed-Out Recovery` unless the user explicitly required the in-app browser only. Never launch the operating-system default browser as an implicit fallback.
+4. A browser-control surface labeled `Chrome` or `extension` is not by itself proof that the visible application is Google Chrome or that the intended profile is active. For a Chrome-extension fallback, verify that the visible application is Google Chrome and that the intended Chrome profile has the official ChatGPT extension enabled. If Edge, Vivaldi, Firefox, Safari, or an uncertain application appears, stop and ask the user rather than proceeding.
+5. The official Chrome-extension path is for Google Chrome. Use Edge, Firefox, Vivaldi, or Safari only when the user explicitly selects that browser, or for the read-only signed-in fallback preflight below, and Computer Use is available. Target the exact application rather than opening a URL through the system default-browser handler.
+6. It is acceptable to perform read-only installation discovery. Do not inspect cookies, local storage, password stores, browser profile databases, or saved credentials to determine whether a browser is signed in. After choosing one explicit browser/profile, open Lazada there, let the page settle, and determine authentication only from visible page state.
+7. Before using any selected browser surface, make its live browser or Computer Use view visible in the ChatGPT desktop app. Keep cart filling visible from the first cart read through final row-level verification. Do not continue on a surface that can be controlled but cannot be shown to the user.
+
+On Windows, check these explicit executable locations with a read-only existence check before launching an external browser. Use the resolved executable path, not a bare URL or the default-browser handler:
+
+- Google Chrome: `%ProgramFiles%\Google\Chrome\Application\chrome.exe`, `%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe`, then `%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe`.
+- Microsoft Edge: `%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe`, then `%ProgramFiles%\Microsoft\Edge\Application\msedge.exe`.
+- Mozilla Firefox: `%ProgramFiles%\Mozilla Firefox\firefox.exe`, then `%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe`.
+- Vivaldi: `%ProgramFiles%\Vivaldi\Application\vivaldi.exe`, then `%LOCALAPPDATA%\Vivaldi\Application\vivaldi.exe`.
+
+On macOS, resolve the requested application by its exact app name or bundle before launching it; for example, use a read-only check such as `open -Ra "<app name>"`. Standard application names and locations are:
+
+- Safari: `Safari`, normally `/Applications/Safari.app`.
+- Google Chrome: `Google Chrome`, normally `/Applications/Google Chrome.app`.
+- Mozilla Firefox: `Firefox`, normally `/Applications/Firefox.app`.
+- Vivaldi: `Vivaldi`, normally `/Applications/Vivaldi.app`.
+- Microsoft Edge: `Microsoft Edge`, normally `/Applications/Microsoft Edge.app`.
+
+Also check the user's `~/Applications` directory on macOS when the system-wide location is absent. Once resolved, use the exact application name or path. Do not substitute Safari merely because it is the macOS default, and do not substitute Edge merely because it is the Windows default.
+
+### First-Time Sign-In And Signed-Out Recovery
+
+The built-in browser is the primary household browser. Its separate profile is intended to retain the Lazada session between runs; no repository marker, username file, cookie export, or password file is needed.
+
+For the first household run:
+
+1. Explicitly select the built-in `iab` surface, make it visible, and open `https://cart.lazada.sg/cart`.
+2. Let the page settle, then read it a second time before deciding whether it is signed out. Treat an explicit blocking login gate as authoritative; do not rely on an early header `login` link alone.
+3. If sign-in is required, keep the built-in browser visible and ask the user to sign in directly there. Tell them not to send a password, OTP, passkey, or other credential through chat and ask them to say when the browser is ready.
+4. After the user returns, verify visible signed-in evidence such as the account name or real cart rows, then continue. Reuse this built-in browser profile on later runs and do not clear its browser data as part of normal cleanup.
+
+For a later run where the built-in browser is unavailable or remains at an explicit login gate after two settled reads:
+
+1. If the user explicitly requested the built-in browser only, keep it visible and ask them to sign in there; do not switch surfaces.
+2. Otherwise, announce that a read-only fallback preflight is starting. Trying another browser for visible Lazada authentication is allowed, but do not add, remove, or change cart rows during the preflight.
+3. Try one exact browser at a time in this order:
+   - Windows: verified Google Chrome with the official ChatGPT extension, then Microsoft Edge, Firefox, and Vivaldi through Computer Use.
+   - macOS: verified Google Chrome with the official ChatGPT extension, then Safari, Firefox, Vivaldi, and Microsoft Edge through Computer Use.
+4. Skip browsers that are not installed, not controllable, or not already open/launchable under current permissions. Do not use the default-browser handler, guess a profile, or inspect cookies, local storage, credential stores, or browser profile files.
+5. In each candidate browser, open the Lazada cart, let it settle, and determine sign-in only from visible page state. If it is signed out, leave it unchanged and continue to the next candidate.
+6. When the first visibly signed-in browser is found, tell the user exactly which application/profile surface will be used. If the original cart request already authorized cart changes and the user did not forbid fallback, continue there; otherwise wait for approval before mutating the cart.
+7. If no browser is visibly signed in, return to the visible built-in browser when available and ask the user to complete sign-in there. A password, OTP, CAPTCHA, passkey, or unusual-traffic challenge always requires the user.
 
 ## Catalog Seeding And Updating
 
@@ -173,6 +225,7 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 ## Browser Navigation Notes
 
 - Use the signed-in built-in browser by default, including for tasks initiated through Remote.
+- Keep every browser surface visible through the ChatGPT desktop app throughout browser work, including external-browser fallbacks controlled through Computer Use. If a person at the computer takes control, pause automation and re-read the settled page before resuming.
 - Treat desktop-app availability, Browser plugin availability, tab connection, website permission, and Lazada authentication as separate states. A missing or stale tab does not prove the built-in browser is unavailable or the account is signed out.
 - Recover a missing tab by opening a fresh tab in the same built-in browser. If the whole browser surface is unavailable, check whether Browser is enabled for the user's app, plan, and workspace before offering Chrome as an explicit fallback.
 - For an explicitly chosen Chrome fallback, treat Chrome installation, extension availability, profile selection, and Lazada authentication as separate states. Retry a lightweight extension connection once; if it still fails, ask the user to focus the correct Chrome profile rather than claiming they are signed out.
