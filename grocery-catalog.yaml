@@ -12,20 +12,20 @@ store:
 items:
   - id: rice_crackers
     category: pantry_snacks
-    default_quantity: 1
+    default_quantity: 3
     aliases:
       - rice crackers
-      - black rice crackers
-      - crackers
+      - brown rice crackers
+      - rice cakes
     preferred_products:
       - rank: 1
-        title: "Ceres Organics Black Rice Crackers Thailand's Riceberry - By Optimo Foods"
-        item_id: "303784320"
-        sku_id: "537486360"
-        canonical_url: "https://www.lazada.sg/products/i303784320-s537486360.html"
-        pack_size: "115 g"
-        observed_price_sgd: 4.28
-    notes: "First preference from the 2026-07-07 cart."
+        title: "CERES ORGANICS Brown Rice Cakes Original - by Optimo Foods"
+        item_id: "304020688"
+        sku_id: "538156357"
+        canonical_url: "https://www.lazada.sg/products/i304020688-s538156357.html"
+        pack_size: "110 g"
+        observed_price_sgd: 4.55
+    notes: "Rebuilt from the approved 2026-07-23 order review; the former black rice crackers product was explicitly excluded."
 
   - id: big_garbage_bags
     category: household
@@ -73,6 +73,7 @@ items:
     aliases:
       - eggs
       - egg
+      - large eggs
     preferred_products:
       - rank: 1
         title: "RedMart 15 Eggs 15 X 60G"
@@ -81,7 +82,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301088929-s527120220.html"
         pack_size: "15 x 60 g"
         observed_price_sgd: 4.65
-    notes: "Family default for generic 'eggs'."
+      - rank: 2
+        title: "RedMart Fresh Local Eggs (Large) 15X60G"
+        item_id: "3229271520"
+        sku_id: "21867677118"
+        canonical_url: "https://www.lazada.sg/products/i3229271520-s21867677118.html"
+        pack_size: "15 x 60 g"
+        observed_price_sgd: 5.67
+    notes: "The long-running RedMart 15 Eggs SKU remains first; the fresh local large-eggs SKU from the 2026-07-23 order is the approved fallback."
 
   - id: capsicum
     category: produce
@@ -269,13 +277,13 @@ items:
       - pork mince
     preferred_products:
       - rank: 1
-        title: "RedMart Australian Chilled Minced Pork (Freezer Ready Packaging)"
+        title: "RedMart Australia Fresh Minced Pork (Freezer Ready Packaging)"
         item_id: "304074281"
         sku_id: "538202297"
         canonical_url: "https://www.lazada.sg/products/i304074281-s538202297.html"
         pack_size: "500 g"
         observed_price_sgd: 6.95
-    notes: "Maps the 2026-07-03 whiteboard item 'pork' in the ground meat line."
+    notes: "Visible-title drift confirmed on the existing item/SKU from the approved 2026-07-23 order; maps ground or minced pork."
 
   - id: ground_chicken
     category: frozen
@@ -302,6 +310,8 @@ items:
       - cheese slices
       - cheddar slices
       - edam slices
+      - emmental cheese
+      - emmental slices
     preferred_products:
       - rank: 1
         title: "RedMart Sliced Edam Cheese (100% Natural Cheese)"
@@ -317,7 +327,21 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3089551336-s21053142027.html"
         pack_size: "125 g"
         observed_price_sgd: 4.50
-    notes: "Generic sliced cheese uses Edam first and cheddar as the ranked fallback."
+      - rank: 3
+        title: "Paysan Breton Emmental Sliced Cheese"
+        item_id: "303280218"
+        sku_id: "536586295"
+        canonical_url: "https://www.lazada.sg/products/i303280218-s536586295.html"
+        pack_size: "160 g"
+        observed_price_sgd: 6.10
+      - rank: 4
+        title: "Tradition Sliced Emmental Cheese"
+        item_id: "1043946934"
+        sku_id: "3897182810"
+        canonical_url: "https://www.lazada.sg/products/i1043946934-s3897182810.html"
+        pack_size: "125 g"
+        observed_price_sgd: 5.04
+    notes: "Generic sliced cheese uses Edam first, cheddar second, then the two approved Emmental alternatives from the 2026-07-21 order."
 
   - id: shredded_mozzarella
     category: chilled
@@ -406,7 +430,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301192074-s527276152.html"
         pack_size: "750 ml"
         observed_price_sgd: 1.90
-    notes: "Maps the 2026-07-03 whiteboard item 'dish washing liquid'."
+      - rank: 2
+        title: "Mama Lemon Natural Lemon Fragrance Dishwashing Liquid Refill Pack -600ML"
+        item_id: "301090877"
+        sku_id: "527132021"
+        canonical_url: "https://www.lazada.sg/products/i301090877-s527132021.html"
+        pack_size: "600 ml"
+        observed_price_sgd: 1.65
+    notes: "RedMart lemon dishwashing liquid remains first; the approved Mama Lemon refill is the ranked fallback."
 
   - id: toilet_wipes
     category: household
@@ -510,7 +541,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1167012126-s4607296865.html"
         pack_size: "500 g"
         observed_price_sgd: 8.90
-    notes: "Generic kimchi prefers JIN spicy kimchi; CJ cabbage kimchi is the delivery-slot or availability backup."
+      - rank: 3
+        title: "Coook Sliced Mat Cabbage Kimchi Korean Banchan 500G"
+        item_id: "2991175808"
+        sku_id: "20508685220"
+        canonical_url: "https://www.lazada.sg/products/i2991175808-s20508685220.html"
+        pack_size: "500 g"
+        observed_price_sgd: 7.35
+    notes: "Generic kimchi prefers JIN spicy kimchi, then CJ cabbage kimchi, with the approved Coook cabbage kimchi as another fallback."
 
   - id: lemon
     category: produce
@@ -691,7 +729,7 @@ items:
 
   - id: feta_cheese
     category: chilled
-    default_quantity: 3
+    default_quantity: 2
     aliases:
       - feta cheese
       - feta
@@ -704,7 +742,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2443619723-s14475877469.html"
         pack_size: "200 g"
         observed_price_sgd: 8.02
-    notes: "Default quantity is 3 from the 2026-07-03 order."
+      - rank: 2
+        title: "Kolios Authentic Traditional Greek Feta"
+        item_id: "2634307789"
+        sku_id: "16772993862"
+        canonical_url: "https://www.lazada.sg/products/i2634307789-s16772993862.html"
+        pack_size: "150 g"
+        observed_price_sgd: 7.40
+    notes: "Default quantity updated to 2 from the approved 2026-07-18 Kolios order; Supervalu remains first and Kolios is the fallback."
 
   - id: cucumber
     category: produce
@@ -862,3 +907,353 @@ items:
         pack_size: "24 x 325 ml"
         observed_price_sgd: 13.90
     notes: "Approved from the newest RedMart order 168317639378810 on 2026-07-13."
+
+  - id: yoghurt
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - yoghurt
+      - yogurt
+      - greek yoghurt
+      - greek yogurt
+    preferred_products:
+      - rank: 1
+        title: "Farmers Union Greek Style All Natural Yoghurt 1KG"
+        item_id: "301102820"
+        sku_id: "527098872"
+        canonical_url: "https://www.lazada.sg/products/i301102820-s527098872.html"
+        pack_size: "1 kg"
+        observed_price_sgd: 10.34
+    notes: "Approved from RedMart order 168775244578810 on 2026-07-23."
+
+  - id: carrots
+    category: produce
+    default_quantity: 1
+    aliases:
+      - carrots
+      - carrot
+    preferred_products:
+      - rank: 1
+        title: "RedMart Carrots 500G Australia"
+        item_id: "303998239"
+        sku_id: "538088935"
+        canonical_url: "https://www.lazada.sg/products/i303998239-s538088935.html"
+        pack_size: "500 g"
+        observed_price_sgd: 0.95
+    notes: "Approved from RedMart order 168775244578810 on 2026-07-23."
+
+  - id: potatoes
+    category: produce
+    default_quantity: 1
+    aliases:
+      - potatoes
+      - potato
+    preferred_products:
+      - rank: 1
+        title: "Holland Potato"
+        item_id: "301110861"
+        sku_id: "527092874"
+        canonical_url: "https://www.lazada.sg/products/i301110861-s527092874.html"
+        pack_size: "1 kg"
+        observed_price_sgd: 1.65
+    notes: "Approved from RedMart order 168775244578810 on 2026-07-23."
+
+  - id: rice_paper
+    category: pantry
+    default_quantity: 2
+    aliases:
+      - spring rolls wrap
+      - spring roll wraps
+      - rice paper
+    preferred_products:
+      - rank: 1
+        title: "Sing Long Rice Paper"
+        item_id: "304192463"
+        sku_id: "538360847"
+        canonical_url: "https://www.lazada.sg/products/i304192463-s538360847.html"
+        pack_size: "100 g"
+        observed_price_sgd: 1.56
+    notes: "Maps the approved newest-order wording 'spring rolls wrap'; kept separate from Mission mini wraps."
+
+  - id: dry_wipes
+    category: household
+    default_quantity: 1
+    aliases:
+      - dry wipes
+    preferred_products:
+      - rank: 1
+        title: "RedMart Wiper Dry Sheets / wipes 3 x 20pcs (Lemongrass)"
+        item_id: "2813838672"
+        sku_id: "19422513998"
+        canonical_url: "https://www.lazada.sg/products/i2813838672-s19422513998.html"
+        pack_size: "3 x 20 pcs"
+        observed_price_sgd: 7.55
+    notes: "Uses only the approved narrow alias 'dry wipes' to avoid collisions with toilet and disinfectant wipes."
+
+  - id: blueberries
+    category: produce
+    default_quantity: 1
+    aliases:
+      - blueberries
+      - blueberry
+    preferred_products:
+      - rank: 1
+        title: "Blueberries"
+        item_id: "301082887"
+        sku_id: "527114118"
+        canonical_url: "https://www.lazada.sg/products/i301082887-s527114118.html"
+        pack_size: "125 g"
+        observed_price_sgd: 2.95
+    notes: "Approved after appearing in both the 2026-07-21 and 2026-07-23 order range."
+
+  - id: strawberry_pouch_yoghurt
+    category: chilled
+    default_quantity: 2
+    aliases:
+      - strawberry pouch yoghurt
+      - strawberry pouch yogurt
+    preferred_products:
+      - rank: 1
+        title: "Chobani Kids Pouch Greek Yogurt Strawberry 100G"
+        item_id: "3021310298"
+        sku_id: "20621668242"
+        canonical_url: "https://www.lazada.sg/products/i3021310298-s20621668242.html"
+        pack_size: "100 g"
+        observed_price_sgd: 2.95
+    notes: "Approved from recent orders; normally ordered at quantity 2."
+
+  - id: vanilla_pouch_yoghurt
+    category: chilled
+    default_quantity: 2
+    aliases:
+      - vanilla pouch yoghurt
+      - vanilla pouch yogurt
+    preferred_products:
+      - rank: 1
+        title: "Chobani Kids Pouch Greek Yogurt Vanilla 100G"
+        item_id: "3021273489"
+        sku_id: "20621638512"
+        canonical_url: "https://www.lazada.sg/products/i3021273489-s20621638512.html"
+        pack_size: "100 g"
+        observed_price_sgd: 2.95
+    notes: "Approved from recent orders; normally ordered at quantity 2."
+
+  - id: bacon_bits
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - bacon
+      - bacon bits
+    preferred_products:
+      - rank: 1
+        title: "RedMart Danish Bacon Bits"
+        item_id: "303308883"
+        sku_id: "536644918"
+        canonical_url: "https://www.lazada.sg/products/i303308883-s536644918.html"
+        pack_size: "190 g"
+        observed_price_sgd: 5.00
+    notes: "Approved from RedMart order 168775244578810 on 2026-07-23."
+
+  - id: hummus
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - hummus
+      - hummus dip
+    preferred_products:
+      - rank: 1
+        title: "RedMart Deli Hummus Dip 220G"
+        item_id: "301076940"
+        sku_id: "527122147"
+        canonical_url: "https://www.lazada.sg/products/i301076940-s527122147.html"
+        pack_size: "220 g"
+        observed_price_sgd: 6.45
+    notes: "Approved from RedMart order 168775244578810 on 2026-07-23."
+
+  - id: farfalle_pasta
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - ribbon pasta
+      - farfalle
+      - bow tie pasta
+    preferred_products:
+      - rank: 1
+        title: "Sainsbury's Farfalle Pasta 500G"
+        item_id: "2980397599"
+        sku_id: "20460798700"
+        canonical_url: "https://www.lazada.sg/products/i2980397599-s20460798700.html"
+        pack_size: "500 g"
+        observed_price_sgd: 4.20
+    notes: "The review explicitly retained the family wording 'ribbon pasta' for the ordered farfalle."
+
+  - id: pork_belly
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - pork belly
+    preferred_products:
+      - rank: 1
+        title: "Ksp Australia Fresh Pork Belly"
+        item_id: "584736184"
+        sku_id: "1680318217"
+        canonical_url: "https://www.lazada.sg/products/i584736184-s1680318217.html"
+        pack_size: "300 g"
+        observed_price_sgd: 9.61
+    notes: "Approved from RedMart order 168775244578810 on 2026-07-23."
+
+  - id: sweet_corn
+    category: produce
+    default_quantity: 2
+    aliases:
+      - corn
+    preferred_products:
+      - rank: 1
+        title: "RedMart Sweet Corn 2s"
+        item_id: "301108870"
+        sku_id: "527088996"
+        canonical_url: "https://www.lazada.sg/products/i301108870-s527088996.html"
+        pack_size: "550 g"
+        observed_price_sgd: 1.95
+    notes: "Uses the approved family word 'corn'; default quantity 2 follows the 2026-07-22 order."
+
+  - id: orange_popsicles
+    category: frozen
+    default_quantity: 1
+    aliases:
+      - orange popsicles
+    preferred_products:
+      - rank: 1
+        title: "Frozt Orange Popsicle Pack Of 4"
+        item_id: "2636787021"
+        sku_id: "16831159291"
+        canonical_url: "https://www.lazada.sg/products/i2636787021-s16831159291.html"
+        pack_size: "4 per pack"
+        observed_price_sgd: 9.90
+    notes: "Approved from RedMart order 168707838378810 on 2026-07-22."
+
+  - id: 100plus_frozen
+    category: frozen
+    default_quantity: 1
+    aliases:
+      - 100plus frozen
+    preferred_products:
+      - rank: 1
+        title: "100 Plus Hydration Bars Ice Cream - Frozen"
+        item_id: "1060284099"
+        sku_id: "4001518146"
+        canonical_url: "https://www.lazada.sg/products/i1060284099-s4001518146.html"
+        pack_size: "75 ml"
+        observed_price_sgd: 4.95
+    notes: "Kept distinct from the catalogued 100PLUS canned isotonic drink."
+
+  - id: remedy_sodaly_guava
+    category: beverages
+    default_quantity: 2
+    aliases:
+      - guava sodaly
+    preferred_products:
+      - rank: 1
+        title: "Remedy Sodaly Guava - Multipack 250ML X 4"
+        item_id: "2645682408"
+        sku_id: "17039227072"
+        canonical_url: "https://www.lazada.sg/products/i2645682408-s17039227072.html"
+        pack_size: "4 x 250 ml"
+        observed_price_sgd: 9.90
+    notes: "Approved counterpart to Remedy Yuzu; default quantity 2 follows the 2026-07-21 order."
+
+  - id: mission_mini_wraps
+    category: pantry
+    default_quantity: 3
+    aliases:
+      - mini wraps
+      - small wraps
+    preferred_products:
+      - rank: 1
+        title: "Mission Mini Wrap - Wholemeal 8 Per Pack"
+        item_id: "1615916091"
+        sku_id: "7596924443"
+        canonical_url: "https://www.lazada.sg/products/i1615916091-s7596924443.html"
+        pack_size: "300 g"
+        observed_price_sgd: 5.45
+      - rank: 2
+        title: "Mission Mini Wrap - Pumpkin 8 Per Pack"
+        item_id: "3045639894"
+        sku_id: "20781429055"
+        canonical_url: "https://www.lazada.sg/products/i3045639894-s20781429055.html"
+        pack_size: "300 g"
+        observed_price_sgd: 5.45
+      - rank: 3
+        title: "Mission Mini Wrap - Original 8 Per Pack"
+        item_id: "1615822839"
+        sku_id: "7596916496"
+        canonical_url: "https://www.lazada.sg/products/i1615822839-s7596916496.html"
+        pack_size: "300 g"
+        observed_price_sgd: 5.45
+    notes: "Approved as one mini-wrap concept; Wholemeal ranks first because its observed quantity was 3, followed by Pumpkin at 2 and Original at 1."
+
+  - id: apricots
+    category: produce
+    default_quantity: 1
+    aliases:
+      - apricot
+      - apricots
+    preferred_products:
+      - rank: 1
+        title: "Turkey Sugar Apricot"
+        item_id: "736500715"
+        sku_id: "2366926481"
+        canonical_url: "https://www.lazada.sg/products/i736500715-s2366926481.html"
+        pack_size: "350 g"
+        observed_price_sgd: 7.95
+    notes: "Approved from RedMart order 168682042078810 on 2026-07-21."
+
+  - id: sweet_potatoes
+    category: produce
+    default_quantity: 1
+    aliases:
+      - sweet potato
+      - sweet potatoes
+    preferred_products:
+      - rank: 1
+        title: "Japanese Sweet Potato"
+        item_id: "301094909"
+        sku_id: "527116279"
+        canonical_url: "https://www.lazada.sg/products/i301094909-s527116279.html"
+        pack_size: "500 g"
+        observed_price_sgd: 2.33
+    notes: "Kept distinct from ordinary potatoes."
+
+  - id: sliced_mozzarella
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - sliced mozzarella cheese
+      - mozzarella slices
+      - sliced mozzarella
+    preferred_products:
+      - rank: 1
+        title: "Sainsbury's Mozzarella Cheese Slices 250G"
+        item_id: "3017773997"
+        sku_id: "20598552745"
+        canonical_url: "https://www.lazada.sg/products/i3017773997-s20598552745.html"
+        pack_size: "250 g"
+        observed_price_sgd: 8.90
+    notes: "Approved from the 2026-07-18 whiteboard/order and kept distinct from shredded mozzarella."
+
+  - id: disinfectant_wipes
+    category: household
+    default_quantity: 1
+    aliases:
+      - disinfectant wipes
+      - disinfecting wipes
+      - clorox wipes
+    preferred_products:
+      - rank: 1
+        title: "Clorox Disinfecting Cleaning Wipes Crisp Lemon 35s"
+        item_id: "304014624"
+        sku_id: "538118961"
+        canonical_url: "https://www.lazada.sg/products/i304014624-s538118961.html"
+        pack_size: "35 wipes (258 g)"
+        observed_price_sgd: 4.59
+    notes: "Approved from the 2026-07-18 whiteboard/order; separate from toilet wipes and dry wipes."
