@@ -1257,3 +1257,36 @@ items:
         pack_size: "35 wipes (258 g)"
         observed_price_sgd: 4.59
     notes: "Approved from the 2026-07-18 whiteboard/order; separate from toilet wipes and dry wipes."
+
+  - id: milkfish
+    category: frozen
+    default_quantity: 1
+    aliases:
+      - milkfish
+      - marinated milkfish
+      - boneless milkfish
+      - bangus
+      - marinated bangus
+    preferred_products:
+      - rank: 1
+        title: "Sarangani Bay Boneless Milkfish Marinated - Frozen"
+        item_id: "305088846"
+        sku_id: "541218569"
+        canonical_url: "https://www.lazada.sg/products/i305088846-s541218569.html"
+        pack_size: "440 g"
+        observed_price_sgd: 12.50
+      - rank: 2
+        title: "Sarangani Bay Baby Milkfish Marinated - Frozen"
+        item_id: "305098671"
+        sku_id: "541212740"
+        canonical_url: "https://www.lazada.sg/products/i305098671-s541212740.html"
+        pack_size: "400 g"
+        observed_price_sgd: 11.00
+      - rank: 3
+        title: "Sarangani Bay Boneless Milkfish Unseasoned - Frozen"
+        item_id: "305086900"
+        sku_id: "541194972"
+        canonical_url: "https://www.lazada.sg/products/i305086900-s541194972.html"
+        pack_size: "320 g"
+        observed_price_sgd: 9.00
+    notes: "Added from the three user-selected product tabs on 2026-08-08; ranked by pack mass from largest to smallest."
