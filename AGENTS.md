@@ -203,11 +203,12 @@ If an item does not match `grocery-catalog.yaml`, do not add it and do not searc
 Rank is a preference, not an absolute rule. For each requested grocery item:
 
 1. Open the `rank: 1` product page.
-2. Find the visible `Product Availability` section on the right side of the product page.
-3. Prefer products available today or tomorrow; tomorrow is the normal expected outcome for RedMart.
-4. Availability two days from now is acceptable.
-5. If rank 1 is only available more than two days from now, try rank 2, then rank 3.
-6. If no ranked product is available within two days from now, report it for human review instead of adding it automatically.
+2. Let the product page settle and perform a second read before making an availability or cart-state decision. Lazada progressively hydrates product and SKU pages; `DOMContentLoaded` or a visible product title alone is not a readiness signal.
+3. Wait for the main product area to show its price, the visible `Product Availability` section, and either the main `Add to cart` control or an existing-product quantity control. If those signals are missing, treat the page as incomplete rather than unavailable, wait again, and inspect the visible page before deciding.
+4. Prefer products available today or tomorrow; tomorrow is the normal expected outcome for RedMart.
+5. Availability two days from now is acceptable.
+6. If rank 1 is only available more than two days from now, try rank 2, then rank 3.
+7. If no ranked product is available within two days from now, report it for human review instead of adding it automatically. Only classify a product as unavailable when the settled page explicitly indicates unavailability or the main product control is disabled with corroborating page state.
 
 The page structure can change. Do not depend on a single fragile CSS selector for availability. A reliable computer-use fallback is to visually inspect the right-side product details area near `Delivery Options` and `Product Availability`, then read date labels such as `Today`, `Tomorrow`, or weekday/date chips.
 
@@ -237,8 +238,10 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 - If the main add button is disabled or the page says the item is unavailable, try the next ranked product or report the issue.
 - Ignore recommendation, carousel, and sponsored-item `Add to Cart` buttons on product pages. Use only the main product add or quantity controls for the requested product.
 - Cart rows contain the product title, pack size, price, and a quantity text field.
-- To change quantity, find the cart row whose product link contains the item/sku pair, scope the quantity input to that exact row, replace the number, and press Enter. Never identify a cart quantity field by a global input index or `nth` position.
-- Re-read the cart row after changing quantity.
+- To change quantity, find the cart row whose product link contains the item/sku pair and scope every control to that exact row. Never identify a cart quantity control by a global input index or `nth` position.
+- Prefer the row's visible plus or minus control for small quantity changes. Click only once, wait for that same item/SKU row to settle or reappear with the expected quantity, then reacquire the row and its control before any further click; Lazada can detach and rerender a row after each change.
+- Use direct quantity-field replacement only when row-scoped plus/minus controls are unavailable or impractical. After replacing the value and pressing Enter, wait for the exact row to settle and verify the persisted quantity. If the row disappears, shows an unexpected value, or enters an incomplete state, stop and re-read instead of repeating the action.
+- Re-read the exact cart row after every quantity change and reload once when needed to confirm the final value persisted.
 - Avoid relying on exact class names. Prefer visible text, product title, canonical URL IDs, and row-level matching.
 - After adding items, always open the cart and verify product titles, item/SKU pairs, pack sizes, and quantities from the actual cart rows.
 - The header cart count, checkout selected count, subtotal, and order summary are not enough to verify cart contents. Lazada can show cart rows while the selected checkout count or subtotal is zero.
