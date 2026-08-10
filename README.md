@@ -2,7 +2,7 @@
 
 Turn your family grocery list into a prepared RedMart cart—with the products you already know and buy.
 
-Send a whiteboard photo, dictate the list, or type it into the ChatGPT desktop app. Its built-in browser keeps the whole workflow in one app: the agent matches your family’s words to your usual groceries, checks availability, fills the cart, and verifies the quantities.
+Send a whiteboard photo, dictate the list, or type it into the ChatGPT desktop app. Its built-in browser keeps the whole workflow in one app: the agent matches your family’s words to your usual groceries, lets each product page finish loading, checks availability, fills the cart, and verifies the exact products and quantities—including items collapsed into promotion groups.
 
 **You stay in control.** The agent stops with the cart ready. You choose the delivery slot, pay, and place the order yourself.
 
@@ -39,7 +39,7 @@ This example starts with a family whiteboard. A voice note or typed list works t
 
 Before touching RedMart, the agent shows you a proposed cart like this. You can correct anything, add an item, or say `skip ham this time`.
 
-After you approve it, the agent checks your saved products, uses an available backup when appropriate, updates the cart, and reads the actual cart rows back to make sure the products and quantities are right.
+After you approve it, the agent checks your saved products, uses an available backup when appropriate, and changes quantities through the exact product-page control when possible. It then performs one complete cart review, including promotion groups, and corrects only a product or quantity that the cart evidence proves is wrong.
 
 It does not go to checkout.
 
@@ -75,7 +75,7 @@ The computer needs to stay awake, online, and signed into the right built-in bro
 - The built-in Browser available in Codex. Availability can depend on your ChatGPT plan and workspace settings.
 - The ChatGPT mobile app if you want to use Remote from your phone.
 
-Chrome and its control extension are optional fallbacks, not requirements. They can still be useful with another agent that lacks an equally capable internal browser or when you deliberately want to use an existing Chrome profile.
+Chrome and its control extension are optional fallbacks, not requirements. They can be useful when the built-in browser is unavailable to the main agent, during the documented signed-out recovery flow, or when you deliberately want to use an existing Chrome profile. A subagent that cannot expose the built-in browser should remain the planner or auditor while the main agent operates the visible built-in browser; that limitation is not a reason to switch browser profiles.
 
 You do **not** need to understand the code or edit the grocery catalog yourself. Give the project to your agent and ask it to guide you.
 
@@ -156,7 +156,7 @@ Your family catalog remembers:
 - Your usual quantities.
 - Backup products you have already accepted.
 
-The agent also checks when a product can be delivered and verifies the real cart after making changes. If the match is unclear or no acceptable product is available soon enough, it leaves the decision to you.
+The agent also waits for the progressively loaded product page, checks when the exact saved SKU can be delivered, and confirms each product-page quantity change before moving on. It then reconciles the complete cart by exact item/SKU and quantity. Lazada can hide or split quantities inside promotion groups, so the agent checks the relevant promotion editor before treating a missing or partial-looking ordinary row as an error. If the match is unclear or no acceptable product is available soon enough, it leaves the decision to you.
 
 ## 🔒 You remain in control
 
@@ -175,7 +175,7 @@ Your catalog and grocery-list photos describe household preferences. Keep the pr
 - **Lazada asks you to sign in:** sign in manually in the visible built-in browser, then ask the agent to continue. Its login state is separate from Chrome.
 - **A saved product has disappeared:** the agent can try a product you previously approved as a backup or ask you to choose a replacement.
 - **An item is not recognised:** tell the agent which product you mean and ask it to add the family wording for next time.
-- **The cart count looks strange:** ask the agent to verify each cart row and quantity. Header totals are not always reliable.
+- **The cart count looks strange:** ask the agent to reconcile the complete expected list by exact product and quantity. The header is only a quick checksum, and promotion groups can hide or split ordinary rows; the agent should inspect the relevant promotion editor before changing anything.
 - **A verification challenge appears:** complete it yourself; the agent should not try to bypass it.
 - **A real Windows or macOS firewall alert appears:** do not disable the firewall or open a public port. The catalog review server is loopback-only. Stop and verify the alert identifies the expected ChatGPT or Node process before allowing anything.
 
