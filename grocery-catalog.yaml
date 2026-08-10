@@ -711,9 +711,24 @@ items:
         observed_price_sgd: 3.73
     notes: "Maps the 2026-07-03 whiteboard item 'fresh milk'."
 
+  - id: low_fat_milk
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - low fat milk
+    preferred_products:
+      - rank: 1
+        title: "Farmhouse Low Fat Fresh Milk 946ML"
+        item_id: "301084922"
+        sku_id: "527112326"
+        canonical_url: "https://www.lazada.sg/products/i301084922-s527112326.html"
+        pack_size: "946 ml"
+        observed_price_sgd: 3.40
+    notes: "Approved from RedMart order 169640089478810 placed on 2026-08-10."
+
   - id: lettuce
     category: produce
-    default_quantity: 2
+    default_quantity: 1
     aliases:
       - lettuce
       - butterhead lettuce
@@ -725,7 +740,29 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2367366756-s13842110206.html"
         pack_size: "200 g"
         observed_price_sgd: 2.25
-    notes: "Default quantity is 2 from the 2026-07-03 order."
+      - rank: 2
+        title: "Butterhead Lettuce"
+        item_id: "301074936"
+        sku_id: "527080881"
+        canonical_url: "https://www.lazada.sg/products/i301074936-s527080881.html"
+        pack_size: "200 g"
+        observed_price_sgd: 3.00
+    notes: "Default quantity updated to 1 from the approved 2026-08-10 order; the newly approved Butterhead product is ranked second."
+
+  - id: onions
+    category: produce
+    default_quantity: 1
+    aliases:
+      - onions
+    preferred_products:
+      - rank: 1
+        title: "RedMart Brown Onion (Netherlands) Yellow Onion"
+        item_id: "491826153"
+        sku_id: "1352684044"
+        canonical_url: "https://www.lazada.sg/products/i491826153-s1352684044.html"
+        pack_size: "1 kg"
+        observed_price_sgd: 3.39
+    notes: "Approved from RedMart order 169640089478810 placed on 2026-08-10."
 
   - id: feta_cheese
     category: chilled
@@ -1257,6 +1294,38 @@ items:
         pack_size: "35 wipes (258 g)"
         observed_price_sgd: 4.59
     notes: "Approved from the 2026-07-18 whiteboard/order; separate from toilet wipes and dry wipes."
+
+  - id: floor_cleaner
+    category: household
+    default_quantity: 1
+    aliases:
+      - floor cleaner
+    preferred_products:
+      - rank: 1
+        title: "RedMart Anti Bacterial Lavender Floor Cleaner 2L"
+        item_id: "301194057"
+        sku_id: "527232835"
+        canonical_url: "https://www.lazada.sg/products/i301194057-s527232835.html"
+        pack_size: "2 L"
+        observed_price_sgd: 3.96
+    notes: "Approved from RedMart order 169640089478810 placed on 2026-08-10."
+
+  - id: pickles
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - pickles
+      - gherkins
+      - cornichons
+    preferred_products:
+      - rank: 1
+        title: "Monoprix Extra Fine Cornichons Gherkins Pickles 185G"
+        item_id: "603356148"
+        sku_id: "1758618646"
+        canonical_url: "https://www.lazada.sg/products/i603356148-s1758618646.html"
+        pack_size: "185 g"
+        observed_price_sgd: 4.14
+    notes: "Approved from RedMart order 169640089478810 placed on 2026-08-10."
 
   - id: milkfish
     category: frozen
