@@ -7,12 +7,31 @@ Use these instructions when setting up this repository for a household or fillin
 Use the ChatGPT desktop app's built-in browser by default on Mac and Windows. It has a browser profile and login state separate from Chrome. All browser work for this repository, including cart inspection, availability checks, adding or removing items, catalog discovery, and fallback-browser preflights, must be visibly shown to the user through the ChatGPT desktop app. Do not perform shopping browser work in a hidden, background-only, or headless surface. Before the first navigation, expose the active browser or Computer Use view in the desktop app and keep it visible for the browser portion of the task so a person at the computer can follow progress or help with sign-in, permissions, stale state, or challenges. If the user begins interacting with the visible browser, pause browser automation, let them finish, and obtain a fresh settled page read before resuming. If a browser surface cannot be presented visibly in the ChatGPT desktop app, stop and ask the user instead of continuing invisibly. The same rules apply when the user starts or continues the task through Remote: browser actions run on the connected host, which must stay awake and online. Keep a Windows host unlocked while it performs browser work.
 
 1. Use the built-in browser's visibility control to show the browser in the ChatGPT desktop app. Treat inability to expose the visible browser as a blocker. Then open Lazada/RedMart and let visible page state settle.
+   - A stale or incorrect visibility-capability read can disagree with what the person at the computer actually sees. If the user explicitly confirms that they can see the intended in-app Browser and describes a direct interaction with that exact tab, such as focusing or refreshing it, treat that human-confirmed interaction as authoritative visible evidence for the current run. Record the capability discrepancy and obtain a fresh settled read of the same tab before continuing.
+   - Ambient tab metadata, an automatically supplied current URL, or the absence of an error is not enough by itself. Without explicit user confirmation of visible interaction, a failed visibility check remains a blocker.
 2. When ChatGPT asks to access a new website, show the request to the user and have them verify the hostname before approving it. Lazada/RedMart and the loopback catalog review URL are expected for this workflow. For a verified Lazada/RedMart hostname, recommend the persistent or `Always allow` option when offered so later runs do not prompt again. Do not recommend permanent access for an unexpected hostname.
 3. On the first household run, or whenever the built-in browser has no retained Lazada session, perform the `First-Time Sign-In And Signed-Out Recovery` flow below. Never ask the user to paste a password, OTP, or other credential into chat.
 4. Reuse the built-in browser's signed-in state. A fresh agent-controlled tab in the same built-in browser should retain that state unless the user logged out, the site expired it, or browser data was cleared.
-5. If a controlled tab becomes stale or disappears, obtain a fresh tab from the same built-in browser instead of reselecting a browser or claiming the user is signed out.
-6. Use Chrome and its control extension only when the user explicitly chooses Chrome, needs an existing Chrome profile, the built-in browser is unavailable, the signed-out recovery flow below reaches the Chrome fallback, or another agent lacks an equivalent internal browser. Do not silently switch surfaces; announce every fallback, because Chrome and the built-in browser have separate sessions.
+5. If a controlled tab becomes stale, disappears, cannot be claimed reliably, or remains entangled with a stale visibility/tab state after the user has explicitly confirmed that the in-app Browser is visible, open a fresh agent-controlled tab in the same `iab` browser and navigate that tab to `https://cart.lazada.sg/cart`. This is the preferred tab-recovery path and does not switch browser profiles or imply that the user must sign in again. Let the fresh cart page settle and read it twice before deciding authentication or cart state.
+   - Prefer a new tab over a new browser window unless the user explicitly asks for another window. Keep the original user tab unchanged until the fresh tab is verified, then offer to close duplicates during cleanup.
+   - An explicit blocking login gate that remains on the fresh tab after two settled reads is authentication evidence. A stale tab, failed claim, visibility-capability discrepancy, early header login link, or newly opened tab by itself is not.
+6. Use Chrome and its control extension only when the user explicitly chooses Chrome, needs an existing Chrome profile, the built-in browser is unavailable to the root browser operator, or the signed-out recovery flow below reaches the Chrome fallback. A subagent's inability to expose or control the `iab` is not built-in-browser unavailability and never authorizes that subagent to switch surfaces; use the root-operated visible-browser coordination below. Do not silently switch surfaces; announce every fallback, because Chrome and the built-in browser have separate sessions.
 7. Distinguish ChatGPT's per-website access request from an operating-system firewall alert. Never disable the firewall or open a public port. The catalog review helper binds only to `127.0.0.1`; if an unexpected OS firewall alert appears, stop and ask the user to verify the named process and requested network scope.
+
+### Visible Browser Coordination With Subagents
+
+Some desktop-app environments do not allow an in-app browser to be made visible from a subagent thread. An authoritative condition such as `IAB visibility is not supported in a subagent thread` means that the subagent cannot be the browser operator; it does not mean the account is signed out or that invisible browser work is allowed.
+
+For a user-requested multi-agent validation or delegated cart workflow in that environment:
+
+1. The subagent must stop before its first shopping navigation or mutation, report the visibility limitation to the root agent, and continue only as the instruction-following planner and auditor.
+2. The root agent becomes the sole visible browser operator. Do not run root and subagent browser controls concurrently or let both claim the same tab.
+3. The subagent must read this file, prepare the proposed manifest and decision rules, and give the root agent the next bounded browser phase. The root executes that phase without silently changing the manifest or decision rule and returns settled page observations, exact item/SKU state, and any uncertainty.
+4. Routine products that follow the documented happy path may be processed as one bounded batch. Availability fallbacks, missing readiness signals, unexpected quantities, promotion ambiguity, and cart mismatches must be returned to the subagent for a decision before mutation continues.
+5. At the cart-audit boundary, the root returns the settled ordinary-row and promotion-group evidence to the subagent. The subagent classifies the manifest and requests only the additional exact checks or corrections justified by this file.
+6. The root remains responsible for keeping the browser visible, stopping at challenges, executing only authorized cart mutations, and never crossing checkout, delivery, payment, or purchase boundaries. The subagent records the run and evaluates whether the instructions were sufficient.
+
+This coordination mode preserves the visibility and safety boundary while still testing whether a fresh subagent can correctly interpret and apply the repository workflow. It is not permission to continue shopping in a hidden subagent browser.
 
 ### Deterministic Browser Selection
 
@@ -193,8 +212,9 @@ An explicit request such as `put these in my cart` authorizes adding the confide
 3. Show a proposed cart table before browser actions.
 4. Check product availability before adding.
 5. Use the first acceptable `preferred_products` entry, starting at `rank: 1`.
-6. Add or update quantities in the logged-in browser cart.
-7. Stop before final checkout, delivery-slot confirmation, payment, or purchase confirmation.
+6. Add or update quantities in the logged-in browser, preferring the exact product-page quantity workflow below when its controls are available.
+7. Perform one final manifest-based cart audit and correct only confirmed mismatches.
+8. Stop before final checkout, delivery-slot confirmation, payment, or purchase confirmation.
 
 If an item does not match `grocery-catalog.yaml`, do not add it and do not search for or guess a substitute unless the user explicitly asks to search, add a new catalog item, or expand the catalog. Report unmatched items for human handling, then continue with the confidently matched portion of an authorized cart request.
 
@@ -204,13 +224,33 @@ Rank is a preference, not an absolute rule. For each requested grocery item:
 
 1. Open the `rank: 1` product page.
 2. Let the product page settle and perform a second read before making an availability or cart-state decision. Lazada progressively hydrates product and SKU pages; `DOMContentLoaded` or a visible product title alone is not a readiness signal.
-3. Wait for the main product area to show its price, the visible `Product Availability` section, and either the main `Add to cart` control or an existing-product quantity control. If those signals are missing, treat the page as incomplete rather than unavailable, wait again, and inspect the visible page before deciding.
+3. Wait for the page to show its price, the visible page-level `Product Availability` section, and either the exact main `Add to cart` control or an exact existing-product quantity control. These signals do not need to share one DOM container; on observed RedMart pages, `Product Availability` can sit outside the main product-detail block. If the settled page explicitly says `Out of stock`, or its main control is disabled with corroborating unavailable state, classify it as unavailable even though dates or an Add/stepper control may be absent. Otherwise, if a readiness signal is missing after the required two settled reads, treat the page as incomplete and allow one additional gentle wait and settled read. If the signal is still missing, return the SKU as `unresolved`; do not keep retrying or call it unavailable.
 4. Prefer products available today or tomorrow; tomorrow is the normal expected outcome for RedMart.
 5. Availability two days from now is acceptable.
 6. If rank 1 is only available more than two days from now, try rank 2, then rank 3.
-7. If no ranked product is available within two days from now, report it for human review instead of adding it automatically. Only classify a product as unavailable when the settled page explicitly indicates unavailability or the main product control is disabled with corroborating page state.
+7. When a ranked fallback is selected, replace that concept's selected manifest item/SKU with the chosen fallback before mutation. For a test, record the fallback SKU's own pre-test baseline so restoration remains exact.
+8. If no ranked product is available within two days from now, report it for human review instead of adding it automatically. Only classify a product as unavailable when the settled page explicitly indicates unavailability or the main product control is disabled with corroborating page state.
 
 The page structure can change. Do not depend on a single fragile CSS selector for availability. A reliable computer-use fallback is to visually inspect the right-side product details area near `Delivery Options` and `Product Availability`, then read date labels such as `Today`, `Tomorrow`, or weekday/date chips.
+
+Product identity is also semantic rather than positional. LazFlash countdowns, promotion banners, ranking text, or other transient lines can appear before the real product title inside the product-detail region. Do not assume the first text line is the title. After redirects and variant hydration settle, read the item ID and SKU ID from the final URL and treat that pair as the authoritative SKU identity. Verify that the semantic visible product heading, such as the page's exact `h1`, describes the same household product concept. Pack-size text is corroborating metadata, not a second identity key.
+
+Interpret pack-size evidence semantically. Normalize harmless typography such as `x` versus `×`, capitalization, and whitespace. Some multipack pages put the full sold configuration in the semantic title, such as `6 x 200 ml`, while the explicit `Pack Size` field shows only the per-unit size, such as `200 ml`. When the final item/SKU matches the catalog and the semantic heading describes that product concept, trust that exact SKU identity. Record abbreviated, omitted-count, or inconsistent pack text as metadata drift and proceed; pack text alone does not override an exact final item/SKU. Stop for identity review only if the final IDs change or the settled semantic heading describes a different product concept, which indicates page-integrity or catalog drift.
+
+## Product-Page Quantity Workflow
+
+Complete the settled availability check above before changing quantity. Maintain an expected manifest while processing products. Each manifest entry must include the requested household item, selected item ID and SKU ID, product title, pack size, target quantity, and current processing status. Keep selected SKUs in the manifest when their product-page result becomes `unresolved`; status is not permission to omit an expected product from final reconciliation.
+
+For each available selected SKU:
+
+1. Use only the exact main product control. Ignore recommendation, carousel, sponsored-item, mini-cart, and floating controls, even when they also say `Add to Cart` or display a quantity.
+2. If the exact main control is `Add to cart`, click it once. Wait for that same requested SKU's main control to become a quantity stepper and confirm quantity 1. Do not navigate away merely because the Add click returned.
+3. If the settled page already has an exact main-product stepper, read its displayed value as the current cart quantity. Do not click Add again.
+4. Move from the current value to the manifest target one unit at a time. After each click, reacquire the exact main-product control, wait until it displays the expected next value, then perform one additional settled reread confirming that the value remains unchanged before continuing or navigating away.
+5. Use condition-based waits rather than assuming a fixed delay is sufficient. If the expected value does not appear, the control disappears, or the reread changes unexpectedly, stop changing that SKU, record it as unresolved, and defer it to the final cart audit. Never repeat a click blindly.
+6. When the target remains confirmed, record the product-page result in the manifest and continue to the next product page.
+
+The product-page workflow is preferred because the control is already scoped to the exact selected SKU and avoids cart-row virtualization, promotion grouping, and rerender ambiguity. It does not replace final cart verification. Use exact cart controls as a fallback when the product-page stepper is unavailable, impractical, or fails to confirm the target.
 
 ## Existing Cart Handling
 
@@ -219,7 +259,7 @@ Before browser actions that will add or update items, inspect the current cart w
 - `requested`: the row matches an item on the current grocery list after catalog matching.
 - `unrequested`: the row is in the cart but is not on the current grocery list.
 
-Default behavior is to add or update requested items and leave unrequested rows alone. If unrequested rows are present, tell the user they are already in the cart and ask whether to keep them or remove them before filling the current list; keeping them is the default.
+Default behavior is to add or update requested items and leave unrequested rows alone. If unrequested rows are present, tell the user they are already in the cart, preserve them, and continue. Ask a blocking keep/remove question only when the user's wording makes removal intent genuinely ambiguous.
 
 If the user asks to start fresh, rebuild, fill the cart again after a bad attempt, clean up a weird previous attempt, or otherwise indicates that the cart should reflect only the current list, remove unrequested rows before or while filling the cart. Still report what was removed.
 
@@ -234,19 +274,44 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 - Before reporting sign-out, make a second settled read and look for an explicit blocking login gate. Account-name text, real cart rows, and row-level item/SKU links are stronger signed-in signals than an early shell link. If signals conflict, record stale state in scratch notes and re-read the same claimed tab rather than rapidly reloading or switching profiles.
 - Prefer `canonical_url` over search.
 - Product pages usually have a visible `Add to cart` button near the product details and price.
-- If the main add button is missing, distinguish "already in cart" from "not available." A quantity stepper, quantity input, or `Go to cart` control usually means the product is already in the cart; verify the cart row quantity instead of adding again.
+- If the main add button is missing, distinguish "already in cart" from "not available." An exact main-product stepper, quantity input, or `Go to cart` control usually means the product is already in the cart. Continue with the Product-Page Quantity Workflow when the exact stepper is available; otherwise defer the quantity to the final cart audit instead of adding again.
 - If the main add button is disabled or the page says the item is unavailable, try the next ranked product or report the issue.
 - Ignore recommendation, carousel, and sponsored-item `Add to Cart` buttons on product pages. Use only the main product add or quantity controls for the requested product.
-- Cart rows contain the product title, pack size, price, and a quantity text field.
+- Cart rows contain the product title, pack size, price, and a quantity text field. Quantity changes in ordinary cart rows are the fallback path after the product-page workflow.
 - To change quantity, find the cart row whose product link contains the item/sku pair and scope every control to that exact row. Never identify a cart quantity control by a global input index or `nth` position.
 - Prefer the row's visible plus or minus control for small quantity changes. Click only once, wait for that same item/SKU row to settle or reappear with the expected quantity, then reacquire the row and its control before any further click; Lazada can detach and rerender a row after each change.
 - Use direct quantity-field replacement only when row-scoped plus/minus controls are unavailable or impractical. After replacing the value and pressing Enter, wait for the exact row to settle and verify the persisted quantity. If the row disappears, shows an unexpected value, or enters an incomplete state, stop and re-read instead of repeating the action.
 - Re-read the exact cart row after every quantity change and reload once when needed to confirm the final value persisted.
 - Avoid relying on exact class names. Prefer visible text, product title, canonical URL IDs, and row-level matching.
-- After adding items, always open the cart and verify product titles, item/SKU pairs, pack sizes, and quantities from the actual cart rows.
+- After processing all product pages, open the cart once, let it settle, perform a second read, and verify it against the complete expected manifest using the promotion-aware procedure below.
 - The header cart count, checkout selected count, subtotal, and order summary are not enough to verify cart contents. Lazada can show cart rows while the selected checkout count or subtotal is zero.
 - Do not select checkout checkboxes merely to verify cart contents.
 - Never click checkout, choose delivery slots, confirm payment, save payment details, or place the order.
+
+## Manifest Cart Verification And Promotions
+
+The final cart audit is a reconciliation pass, not a reason to repeat every quantity change in the cart.
+
+1. Include every selected requested SKU and target quantity in the expected manifest, including product-page-`unresolved` entries, plus every preserved pre-existing row. Track unresolved status separately; never omit an expected SKU from reconciliation. Compute the expected total unit count.
+2. Load the cart once after the product-page pass, let it settle, and perform a second read.
+3. Use the cart header item count only as a quick checksum against the expected total. It is not proof of exact contents, and checkout selected counts, subtotals, and order summaries are not verification.
+4. Match ordinary rendered rows by exact item ID and SKU ID, then verify title, pack size, and quantity. Classify each expected SKU as `normal-row match`, `promotion-group match`, `actual mismatch`, or `unresolved`.
+5. Lazada can collapse products into promotional groups, hide their ordinary rows, or show only part of a product's full quantity in an ordinary row. A missing row or partial-looking quantity is not automatically a mismatch. Do not change it yet.
+6. For each expected SKU that is missing, collapsed, or partial-looking, inspect the relevant promotion summary through its `EDIT` control. Process one promotion group at a time. On the promotion editor page, verify the exact item/SKU, title, pack size, and full quantity, record the result, then return to the cart and reacquire its settled state before inspecting another group.
+7. Promotion labels can repeat. After any navigation or rerender, reacquire the promotion group and its control; do not reuse a stale locator or rely on a previous global index. Treat the promotion editor's exact product and quantity as authoritative for a grouped SKU.
+8. If an exact promotion `EDIT` activation is a no-op, obtain a fresh settled cart read, reacquire that exact group and control, and retry once. A second no-op becomes `unresolved`; do not force repeated activations.
+9. After two settled cart reads and inspection of every relevant promotion group, classify an expected SKU as `actual mismatch` when it is absent from every ordinary and promotion representation, or when its authoritative quantity differs from the manifest target. If page state or promotion-group coverage remains uncertain, keep it `unresolved` and do not correct it yet.
+10. Record unexpected extra rows separately. Preserve and report them unless exact evidence proves they are removable artifacts created by the current test; never broaden cleanup by inference.
+11. Correct only entries proven to be `actual mismatch`. Use controls scoped to the exact item/SKU representation, apply one change at a time, and wait/reacquire as required. Do not alter `normal-row match` or `promotion-group match` entries.
+12. If corrections were required, reload once and re-audit the corrected exact entries plus the manifest checksum. If no corrections were required, leave the matching cart unchanged.
+
+### Test Cleanup And Baseline Restoration
+
+When a quantity-workflow test temporarily changes the cart, record the exact pre-test item/SKU/quantity baseline and the exact test SKUs before any mutation. If a ranked fallback is chosen later, record that fallback SKU's pre-test baseline before changing it and add it to the cleanup manifest. Restoration is not a general cart cleanup: preserve every baseline row and set only the recorded test SKUs back to their original quantities.
+
+Prefer each test SKU's canonical product page and exact main-product stepper. Confirm the expected current quantity, move one unit at a time toward its recorded baseline in either direction, and after every click reacquire the exact control and perform a settled reread of the expected value. When the baseline is zero, the final decrement from quantity 1 must settle to that exact SKU's main `Add to cart` state as proof of zero. Stop on an unexpected starting value, ambiguous confirmation, missing or unstable control, failed transition, challenge, human interaction, or any risk to a preserved row; do not compensate with a global or position-based cart control.
+
+After all test SKUs reach their recorded baseline, open the cart once and perform two settled row-level reads. Both reads must match the complete pre-test manifest, including exact item/SKU pairs and quantities, with no residual test rows or promotion groups. Report and leave any unexplained residual state unchanged rather than broadening cleanup scope.
 
 ## Cart-Fill Checklist
 
@@ -262,8 +327,9 @@ During browser work:
 - Identify which existing cart rows are requested versus unrequested when practical.
 - Check product-page availability dates before adding.
 - Prefer today/tomorrow, accept two days from now, and try the next ranked product when rank 1 is later than two days from now.
-- Treat product-page quantity controls or `Go to cart` as likely already-in-cart state, then verify the cart row.
-- Verify final cart line items and quantities from row-level cart data.
+- Use the Product-Page Quantity Workflow to reach and stably confirm each target when the exact main-product stepper is available.
+- After all product pages, perform one Manifest Cart Verification And Promotions pass. Inspect promotion editors only for expected SKUs that ordinary exact rows do not fully resolve.
+- Correct only confirmed actual mismatches, then verify any corrections once.
 
 After browser work:
 
