@@ -59,10 +59,11 @@ The practical everyday flow is simple:
 
 1. Install the [ChatGPT desktop app](https://chatgpt.com/download/) on the Mac or Windows computer that will prepare the cart.
 2. Open this project in Codex mode and use **Set up Remote** to pair the ChatGPT mobile app with that computer.
-3. In the desktop app’s built-in browser, open Lazada/RedMart. When ChatGPT asks for website access, verify that the hostname belongs to Lazada/RedMart and choose the persistent or **Always allow** option if it is offered. Then sign in once. Enter credentials only in the browser, never in chat.
-4. Leave the desktop app running and the computer awake. Keep a Windows host unlocked while it is doing browser work.
-5. From **Remote** in the mobile app, send a photo, dictate the list, or type it, then review the proposed cart.
-6. Let the connected computer prepare and verify the cart. Choose delivery and check out yourself when convenient.
+3. Under the Codex message box, open the model and reasoning control. For an everyday cart, choose **5.6 Terra** with **Medium** reasoning when available. This is the tested, lower-cost routine setting; leave the app's default selected if Terra is not offered.
+4. In the desktop app’s built-in browser, open Lazada/RedMart. When ChatGPT asks for website access, verify that the hostname belongs to Lazada/RedMart and choose the persistent or **Always allow** option if it is offered. Then sign in once. Enter credentials only in the browser, never in chat.
+5. Leave the desktop app running and the computer awake. Keep a Windows host unlocked while it is doing browser work.
+6. From **Remote** in the mobile app, send a photo, dictate the list, or type it, then review the proposed cart.
+7. Let the connected computer prepare and verify the cart. Choose delivery and check out yourself when convenient.
 
 This is useful because the list can start wherever family life happens, while the repetitive browser work happens on the connected computer that already has your RedMart session. This workflow has been exercised with the built-in browser on both Mac and Windows, including Remote control of a Windows host.
 
@@ -72,12 +73,14 @@ The computer needs to stay awake, online, and signed into the right built-in bro
 
 - A RedMart/Lazada Singapore account.
 - A Mac or Windows computer with the [ChatGPT desktop app](https://chatgpt.com/download/). On Mac, the current app requires macOS 14 and Apple Silicon (M1 or newer).
-- The built-in Browser available in Codex. Availability can depend on your ChatGPT plan and workspace settings.
+- The built-in Browser available in Codex. Availability can depend on your ChatGPT plan and workspace settings; 5.6 Terra with Medium reasoning is the tested setting for routine carts when the model control offers it.
 - The ChatGPT mobile app if you want to use Remote from your phone.
 
 Chrome and its control extension are optional fallbacks, not requirements. They can be useful when the built-in browser is unavailable to the main agent, during the documented signed-out recovery flow, or when you deliberately want to use an existing Chrome profile. A subagent that cannot expose the built-in browser should remain the planner or auditor while the main agent operates the visible built-in browser; that limitation is not a reason to switch browser profiles.
 
 You do **not** need to understand the code or edit the grocery catalog yourself. Give the project to your agent and ask it to guide you.
+
+Two supervised everyday-cart tests used 5.6 Terra with Medium reasoning and reached verified carts with no observed product, availability, quantity, or promotion-audit errors. The test did not cover catalog setup, where a more capable model remains a reasonable user choice. See the [full test notes](docs/model-benchmark-results-2026-08-14.md).
 
 The project itself is free. Your AI service may have its own plan or usage costs, and you still pay RedMart for the groceries you order.
 

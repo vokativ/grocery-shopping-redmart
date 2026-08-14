@@ -22,6 +22,8 @@ Operating system and version:
 ChatGPT desktop app version:
 Browser surface (built-in, Chrome fallback, or other):
 Direct desktop or Remote:
+Model and reasoning selected:
+Did the model control remain at that selection: yes/no/unclear
 Which session did you attempt?
 Did you reach a proposed cart? yes/no
 Did you reach a correctly verified live cart? yes/no/not attempted
@@ -30,9 +32,11 @@ The first confusing or blocked step:
 What you expected:
 What happened instead:
 Unmatched items or incorrect quantities:
+Judgment error observed (wrong SKU / wrong availability / wrong promotion reconciliation): yes/no, describe
 Any intervention the agent needed:
 Any website-access or operating-system firewall prompt:
 For Lazada/RedMart access, was a persistent or Always allow option offered and selected?
+Plan or credit usage, if you choose to disclose it:
 Did this feel faster or less burdensome than ordering normally? Why?
 Sanitized logs or screenshots, if useful:
 May anonymized feedback be quoted publicly? yes/no
