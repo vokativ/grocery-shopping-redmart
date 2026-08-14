@@ -2,6 +2,13 @@
 
 Use these instructions when setting up this repository for a household or filling a RedMart/Lazada cart from this repository.
 
+## Model Selection And Token Use
+
+Before routine browser work, read the model and reasoning control beneath the ChatGPT Codex composer and state the selected setting. When the user has not chosen otherwise and the control offers it, use **5.6 Terra** with **Medium** reasoning for normal cart filling. This repository has two supervised everyday-cart runs with that setting and zero observed judgment errors.
+
+Do not silently switch a routine cart task to Sol, High, Max, or Ultra merely because it has several browser steps. If Terra is unavailable, preserve the app's current/default setting and report that fact. For catalog seeding, unresolved product identity, or another genuinely open-ended decision, explain why a higher setting may help and let the user choose it. Model selection is user-controlled; do not claim that a repository configuration file changed the Desktop app's selection.
+
+
 ## Browser Surface, Sign-In, And Remote
 
 Use the ChatGPT desktop app's built-in browser by default on Mac and Windows. It has a browser profile and login state separate from Chrome. All browser work for this repository, including cart inspection, availability checks, adding or removing items, catalog discovery, and fallback-browser preflights, must be visibly shown to the user through the ChatGPT desktop app. Do not perform shopping browser work in a hidden, background-only, or headless surface. Before the first navigation, expose the active browser or Computer Use view in the desktop app and keep it visible for the browser portion of the task so a person at the computer can follow progress or help with sign-in, permissions, stale state, or challenges. If the user begins interacting with the visible browser, pause browser automation, let them finish, and obtain a fresh settled page read before resuming. If a browser surface cannot be presented visibly in the ChatGPT desktop app, stop and ask the user instead of continuing invisibly. The same rules apply when the user starts or continues the task through Remote: browser actions run on the connected host, which must stay awake and online. Keep a Windows host unlocked while it performs browser work.

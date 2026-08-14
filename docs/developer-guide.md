@@ -4,7 +4,7 @@ This document contains the technical and open-source details intentionally kept 
 
 ## Project status
 
-RedMart/Lazada Singapore is the maintained reference workflow. The easiest and tested path is Codex in the ChatGPT desktop app using its own signed-in built-in browser on Mac or Windows. Direct use and Remote control of a Windows host have both been exercised. Chrome and its control extension remain optional fallbacks for existing Chrome profiles or other agents, but require more setup and are not the primary onboarding path.
+RedMart/Lazada Singapore is the maintained reference workflow. The easiest and tested path is Codex in the ChatGPT desktop app using its own signed-in built-in browser on Mac or Windows. **GPT-5.6 Terra with Medium reasoning is the tested recommendation for routine cart filling:** two supervised live sessions reached verified carts with zero observed judgment errors. That evidence does not cover catalog seeding, and it does not yet support Claude Desktop. Direct use and Remote control of a Windows host have both been exercised. Chrome and its control extension remain optional fallbacks for existing Chrome profiles or other agents, but require more setup and are not the primary onboarding path.
 
 The project is currently being hardened for a small tester cohort and will then move to best-effort maintenance. There is no response-time, retailer, browser, operating-system, or agent compatibility guarantee.
 
@@ -107,6 +107,9 @@ Begin with a retailer-specific adapter or documented workflow. Extract shared ab
 - [Demo recording script](demo-script.md)
 - [LinkedIn build-story draft](linkedin-draft.md)
 - [Applied-AI case study](case-study.md)
+- [Model and harness benchmark plan](model-benchmark-plan.md) — tested Terra routine-cart recommendation, open validation boundaries, and model-selection guidance
+- [Terra Medium cart-fill benchmark notes](model-benchmark-results-2026-08-14.md) — two supervised ChatGPT Desktop sessions, 2/2 verified carts and zero observed judgment errors
+- [Claude Desktop setup guide](claude-desktop-setup.md) — untested proposal for running the workflow with Claude's Cowork mode; records what needs validation before it can be recommended
 
 ## License and independence
 
