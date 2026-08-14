@@ -232,7 +232,6 @@ items:
     aliases:
       - tomato sauce
       - pasta sauce
-      - passata
       - tomato puree
     preferred_products:
       - rank: 1
@@ -1114,6 +1113,7 @@ items:
       - ribbon pasta
       - farfalle
       - bow tie pasta
+      - curly pasta
     preferred_products:
       - rank: 1
         title: "Sainsbury's Farfalle Pasta 500G"
