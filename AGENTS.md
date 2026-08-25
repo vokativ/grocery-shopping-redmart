@@ -2,34 +2,44 @@
 
 Use these instructions when setting up this repository for a household or filling a RedMart/Lazada cart from this repository.
 
-## Model Selection And Token Use
+## Model Selection And Harness Reporting
 
-Before routine browser work, read the model and reasoning control beneath the ChatGPT Codex composer and state the selected setting. When the user has not chosen otherwise and the control offers it, use **5.6 Terra** with **Medium** reasoning for normal cart filling. This repository has two supervised everyday-cart runs with that setting and zero observed judgment errors.
+Before routine browser work, identify the execution harness and state the model and reasoning setting that its user-visible control or runtime metadata actually exposes.
 
-Do not silently switch a routine cart task to Sol, High, Max, or Ultra merely because it has several browser steps. If Terra is unavailable, preserve the app's current/default setting and report that fact. For catalog seeding, unresolved product identity, or another genuinely open-ended decision, explain why a higher setting may help and let the user choose it. Model selection is user-controlled; do not claim that a repository configuration file changed the Desktop app's selection.
+- **ChatGPT Desktop:** read the model and reasoning control beneath the Codex composer. When the user has not chosen otherwise and the control offers it, use **5.6 Terra** with **Medium** reasoning for normal cart filling. This repository has two supervised everyday-cart runs with that setting and zero observed judgment errors.
+- **Oh My Pi (OMP):** report the runtime model and reasoning setting when OMP exposes them. If either value is unavailable, say so and continue with the current setting; the missing ChatGPT Desktop composer is not a blocker. Do not claim that the Desktop Terra evidence applies to another model or harness.
+
+Do not silently switch models or reasoning levels merely because a cart task has several browser steps. For catalog seeding, unresolved product identity, or another genuinely open-ended decision, explain why a more capable setting may help and let the user choose it. Model selection is user-controlled; do not claim that a repository configuration file changed the ChatGPT Desktop app or OMP runtime selection.
 
 
 ## Browser Surface, Sign-In, And Remote
 
-Use the ChatGPT desktop app's built-in browser by default on Mac and Windows. It has a browser profile and login state separate from Chrome. All browser work for this repository, including cart inspection, availability checks, adding or removing items, catalog discovery, and fallback-browser preflights, must be visibly shown to the user through the ChatGPT desktop app. Do not perform shopping browser work in a hidden, background-only, or headless surface. Before the first navigation, expose the active browser or Computer Use view in the desktop app and keep it visible for the browser portion of the task so a person at the computer can follow progress or help with sign-in, permissions, stale state, or challenges. If the user begins interacting with the visible browser, pause browser automation, let them finish, and obtain a fresh settled page read before resuming. If a browser surface cannot be presented visibly in the ChatGPT desktop app, stop and ask the user instead of continuing invisibly. The same rules apply when the user starts or continues the task through Remote: browser actions run on the connected host, which must stay awake and online. Keep a Windows host unlocked while it performs browser work.
+All browser work for this repository, including cart inspection, availability checks, cart mutations, catalog discovery, and fallback preflights, must run in a real, headed browser surface that the user can see and interrupt. Never use a hidden, background-only, or headless shopping surface. Keep the selected browser window and tab visible for the browser portion of the task. If the user begins interacting with it, pause automation, let them finish, and obtain a fresh settled read before resuming. The host must remain awake, online, and unlocked while browser work runs.
 
-1. Use the built-in browser's visibility control to show the browser in the ChatGPT desktop app. Treat inability to expose the visible browser as a blocker. Then open Lazada/RedMart and let visible page state settle.
-   - A stale or incorrect visibility-capability read can disagree with what the person at the computer actually sees. If the user explicitly confirms that they can see the intended in-app Browser and describes a direct interaction with that exact tab, such as focusing or refreshing it, treat that human-confirmed interaction as authoritative visible evidence for the current run. Record the capability discrepancy and obtain a fresh settled read of the same tab before continuing.
-   - Ambient tab metadata, an automatically supplied current URL, or the absence of an error is not enough by itself. Without explicit user confirmation of visible interaction, a failed visibility check remains a blocker.
-2. When ChatGPT asks to access a new website, show the request to the user and have them verify the hostname before approving it. Lazada/RedMart and the loopback catalog review URL are expected for this workflow. For a verified Lazada/RedMart hostname, recommend the persistent or `Always allow` option when offered so later runs do not prompt again. Do not recommend permanent access for an unexpected hostname.
-3. On the first household run, or whenever the built-in browser has no retained Lazada session, perform the `First-Time Sign-In And Signed-Out Recovery` flow below. Never ask the user to paste a password, OTP, or other credential into chat.
-4. Reuse the built-in browser's signed-in state. A fresh agent-controlled tab in the same built-in browser should retain that state unless the user logged out, the site expired it, or browser data was cleared.
-5. If a controlled tab becomes stale, disappears, cannot be claimed reliably, or remains entangled with a stale visibility/tab state after the user has explicitly confirmed that the in-app Browser is visible, open a fresh agent-controlled tab in the same `iab` browser and navigate that tab to `https://cart.lazada.sg/cart`. This is the preferred tab-recovery path and does not switch browser profiles or imply that the user must sign in again. Let the fresh cart page settle and read it twice before deciding authentication or cart state.
-   - Prefer a new tab over a new browser window unless the user explicitly asks for another window. Keep the original user tab unchanged until the fresh tab is verified, then offer to close duplicates during cleanup.
-   - An explicit blocking login gate that remains on the fresh tab after two settled reads is authentication evidence. A stale tab, failed claim, visibility-capability discrepancy, early header login link, or newly opened tab by itself is not.
-6. Use Chrome and its control extension only when the user explicitly chooses Chrome, needs an existing Chrome profile, the built-in browser is unavailable to the root browser operator, or the signed-out recovery flow below reaches the Chrome fallback. A subagent's inability to expose or control the `iab` is not built-in-browser unavailability and never authorizes that subagent to switch surfaces; use the root-operated visible-browser coordination below. Do not silently switch surfaces; announce every fallback, because Chrome and the built-in browser have separate sessions.
-7. Distinguish ChatGPT's per-website access request from an operating-system firewall alert. Never disable the firewall or open a public port. The catalog review helper binds only to `127.0.0.1`; if an unexpected OS firewall alert appears, stop and ask the user to verify the named process and requested network scope.
+Choose exactly one primary surface before the first shopping navigation:
+
+- **ChatGPT Desktop:** use the app's built-in browser (`iab`) by default on Mac and Windows. It has a browser profile and login state separate from Chrome. Expose its Browser or Computer Use view inside the desktop app.
+- **OMP Browser Relay:** preferred in OMP when the household already uses a signed-in Chrome profile. Connect through the OMP Browser Relay extension to the exact user-visible Chrome tab/profile. The relay is the control channel; the real Chrome window is the visible surface.
+- **OMP CDP:** use only when the user deliberately selected a headed Chrome/Chromium instance with a loopback-only CDP endpoint. Connect to that existing endpoint; do not launch an implicit browser or guess a profile.
+
+Before navigation, announce the chosen surface. Do not silently switch among `iab`, OMP relay, OMP CDP, extension surfaces, browsers, profiles, or tabs: each can have different authentication and cart state.
+
+Common rules:
+
+1. Confirm that the control channel owns the intended tab before navigating. A URL supplied by ambient metadata or the absence of a connection error is not enough after a failed or ambiguous claim.
+2. Keep the live browser surface visible. If the tool reports that visibility is unsupported or the browser is headless, stop. A user who explicitly confirms seeing and interacting with the exact intended tab provides authoritative visibility evidence; after that interaction, reacquire and reread the settled tab before continuing.
+3. When a browser or control extension asks for access to a new website, show the request and have the user verify the hostname. Lazada/RedMart and the loopback catalog review URL are expected. Recommend persistent access only for a verified Lazada/RedMart hostname, never for an unexpected host.
+4. Determine authentication only from two settled page reads. An explicit blocking login gate is evidence; an early header `login` link, a stale tab, or a failed claim is not.
+5. Never ask the user to paste a password, OTP, passkey, CAPTCHA answer, or other credential into chat. Keep the selected surface visible and let the user complete authentication or a challenge directly there.
+6. Reuse the selected browser profile's signed-in state. Do not inspect cookies, local storage, browser profile databases, password stores, or saved credentials.
+7. If a controlled tab becomes stale or disappears, recover within the same selected browser and profile. Prefer a fresh controlled tab over a new window, navigate it to `https://cart.lazada.sg/cart`, and read it twice before deciding authentication or cart state. Keep the original tab unchanged until the replacement is verified, then offer to close duplicates.
+8. Distinguish a browser/control-channel permission prompt from an operating-system firewall alert. Never disable the firewall or expose a public port. The catalog review helper and any OMP CDP endpoint used by this workflow must bind only to loopback.
 
 ### Visible Browser Coordination With Subagents
 
-Some desktop-app environments do not allow an in-app browser to be made visible from a subagent thread. An authoritative condition such as `IAB visibility is not supported in a subagent thread` means that the subagent cannot be the browser operator; it does not mean the account is signed out or that invisible browser work is allowed.
+Some harnesses do not expose their visible browser control to a subagent thread. An authoritative limitation such as `IAB visibility is not supported in a subagent thread` or an unavailable OMP relay/CDP device means that the subagent cannot be the browser operator; it does not mean the account is signed out or that invisible browser work is allowed.
 
-For a user-requested multi-agent validation or delegated cart workflow in that environment:
+For a user-requested multi-agent validation or delegated cart workflow:
 
 1. The subagent must stop before its first shopping navigation or mutation, report the visibility limitation to the root agent, and continue only as the instruction-following planner and auditor.
 2. The root agent becomes the sole visible browser operator. Do not run root and subagent browser controls concurrently or let both claim the same tab.
@@ -40,17 +50,31 @@ For a user-requested multi-agent validation or delegated cart workflow in that e
 
 This coordination mode preserves the visibility and safety boundary while still testing whether a fresh subagent can correctly interpret and apply the repository workflow. It is not permission to continue shopping in a hidden subagent browser.
 
-### Deterministic Browser Selection
+### OMP Relay And CDP Selection
 
-Treat these as three separate facts: which browser applications are installed, which browser-control surfaces ChatGPT can currently use, and which browser profile is visibly signed in to Lazada. Do not infer one from another.
+Treat the browser application, OMP control channel, selected browser profile, selected tab, and Lazada authentication as separate facts.
+
+1. Prefer OMP Browser Relay for an existing signed-in Chrome profile. Open the OMP browser device with relay enabled and target the user-selected Lazada/RedMart tab when possible. Confirm the adopted page is the intended tab before navigation or mutation.
+2. If no suitable tab exists, the relay may adopt the user's current visible tab and navigate it only after the chosen surface has been announced. Prefer opening a fresh tab in the same relayed browser for recovery so unrelated user content remains unchanged.
+3. Use CDP only when the user explicitly selected it or relay is unavailable and the user approves CDP. The endpoint must be loopback-only (`127.0.0.1` or `localhost`), and the attached browser must be headed, visible, and launched with a deliberate profile.
+4. CDP is a powerful full-browser control channel. Never connect to a non-loopback endpoint, expose its debugging port, inspect unrelated tabs, or read cookies, storage, credentials, downloads, or browsing history. Operate only the Lazada/RedMart and loopback review tabs required by the task.
+5. Do not use an OMP-spawned headless/default browser, an unrelated sandbox browser, or an automatically selected system browser for shopping. A generic CDP connection is acceptable only when it satisfies the visible, user-selected, loopback, real-session requirements above.
+6. Relay failure does not prove sign-out. Retry one lightweight relay connection after asking the user to focus the intended Chrome tab. If it still fails, stop and ask the user to reconnect the relay or deliberately choose loopback CDP; do not silently switch profiles or surfaces.
+7. Keep a single root browser operator. Never drive the same relayed or CDP tab concurrently from root and subagent sessions.
+8. On Browser Relay, prefer OMP's `tab` action helpers over raw Puppeteer `ElementHandle` actions. When an unlabeled stepper requires a selector, scope it beneath the already verified exact product detail or cart row.
+9. Never mutate the cart with `page.evaluate(() => element.click())`. A DOM click can change a local stepper value without persisting the server-side cart. If an action times out or errors, reread the exact SKU state before deciding whether it occurred; retry only when the persisted state is unchanged. A changed local control alone is not proof.
+
+### ChatGPT Desktop Browser Selection
+
+This subsection applies only to ChatGPT Desktop. Treat the browser application, available control surfaces, and visibly signed-in profile as separate facts.
 
 1. For Lazada/RedMart, explicitly select ChatGPT's in-app browser surface (`iab`) when the Browser plugin is available. Do not use automatic or URL-based browser selection such as a default-browser or `getForUrl` choice; it can select an external extension surface instead.
 2. Before navigating, verify that the selected surface identifies itself as the in-app browser with type `iab`. If it does not, stop instead of continuing in the unexpected browser.
-3. If the in-app browser is unavailable, report that exact condition and follow the deterministic fallback preflight in `First-Time Sign-In And Signed-Out Recovery` unless the user explicitly required the in-app browser only. Never launch the operating-system default browser as an implicit fallback.
-4. A browser-control surface labeled `Chrome` or `extension` is not by itself proof that the visible application is Google Chrome or that the intended profile is active. For a Chrome-extension fallback, verify that the visible application is Google Chrome and that the intended Chrome profile has the official ChatGPT extension enabled. If Edge, Vivaldi, Firefox, Safari, or an uncertain application appears, stop and ask the user rather than proceeding.
-5. The official Chrome-extension path is for Google Chrome. Use Edge, Firefox, Vivaldi, or Safari only when the user explicitly selects that browser, or for the read-only signed-in fallback preflight below, and Computer Use is available. Target the exact application rather than opening a URL through the system default-browser handler.
-6. It is acceptable to perform read-only installation discovery. Do not inspect cookies, local storage, password stores, browser profile databases, or saved credentials to determine whether a browser is signed in. After choosing one explicit browser/profile, open Lazada there, let the page settle, and determine authentication only from visible page state.
-7. Before using any selected browser surface, make its live browser or Computer Use view visible in the ChatGPT desktop app. Keep cart filling visible from the first cart read through final row-level verification. Do not continue on a surface that can be controlled but cannot be shown to the user.
+3. If the in-app browser is unavailable, report that exact condition and follow the ChatGPT Desktop fallback preflight in `First-Time Sign-In And Signed-Out Recovery` unless the user explicitly required the in-app browser only. Never launch the operating-system default browser as an implicit fallback.
+4. A browser-control surface labeled `Chrome` or `extension` is not by itself proof that the visible application is Google Chrome or that the intended profile is active. For a Chrome-extension fallback, verify that the visible application is Google Chrome and that the intended profile has the official ChatGPT extension enabled. If Edge, Vivaldi, Firefox, Safari, or an uncertain application appears, stop and ask the user rather than proceeding.
+5. The official ChatGPT Chrome-extension path is for Google Chrome. Use Edge, Firefox, Vivaldi, or Safari only when the user explicitly selects that browser, or for the read-only signed-in fallback preflight below, and Computer Use is available. Target the exact application rather than opening a URL through the system default-browser handler.
+6. It is acceptable to perform read-only installation discovery. After choosing one explicit browser/profile, open Lazada there, let the page settle, and determine authentication only from visible page state.
+7. Before using any selected surface, expose its live Browser or Computer Use view in ChatGPT Desktop. Keep it visible from the first cart read through final row-level verification.
 
 On Windows, check these explicit executable locations with a read-only existence check before launching an external browser. Use the resolved executable path, not a bare URL or the default-browser handler:
 
@@ -71,23 +95,29 @@ Also check the user's `~/Applications` directory on macOS when the system-wide l
 
 ### First-Time Sign-In And Signed-Out Recovery
 
-The built-in browser is the primary household browser. Its separate profile is intended to retain the Lazada session between runs; no repository marker, username file, cookie export, or password file is needed.
+The selected browser profile is the household browser for the run. Its retained Lazada session is the only authentication state to use; no repository marker, username file, cookie export, or password file is needed.
 
 For the first household run:
 
-1. Explicitly select the built-in `iab` surface, make it visible, and open `https://cart.lazada.sg/cart`.
+1. Select and expose one permitted surface. In ChatGPT Desktop, use `iab` by default. In OMP, connect the announced relay or loopback-CDP surface. Open `https://cart.lazada.sg/cart`.
 2. Let the page settle, then read it a second time before deciding whether it is signed out. Treat an explicit blocking login gate as authoritative; do not rely on an early header `login` link alone.
-3. If sign-in is required, keep the built-in browser visible and ask the user to sign in directly there. Tell them not to send a password, OTP, passkey, or other credential through chat and ask them to say when the browser is ready.
-4. After the user returns, verify visible signed-in evidence such as the account name or real cart rows, then continue. Reuse this built-in browser profile on later runs and do not clear its browser data as part of normal cleanup.
+3. If sign-in is required, keep that browser visible and ask the user to sign in directly there. Tell them not to send a password, OTP, passkey, or other credential through chat and ask them to say when the browser is ready.
+4. After the user returns, verify visible signed-in evidence such as the account name or real cart rows, then continue. Reuse that exact profile on later runs and do not clear its browser data as part of normal cleanup.
 
-For a later run where the built-in browser is unavailable or remains at an explicit login gate after two settled reads:
+For a later OMP run where relay/CDP is unavailable or the selected profile remains at an explicit login gate after two settled reads:
+
+1. Do not hunt through installed browsers or profiles. Keep the selected browser visible and ask the user to reconnect the relay, deliberately provide a loopback CDP surface, or sign in to the already selected profile.
+2. Treat relay/CDP availability, tab ownership, and Lazada authentication as separate states. Reconnect or recover the exact tab once before concluding that the surface is unavailable.
+3. Switching between relay and CDP is a surface change. Announce it and obtain user approval unless the user's original request explicitly authorized either OMP surface.
+
+For a later ChatGPT Desktop run where the built-in browser is unavailable or remains at an explicit login gate after two settled reads:
 
 1. If the user explicitly requested the built-in browser only, keep it visible and ask them to sign in there; do not switch surfaces.
-2. Otherwise, announce that a read-only fallback preflight is starting. Trying another browser for visible Lazada authentication is allowed, but do not add, remove, or change cart rows during the preflight.
+2. Otherwise, announce that a read-only fallback preflight is starting. Trying another browser for visible Lazada authentication is allowed, but do not change cart rows during the preflight.
 3. Try one exact browser at a time in this order:
    - Windows: verified Google Chrome with the official ChatGPT extension, then Microsoft Edge, Firefox, and Vivaldi through Computer Use.
    - macOS: verified Google Chrome with the official ChatGPT extension, then Safari, Firefox, Vivaldi, and Microsoft Edge through Computer Use.
-4. Skip browsers that are not installed, not controllable, or not already open/launchable under current permissions. Do not use the default-browser handler, guess a profile, or inspect cookies, local storage, credential stores, or browser profile files.
+4. Skip browsers that are not installed, not controllable, or not already open/launchable under current permissions. Do not use the default-browser handler, guess a profile, or inspect browser-private data.
 5. In each candidate browser, open the Lazada cart, let it settle, and determine sign-in only from visible page state. If it is signed out, leave it unchanged and continue to the next candidate.
 6. When the first visibly signed-in browser is found, tell the user exactly which application/profile surface will be used. If the original cart request already authorized cart changes and the user did not forbid fallback, continue there; otherwise wait for approval before mutating the cart.
 7. If no browser is visibly signed in, return to the visible built-in browser when available and ask the user to complete sign-in there. A password, OTP, CAPTCHA, passkey, or unusual-traffic challenge always requires the user.
@@ -118,7 +148,7 @@ Do not invent a separate update UI or bypass review just because the catalog alr
 
 ### Discovery Pass
 
-1. Start from the signed-in built-in browser session on the active desktop or Remote host.
+1. Start from the selected signed-in browser profile on the active desktop or connected host.
 2. Open the Lazada `My Orders` page: `https://my.lazada.sg/customer/order/index/`.
 3. Use only order cards whose visible shop or store name is `RedMart`.
 4. Click `Show All` on RedMart cards when present.
@@ -272,11 +302,11 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 
 ## Browser Navigation Notes
 
-- Use the signed-in built-in browser by default, including for tasks initiated through Remote.
-- Keep every browser surface visible through the ChatGPT desktop app throughout browser work, including external-browser fallbacks controlled through Computer Use. If a person at the computer takes control, pause automation and re-read the settled page before resuming.
-- Treat desktop-app availability, Browser plugin availability, tab connection, website permission, and Lazada authentication as separate states. A missing or stale tab does not prove the built-in browser is unavailable or the account is signed out.
-- Recover a missing tab by opening a fresh tab in the same built-in browser. If the whole browser surface is unavailable, check whether Browser is enabled for the user's app, plan, and workspace before offering Chrome as an explicit fallback.
-- For an explicitly chosen Chrome fallback, treat Chrome installation, extension availability, profile selection, and Lazada authentication as separate states. Retry a lightweight extension connection once; if it still fails, ask the user to focus the correct Chrome profile rather than claiming they are signed out.
+- Use the selected signed-in browser surface and profile for the entire run.
+- Keep the real browser window and controlled tab visible throughout browser work. If a person takes control, pause automation and re-read the settled page before resuming.
+- Treat harness availability, browser-control availability, tab ownership, website permission, profile selection, and Lazada authentication as separate states. A missing or stale tab does not prove the surface is unavailable or the account is signed out.
+- Recover a missing tab within the same selected browser and profile. If the control surface is unavailable, follow its explicit recovery path: ChatGPT Desktop Browser settings for `iab`, or one relay reconnect followed by user-directed relay/CDP recovery in OMP.
+- For an extension or relay surface, retry one lightweight connection after asking the user to focus the exact intended tab. If it still fails, ask the user to reconnect that profile rather than claiming sign-out or silently selecting another profile.
 - After navigating to Lazada or RedMart, allow the visible page state to settle before deciding whether the account or cart is available. A header `login` link by itself is not authoritative because the outer Lazada shell may render before account and cart content.
 - Before reporting sign-out, make a second settled read and look for an explicit blocking login gate. Account-name text, real cart rows, and row-level item/SKU links are stronger signed-in signals than an early shell link. If signals conflict, record stale state in scratch notes and re-read the same claimed tab rather than rapidly reloading or switching profiles.
 - Prefer `canonical_url` over search.

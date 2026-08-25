@@ -4,7 +4,7 @@ This document contains the technical and open-source details intentionally kept 
 
 ## Project status
 
-RedMart/Lazada Singapore is the maintained reference workflow. The easiest and tested path is Codex in the ChatGPT desktop app using its own signed-in built-in browser on Mac or Windows. **GPT-5.6 Terra with Medium reasoning is the tested recommendation for routine cart filling:** two supervised live sessions reached verified carts with zero observed judgment errors. That evidence does not cover catalog seeding, and it does not yet support Claude Desktop. Direct use and Remote control of a Windows host have both been exercised. Chrome and its control extension remain optional fallbacks for existing Chrome profiles or other agents, but require more setup and are not the primary onboarding path.
+RedMart/Lazada Singapore is the maintained reference workflow. The easiest and best-established path is Codex in the ChatGPT desktop app using its own signed-in built-in browser on Mac or Windows. **GPT-5.6 Terra with Medium reasoning is the tested recommendation for routine ChatGPT Desktop cart filling:** two supervised live sessions reached verified carts with zero observed judgment errors. That model evidence does not cover catalog seeding, OMP, or Claude Desktop. Direct use and Remote control of a Windows host have both been exercised. OMP Browser Relay has one reversible three-product smoke test; loopback CDP remains live-test pending. These alternative control channels do not relax any page-state, cart-verification, privacy, or checkout boundary.
 
 The project is currently being hardened for a small tester cohort and will then move to best-effort maintenance. There is no response-time, retailer, browser, operating-system, or agent compatibility guarantee.
 
@@ -25,7 +25,7 @@ npm run validate
 npm run dry-run -- --file examples/grocery-list.txt
 ```
 
-The dry run is a developer and diagnostic tool. Normal household users should work through Codex in the ChatGPT desktop app and do not need to run it themselves.
+The dry run is a developer and diagnostic tool. Normal household users on the primary path should work through Codex in the ChatGPT desktop app. OMP users should follow the separate browser setup guide before live browser work.
 
 ## Repository map
 
@@ -35,7 +35,7 @@ The dry run is a developer and diagnostic tool. Normal household users should wo
 - `tools/dry-run.mjs` — credential-free proposed-cart diagnostic.
 - `tools/validate-catalog.mjs` — catalog integrity checks.
 - `tools/render-catalog-review.mjs` — renderer for the shared catalog seeding and incremental-update approval page.
-- `tools/serve-catalog-review.mjs` — loopback-only server that makes the generated approval page available to the built-in browser.
+- `tools/serve-catalog-review.mjs` — loopback-only server that makes the generated approval page available to the selected visible browser.
 - `templates/redmart-catalog-review-template.html` — reusable local approval UI.
 - `tests/` — catalog, renderer, and template contract tests.
 - `.github/workflows/ci.yml` — credential-free CI.
@@ -53,7 +53,7 @@ The dry run is a developer and diagnostic tool. Normal household users should wo
 - Canonical URLs match the stored item and SKU IDs.
 - Item/SKU pairs do not collide across the catalog.
 
-Live RedMart behavior cannot be tested in CI because it depends on a household's logged-in browser. Perform a careful built-in-browser smoke test before meaningful releases or after credible breakage reports. Record whether the task ran directly on the desktop host or through Remote.
+Live RedMart behavior cannot be tested in CI because it depends on a household's logged-in browser. Perform a careful smoke test on an allowed real, visible browser surface before meaningful releases or after credible breakage reports. Record the harness, model/reasoning setting when exposed, browser control channel (`iab`, OMP relay, or loopback CDP), and whether the run was direct or Remote.
 
 ## Contribution boundaries
 
@@ -110,6 +110,8 @@ Begin with a retailer-specific adapter or documented workflow. Extract shared ab
 - [Model and harness benchmark plan](model-benchmark-plan.md) — tested Terra routine-cart recommendation, open validation boundaries, and model-selection guidance
 - [Terra Medium cart-fill benchmark notes](model-benchmark-results-2026-08-14.md) — two supervised ChatGPT Desktop sessions, 2/2 verified carts and zero observed judgment errors
 - [Claude Desktop setup guide](claude-desktop-setup.md) — untested proposal for running the workflow with Claude's Cowork mode; records what needs validation before it can be recommended
+- [OMP browser setup guide](omp-setup.md) — relay/CDP surface selection, security boundaries, Puppeteer-style element handling, and the recorded reversible Browser Relay smoke test
+- [OMP model qualification test](omp-model-qualification.md) — staged protocol for deciding which model is cheap enough and safe enough to run the OMP relay workflow
 
 ## License and independence
 

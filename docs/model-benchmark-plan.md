@@ -46,15 +46,27 @@ things:
 Keep the recommendation for #1 and the tooling note for #2 separate when writing this
 up for testers; they are easy to conflate because both are called "Codex."
 
-## Desktop app status
+## Execution surface status
 
-**ChatGPT Desktop Codex mode is the only tested and supported execution surface.**
-It runs the live shopping workflow in the visible built-in browser. Open the model and
-reasoning control beneath the Codex composer before beginning a cart session.
+**ChatGPT Desktop Codex mode remains the primary and best-established execution surface.**
+It has two supervised everyday-cart runs in the visible built-in browser. Open the model
+and reasoning control beneath the Codex composer before beginning a Desktop cart session.
 
-Model and Browser availability depend on the user's ChatGPT plan and workspace. This
-repository does not record, compare, or promise subscription pricing, token allowances,
-or credits; use the setting the Desktop app visibly offers.
+**OMP Browser Relay has one reversible live smoke test.** The
+[OMP setup guide](omp-setup.md) records a three-product run with exact product-page
+quantities, two promotion-editor checks, and full baseline restoration. That run
+validates the visible relay control path and exposed a relay-specific click-persistence
+failure mode; it does not establish an OMP model recommendation or validate loopback CDP.
+
+For choosing an OMP model specifically — including the offline decision bench, the
+live cart-fill and catalog runs, the hard-fail list, and the cost ledger — use
+[OMP model qualification test](omp-model-qualification.md). It reuses this document's
+Tier 1 case bank as part of its cart track.
+
+Model and Browser availability depend on the selected harness, account, and workspace.
+This repository does not record, compare, or promise subscription pricing, token
+allowances, or credits. Report only the model/reasoning setting the active harness
+actually exposes.
 
 **Claude Desktop Cowork remains an untested proposal.** The separate
 [Claude setup guide](claude-desktop-setup.md) records the browser/control assumptions
@@ -71,23 +83,25 @@ cart when that control offers it. The exact model identifier is `gpt-5.6-terra`.
 
 This is a tested recommendation, not a claim that every GPT-5.6 tier is interchangeable:
 
-| Workload | Recommended setting | Evidence | Boundary |
+| Workload or harness | Recommended setting | Evidence | Boundary |
 |---|---|---|---|
-| Everyday cart-fill | **5.6 Terra, Medium** | [Two supervised Tier 2 sessions](model-benchmark-results-2026-08-14.md): 2/2 verified carts, zero observed judgment errors, exact SKU/quantity checks, promotion reconciliation, and full baseline restoration | No exact subscription/credit cost was recorded; use the model the Desktop picker makes available |
+| ChatGPT Desktop everyday cart-fill | **5.6 Terra, Medium** | [Two supervised Tier 2 sessions](model-benchmark-results-2026-08-14.md): 2/2 verified carts, zero observed judgment errors, exact SKU/quantity checks, promotion reconciliation, and full baseline restoration | No exact subscription/credit cost was recorded; use the model the Desktop picker makes available |
+| OMP Browser Relay | No model recommendation yet | [One reversible relay smoke test](omp-setup.md#validation-status): three exact SKUs, ordinary and promotion representations, full restoration | One household session on `openai-codex/gpt-5.6-sol`; reasoning setting unavailable; loopback CDP untested |
 | Catalog seeding/update | User choice; Sol is a conservative option for open-ended judgment | None yet | Terra has not been tested for order-history discovery, alias design, title drift, or catalog insertion |
 | Claude Desktop Cowork | No recommendation | None yet | [Claude setup](claude-desktop-setup.md) remains an untested proposal |
 
-For ordinary users, model selection is visible and user-controlled: open the control
-below the Codex message box before starting. Do not assume a repository file changed
-the active Desktop model. If Terra is not listed, keep the app's current/default model
-and report that constraint rather than attempting a configuration workaround.
+For ChatGPT Desktop users, model selection is visible and user-controlled: open the
+control below the Codex message box before starting. Do not assume a repository file
+changed the active Desktop model. If Terra is not listed, keep the app's current/default
+model and report that constraint rather than attempting a configuration workaround.
 
 The GPT-5.6 family is Sol (flagship), Terra (balanced), and Luna (fast/affordable).
 OpenAI describes Terra as its balanced model for everyday work and documents the
 Desktop composer control in its [Codex models guide](https://learn.chatgpt.com/docs/models).
 
-**Out of scope for this project:** Gemini-in-Chrome, DeepSeek Harness, and other agent
-runtimes. Do not use them with a real Lazada account without separate validation.
+**Out of scope for this project:** Gemini-in-Chrome, DeepSeek Harness, and agent
+runtimes other than the documented ChatGPT Desktop, OMP relay/CDP, and Claude proposal.
+Do not use an unvalidated runtime with a real Lazada account without separate validation.
 
 
 ## Tier 1 — offline decision bench (safe, repeatable, no live site)
@@ -193,11 +207,12 @@ only a live run does. Keep this bounded and safe:
 
 1. Only run this on the harness's real, visible, signed-in browser surface, following
    this repo's existing AGENTS.md rules exactly (visible browser, no headless surface,
-   stop before checkout). A generic Puppeteer/CDP-controlled browser (like the one
-   available in an unrelated coding-assistant sandbox) is **not** an acceptable
-   substitute for this leg — it cannot satisfy the visibility/session requirements
-   AGENTS.md imposes, so don't let a coding agent "test" this step for you in a
-   headless tool.
+   stop before checkout). ChatGPT Desktop `iab`, OMP Browser Relay, and an explicitly
+   selected headed browser attached through loopback-only CDP can qualify. A generic
+   sandbox, headless Puppeteer browser, guessed profile, or non-loopback CDP endpoint
+   does **not** qualify. The control API is not the deciding factor; visibility,
+   deliberate profile/tab selection, real retained session state, and user
+   interruptibility are.
 2. For each Tier-1-passing candidate (tier + harness), run exactly one of
    [tester-guide.md](tester-guide.md)'s existing "Everyday cart" sessions with a short,
    fixed real list (reuse `examples/grocery-list.txt`'s items plus 2–3 of your own).

@@ -78,6 +78,12 @@ The computer needs to stay awake, online, and signed into the right built-in bro
 
 Chrome and its control extension are optional fallbacks, not requirements. They can be useful when the built-in browser is unavailable to the main agent, during the documented signed-out recovery flow, or when you deliberately want to use an existing Chrome profile. A subagent that cannot expose the built-in browser should remain the planner or auditor while the main agent operates the visible built-in browser; that limitation is not a reason to switch browser profiles.
 
+### OMP browser alternative
+
+Oh My Pi (OMP) can run the same workflow through its Browser Relay extension in a visible, signed-in Chrome profile, or through an explicitly selected headed browser with a loopback-only CDP endpoint. The relay is preferred because it reuses the tab and profile the user already chose. OMP must not use a headless browser, guess a profile, expose a CDP port beyond loopback, inspect browser-private data, or cross the checkout boundary.
+
+See the [OMP browser setup guide](docs/omp-setup.md). It maps OMP page observations and Puppeteer-style element handling to the exact identity, availability, quantity, manifest, promotion, and restoration rules in `AGENTS.md`. One reversible Browser Relay smoke test is recorded there; loopback CDP remains live-test pending. The ChatGPT Desktop Terra/Medium benchmark does not establish equivalent model quality in OMP.
+
 You do **not** need to understand the code or edit the grocery catalog yourself. Give the project to your agent and ask it to guide you.
 
 Two supervised everyday-cart tests used 5.6 Terra with Medium reasoning and reached verified carts with no observed product, availability, quantity, or promotion-audit errors. The test did not cover catalog setup, where a more capable model remains a reasonable user choice. See the [full test notes](docs/model-benchmark-results-2026-08-14.md).
