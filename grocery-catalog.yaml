@@ -1,4 +1,4 @@
-catalog_version: 1
+catalog_version: 2
 store:
   name: RedMart on Lazada Singapore
   country: Singapore
@@ -1111,6 +1111,7 @@ items:
     default_quantity: 1
     aliases:
       - ribbon pasta
+      - pasta
       - farfalle
       - bow tie pasta
       - curly pasta
@@ -1359,3 +1360,20 @@ items:
         pack_size: "320 g"
         observed_price_sgd: 9.00
     notes: "Added from the three user-selected product tabs on 2026-08-08; ranked by pack mass from largest to smallest."
+
+# Household baskets map one spoken word to a deliberate mix of catalog items.
+# `default_quantity` is the TOTAL number of packs, spread across `members` in declared
+# order (earliest members absorb an odd remainder). Flavour-specific aliases on the
+# member items keep working and always resolve to that single flavour.
+household_baskets:
+  - id: remedy_sodaly_mix
+    category: beverages
+    default_quantity: 2
+    aliases:
+      - sodaly
+      - sodalys
+      - remedy sodaly
+    members:
+      - item: remedy_sodaly_guava
+      - item: remedy_sodaly_yuzu
+    notes: "The household says 'Sodaly' without a flavour and wants a mix. The generic word deliberately defaults to 2 packs TOTAL, one of each flavour, even though each flavour-specific alias still defaults to 2 packs of that flavour on its own. Guava is declared first, so an odd total gives Guava the extra pack. Say 'yuzu sodaly' or 'guava sodaly' for a single flavour."

@@ -8,5 +8,6 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exitCode = 1;
 } else {
-  console.log(`Catalog is valid: ${catalog.items.length} household items.`);
+  const baskets = catalog.household_baskets?.length ?? 0;
+  console.log(`Catalog is valid: ${catalog.items.length} household items, ${baskets} household basket(s).`);
 }

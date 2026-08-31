@@ -20,8 +20,8 @@ judgment intensity:
 
 | Workload | Frequency | What the model must do | Judgment intensity |
 |---|---|---|---|
-| **Catalog seeding / update** | Rare (setup, occasional order review) | Read order history, resolve title drift, write aliases a family would actually say, decide what's a duplicate vs. a new pack size | High — open-ended, semantic, low volume |
-| **Everyday cart-fill** | Frequent (every shop) | Follow the AGENTS.md procedure: match aliases, check availability against explicit rules, click the right control, reconcile promotion groups against a manifest | Low-to-medium — mostly procedural, the "thinking" is already encoded in AGENTS.md's rules |
+| **Catalog seeding / update** | Rare (setup, occasional order review) | Read order history, resolve title drift, write item and basket aliases a family would actually say, decide what's a duplicate vs. a new pack size | High — open-ended, semantic, low volume |
+| **Everyday cart-fill** | Frequent (every shop) | Follow the AGENTS.md procedure: match aliases (a basket alias may expand one list concept into several member SKUs), check availability against explicit rules, click the right control, reconcile promotion groups against a manifest | Low-to-medium — mostly procedural, the "thinking" is already encoded in AGENTS.md's rules |
 
 This split matters for the recommendation: the everyday path is closer to "follow a
 long, precise instruction set and read a screen carefully" than to "invent a plan,"
@@ -115,19 +115,27 @@ account, no risk to a real cart. Safe to run unattended, safe to run today.
 **A. Fuzzy alias resolution** (uses the real fixtures already in this repo)
 1. Input: `examples/grocery_list_example_20260707.jpg` (whiteboard photo). Expected:
    the 10-row table already documented in README.md's "What it looks like" section —
-   score exact item + quantity match against that table.
+   score exact item + quantity match against that table. Scoring counts matched input
+   concepts, not produced cart rows: one basket input can legitimately expand into
+   several member-SKU cart rows. The current fixtures contain no basket input, so the
+   existing 10-row expectation is unchanged.
 2. Input: `examples/grocery-list.txt` (`eggs`, `2 watermelon`, `rice crackers`,
-   `unknown treat`). Expected: 3 matched, `unknown treat` correctly reported as
-   unmatched rather than guessed. This case is also runnable deterministically via
-   `npm run dry-run -- --file examples/grocery-list.txt`, which gives you a
-   zero-cost, non-AI ground-truth oracle for exact-alias inputs — use it to confirm
-   the bank's expected answers before scoring any model against them.
+   `unknown treat`). Expected: 3 matched input concepts, with `unknown treat` correctly
+   reported as unmatched rather than guessed. A basket input still counts as one matched
+   input concept even when it produces several cart rows. The current fixtures contain
+   no basket input, so the existing expectation is unchanged. This case is also runnable
+   deterministically via `npm run dry-run -- --file examples/grocery-list.txt`, which
+   gives you a zero-cost, non-AI ground-truth oracle for exact-alias inputs — use it to
+   confirm the bank's expected answers before scoring any model against them.
 3. A misspelled/loose variant not in `grocery-catalog.yaml`'s alias list (e.g.
    `washing pwder`, `trash bag`) — expected: matched to `persil_powder` /
    `big_garbage_bags` respectively, since those aliases are near-neighbors of listed
    aliases. Tests generalization beyond exact string match (the real workflow relies
    on the model's own language understanding here, not `tools/catalog.mjs`, which is
-   exact-match only).
+   exact-match only; an exact basket-alias match still expands into its member SKUs).
+3a. Input: `3 sodaly`. Expected: the `remedy_sodaly_mix` basket produces guava 2 and
+    yuzu 1. Quantity is allocated across the basket total; with the remainder assigned
+    in declared member order, guava receives the odd pack because it is declared first.
 
 **B. Availability classification** (paraphrase AGENTS.md's "Product Choice And
 Availability" rules into 5–6 short synthetic settled-page-state snippets)
@@ -140,6 +148,10 @@ Availability" rules into 5–6 short synthetic settled-page-state snippets)
    distinguishes these).
 8. Main control present but disabled, corroborating "currently unavailable" text
    nearby → expected: unavailable.
+8a. A `remedy_sodaly_mix` basket where the guava member is explicitly unavailable
+    while the yuzu member remains available → expected: report guava as unavailable,
+    keep yuzu's allocated quantity unchanged, and do not rebalance the missing pack
+    onto yuzu or alter the basket total.
 
 **C. Identity over titles** (from case-study.md's "Canonical identity beats titles"
 lesson)

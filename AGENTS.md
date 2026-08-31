@@ -26,13 +26,13 @@ Before navigation, announce the chosen surface. Do not silently switch among `ia
 
 Common rules:
 
-1. Confirm that the control channel owns the intended tab before navigating. A URL supplied by ambient metadata or the absence of a connection error is not enough after a failed or ambiguous claim.
+1. Confirm that the control channel owns the intended tab before navigating. A URL supplied by ambient metadata or the absence of a connection error is not enough after a failed or ambiguous claim. If no tab is open for Lazada/RedMart, the agent should open one on its own volition within the selected browser profile.
 2. Keep the live browser surface visible. If the tool reports that visibility is unsupported or the browser is headless, stop. A user who explicitly confirms seeing and interacting with the exact intended tab provides authoritative visibility evidence; after that interaction, reacquire and reread the settled tab before continuing.
 3. When a browser or control extension asks for access to a new website, show the request and have the user verify the hostname. Lazada/RedMart and the loopback catalog review URL are expected. Recommend persistent access only for a verified Lazada/RedMart hostname, never for an unexpected host.
 4. Determine authentication only from two settled page reads. An explicit blocking login gate is evidence; an early header `login` link, a stale tab, or a failed claim is not.
-5. Never ask the user to paste a password, OTP, passkey, CAPTCHA answer, or other credential into chat. Keep the selected surface visible and let the user complete authentication or a challenge directly there.
-6. Reuse the selected browser profile's signed-in state. Do not inspect cookies, local storage, browser profile databases, password stores, or saved credentials.
-7. If a controlled tab becomes stale or disappears, recover within the same selected browser and profile. Prefer a fresh controlled tab over a new window, navigate it to `https://cart.lazada.sg/cart`, and read it twice before deciding authentication or cart state. Keep the original tab unchanged until the replacement is verified, then offer to close duplicates.
+5. Never ask the user to paste a password, OTP, passkey, CAPTCHA answer, or other credential into chat. When sign-in is required, the agent should check for a local `.env` file containing `USERNAME` and `PASSWORD` (or `LAZADA_USERNAME` and `LAZADA_PASSWORD`) and use them to fill the visible login form automatically if possible. If `.env` is absent, or if Lazada triggers an interactive challenge (OTP, SMS verification, CAPTCHA, slider, passkey, or unusual-traffic verification), keep the selected surface visible and let the user complete authentication or the challenge directly there.
+6. Reuse the selected browser profile's signed-in state, or sign in automatically via `.env` credentials when signed out. Do not inspect cookies, local storage, browser profile databases, or password stores.
+7. If a Lazada tab is not open, or if a controlled tab becomes stale or disappears, the agent should open a tab on its own volition within the same selected browser and profile, navigate it to `https://cart.lazada.sg/cart`, and read it twice before deciding authentication or cart state. Keep the original tab unchanged until the replacement is verified, then offer to close duplicates.
 8. Distinguish a browser/control-channel permission prompt from an operating-system firewall alert. Never disable the firewall or expose a public port. The catalog review helper and any OMP CDP endpoint used by this workflow must bind only to loopback.
 
 ### Visible Browser Coordination With Subagents
@@ -55,7 +55,7 @@ This coordination mode preserves the visibility and safety boundary while still 
 Treat the browser application, OMP control channel, selected browser profile, selected tab, and Lazada authentication as separate facts.
 
 1. Prefer OMP Browser Relay for an existing signed-in Chrome profile. Open the OMP browser device with relay enabled and target the user-selected Lazada/RedMart tab when possible. Confirm the adopted page is the intended tab before navigation or mutation.
-2. If no suitable tab exists, the relay may adopt the user's current visible tab and navigate it only after the chosen surface has been announced. Prefer opening a fresh tab in the same relayed browser for recovery so unrelated user content remains unchanged.
+2. If no suitable tab exists, the relay may adopt the user's current visible tab and navigate it only after the chosen surface has been announced, or open a fresh tab on its own volition in the same relayed browser navigating to `https://cart.lazada.sg/cart` so unrelated user content remains unchanged.
 3. Use CDP only when the user explicitly selected it or relay is unavailable and the user approves CDP. The endpoint must be loopback-only (`127.0.0.1` or `localhost`), and the attached browser must be headed, visible, and launched with a deliberate profile.
 4. CDP is a powerful full-browser control channel. Never connect to a non-loopback endpoint, expose its debugging port, inspect unrelated tabs, or read cookies, storage, credentials, downloads, or browsing history. Operate only the Lazada/RedMart and loopback review tabs required by the task.
 5. Do not use an OMP-spawned headless/default browser, an unrelated sandbox browser, or an automatically selected system browser for shopping. A generic CDP connection is acceptable only when it satisfies the visible, user-selected, loopback, real-session requirements above.
@@ -95,32 +95,32 @@ Also check the user's `~/Applications` directory on macOS when the system-wide l
 
 ### First-Time Sign-In And Signed-Out Recovery
 
-The selected browser profile is the household browser for the run. Its retained Lazada session is the only authentication state to use; no repository marker, username file, cookie export, or password file is needed.
+The selected browser profile is the household browser for the run. Its retained Lazada session is the primary authentication state to use. Because Lazada frequently expires sessions over time, a local `.env` file with `USERNAME` and `PASSWORD` (or `LAZADA_USERNAME` and `LAZADA_PASSWORD`) may be provided so the agent can automatically re-authenticate when signed out.
 
 For the first household run:
 
-1. Select and expose one permitted surface. In ChatGPT Desktop, use `iab` by default. In OMP, connect the announced relay or loopback-CDP surface. Open `https://cart.lazada.sg/cart`.
+1. Select and expose one permitted surface. In ChatGPT Desktop, use `iab` by default. In OMP, connect the announced relay or loopback-CDP surface. If a Lazada tab is not currently open, open one on your own volition and navigate to `https://cart.lazada.sg/cart`.
 2. Let the page settle, then read it a second time before deciding whether it is signed out. Treat an explicit blocking login gate as authoritative; do not rely on an early header `login` link alone.
-3. If sign-in is required, keep that browser visible and ask the user to sign in directly there. Tell them not to send a password, OTP, passkey, or other credential through chat and ask them to say when the browser is ready.
-4. After the user returns, verify visible signed-in evidence such as the account name or real cart rows, then continue. Reuse that exact profile on later runs and do not clear its browser data as part of normal cleanup.
+3. If sign-in is required, check if a local `.env` file exists with login credentials and use them to fill the login form and sign in automatically in the visible browser if possible. If `.env` is absent or if Lazada requires an interactive challenge (OTP, SMS verification, passkey, CAPTCHA, slider, or unusual-traffic check), keep that browser visible and ask the user to complete sign-in or solve the challenge directly there. Tell them not to send a password, OTP, passkey, or other credential through chat and ask them to say when the browser is ready.
+4. After sign-in completes, verify visible signed-in evidence such as the account name or real cart rows, then continue. Reuse that exact profile on later runs and do not clear its browser data as part of normal cleanup.
 
 For a later OMP run where relay/CDP is unavailable or the selected profile remains at an explicit login gate after two settled reads:
 
-1. Do not hunt through installed browsers or profiles. Keep the selected browser visible and ask the user to reconnect the relay, deliberately provide a loopback CDP surface, or sign in to the already selected profile.
+1. Open a Lazada tab on your own volition if none is open. If an explicit login gate is present, attempt automatic sign-in using `.env` credentials if available. If `.env` is absent or an interactive challenge appears, keep the selected browser visible and ask the user to reconnect the relay, deliberately provide a loopback CDP surface, or complete sign-in / verification directly in the already selected profile.
 2. Treat relay/CDP availability, tab ownership, and Lazada authentication as separate states. Reconnect or recover the exact tab once before concluding that the surface is unavailable.
 3. Switching between relay and CDP is a surface change. Announce it and obtain user approval unless the user's original request explicitly authorized either OMP surface.
 
 For a later ChatGPT Desktop run where the built-in browser is unavailable or remains at an explicit login gate after two settled reads:
 
-1. If the user explicitly requested the built-in browser only, keep it visible and ask them to sign in there; do not switch surfaces.
+1. If the user explicitly requested the built-in browser only, keep it visible, attempt automatic login with `.env` credentials if present, or ask them to sign in there; do not switch surfaces.
 2. Otherwise, announce that a read-only fallback preflight is starting. Trying another browser for visible Lazada authentication is allowed, but do not change cart rows during the preflight.
 3. Try one exact browser at a time in this order:
    - Windows: verified Google Chrome with the official ChatGPT extension, then Microsoft Edge, Firefox, and Vivaldi through Computer Use.
    - macOS: verified Google Chrome with the official ChatGPT extension, then Safari, Firefox, Vivaldi, and Microsoft Edge through Computer Use.
 4. Skip browsers that are not installed, not controllable, or not already open/launchable under current permissions. Do not use the default-browser handler, guess a profile, or inspect browser-private data.
-5. In each candidate browser, open the Lazada cart, let it settle, and determine sign-in only from visible page state. If it is signed out, leave it unchanged and continue to the next candidate.
+5. In each candidate browser, open the Lazada cart on your own volition if not present, let it settle, and determine sign-in only from visible page state. If it is signed out, leave it unchanged and continue to the next candidate.
 6. When the first visibly signed-in browser is found, tell the user exactly which application/profile surface will be used. If the original cart request already authorized cart changes and the user did not forbid fallback, continue there; otherwise wait for approval before mutating the cart.
-7. If no browser is visibly signed in, return to the visible built-in browser when available and ask the user to complete sign-in there. A password, OTP, CAPTCHA, passkey, or unusual-traffic challenge always requires the user.
+7. If no browser is visibly signed in, return to the visible built-in browser when available, attempt `.env` sign-in if credentials exist, or ask the user to complete sign-in there. A password, OTP, CAPTCHA, passkey, or unusual-traffic challenge without `.env` always requires the user.
 
 ## Catalog Seeding And Updating
 
@@ -225,11 +225,12 @@ This is legitimate user-assisted shopping from a logged-in household account, bu
 2. If a retained candidate resolves to an item/SKU already in `grocery-catalog.yaml` under a different title, do not add a duplicate. Record the title drift in the temporary scratch file.
 3. If a product is the same household concept but a different pack size, add it as another ranked product under the existing item instead of creating a duplicate household item.
 4. If a product page is unavailable or the match is unclear, keep it out of the catalog or rank it as a fallback only after human review.
-5. After editing the catalog, validate that `grocery-catalog.yaml` parses and check that newly added item/SKU pairs do not collide with existing entries.
+5. Use a `household_baskets` entry when the household says one word but deliberately wants a mix of catalogued flavours. A basket has an ID, category, total default quantity, aliases, and members; it must have at least two members, each referencing an existing item, and baskets cannot nest.
+6. After editing the catalog, validate that `grocery-catalog.yaml` parses and check that newly added item/SKU pairs do not collide with existing entries.
 
 ### Catalog Aliases
 
-Use aliases that match what the family would naturally write or say, not only the exact SKU title. Prefer general household terms such as `cream cheese`, `mayo`, `cherry tomatoes`, or `fabric softener`; add brand names only when they are likely to be spoken, such as `downy` or `anchor butter`. Include useful singular, plural, and shorthand forms. Avoid aliases that are too broad and likely to collide with other catalog items; for example, use `cream cheese` instead of `cheese` when the catalog has several cheeses. Ask the user before finalizing aliases that are unclear.
+Use aliases that match what the family would naturally write or say, not only the exact SKU title. Prefer general household terms such as `cream cheese`, `mayo`, `cherry tomatoes`, or `fabric softener`; add brand names only when they are likely to be spoken, such as `downy` or `anchor butter`. Include useful singular, plural, and shorthand forms. Aliases must be globally unique across items and baskets. Avoid aliases that are too broad and likely to collide with other catalog items; for example, use `cream cheese` instead of `cheese` when the catalog has several cheeses. A generic word that maps to one product remains an ordinary item; use a basket only for a deliberate mix of catalogued flavours. Ask the user before finalizing aliases that are unclear.
 
 Never place an order, choose delivery slots, confirm payment, save payment details, or go past cart/review steps while seeding the catalog.
 
@@ -245,10 +246,10 @@ An explicit request such as `put these in my cart` authorizes adding the confide
 ## Core Flow
 
 1. Read a whiteboard image, typed grocery list, or voice-dictated list.
-2. Match each item to `items[].aliases` in `grocery-catalog.yaml`.
+2. Match each item to `items[].aliases` or `household_baskets[].aliases` in `grocery-catalog.yaml`.
 3. Show a proposed cart table before browser actions.
 4. Check product availability before adding.
-5. Use the first acceptable `preferred_products` entry, starting at `rank: 1`.
+5. Expand a matched basket into its members first, then use each member's own ranked `preferred_products`, starting at `rank: 1`.
 6. Add or update quantities in the logged-in browser, preferring the exact product-page quantity workflow below when its controls are available.
 7. Perform one final manifest-based cart audit and correct only confirmed mismatches.
 8. Stop before final checkout, delivery-slot confirmation, payment, or purchase confirmation.
@@ -257,16 +258,16 @@ If an item does not match `grocery-catalog.yaml`, do not add it and do not searc
 
 ## Product Choice And Availability
 
-Rank is a preference, not an absolute rule. For each requested grocery item:
+Rank is a preference, not an absolute rule. Evaluate availability and ranked fallback independently for each requested ordinary item and each member of a matched basket:
 
 1. Open the `rank: 1` product page.
 2. Let the product page settle and perform a second read before making an availability or cart-state decision. Lazada progressively hydrates product and SKU pages; `DOMContentLoaded` or a visible product title alone is not a readiness signal.
-3. Wait for the page to show its price, the visible page-level `Product Availability` section, and either the exact main `Add to cart` control or an exact existing-product quantity control. These signals do not need to share one DOM container; on observed RedMart pages, `Product Availability` can sit outside the main product-detail block. If the settled page explicitly says `Out of stock`, or its main control is disabled with corroborating unavailable state, classify it as unavailable even though dates or an Add/stepper control may be absent. Otherwise, if a readiness signal is missing after the required two settled reads, treat the page as incomplete and allow one additional gentle wait and settled read. If the signal is still missing, return the SKU as `unresolved`; do not keep retrying or call it unavailable.
+3. Wait for the page to show its price, the visible page-level `Product Availability` section, and either the exact main `Add to cart` control or an exact existing-product quantity control. These signals do not need to share one DOM container; on observed RedMart pages, `Product Availability` can sit outside the main product-detail block. If the settled page explicitly says `Out of stock`, or its main control is disabled with corroborating unavailable state, classify it as unavailable even though dates or an Add/stepper control may be absent. Otherwise, if a readiness signal is missing after the required two settled reads, treat the page as incomplete and allow one additional gentle wait and settled read. If the signal is still missing, return the SKU as `unresolved` for human review rather than treating it as unavailable.
 4. Prefer products available today or tomorrow; tomorrow is the normal expected outcome for RedMart.
 5. Availability two days from now is acceptable.
 6. If rank 1 is only available more than two days from now, try rank 2, then rank 3.
 7. When a ranked fallback is selected, replace that concept's selected manifest item/SKU with the chosen fallback before mutation. For a test, record the fallback SKU's own pre-test baseline so restoration remains exact.
-8. If no ranked product is available within two days from now, report it for human review instead of adding it automatically. Only classify a product as unavailable when the settled page explicitly indicates unavailability or the main product control is disabled with corroborating page state.
+8. If no ranked product is available within two days from now, report it for human review instead of adding it automatically. Never silently rebalance an unavailable basket member's packs onto another member or change the basket total; report that member for human review exactly as an unavailable ordinary item. Only classify a product as unavailable when the settled page explicitly indicates unavailability or the main product control is disabled with corroborating page state.
 
 The page structure can change. Do not depend on a single fragile CSS selector for availability. A reliable computer-use fallback is to visually inspect the right-side product details area near `Delivery Options` and `Product Availability`, then read date labels such as `Today`, `Tomorrow`, or weekday/date chips.
 
@@ -276,7 +277,7 @@ Interpret pack-size evidence semantically. Normalize harmless typography such as
 
 ## Product-Page Quantity Workflow
 
-Complete the settled availability check above before changing quantity. Maintain an expected manifest while processing products. Each manifest entry must include the requested household item, selected item ID and SKU ID, product title, pack size, target quantity, and current processing status. Keep selected SKUs in the manifest when their product-page result becomes `unresolved`; status is not permission to omit an expected product from final reconciliation.
+Complete the settled availability check above before changing quantity. Maintain an expected manifest while processing products. Include one manifest entry for each expanded member SKU, tagged with its source basket when applicable. Each manifest entry must include the requested household item, selected item ID and SKU ID, product title, pack size, target quantity, and current processing status. Keep selected SKUs in the manifest when their product-page result becomes `unresolved`; status is not permission to omit an expected product from final reconciliation. Mark a basket member with no available ranked product as `unavailable` and keep its recorded allocation for reporting only; it is never added and never becomes an expected cart row.
 
 For each available selected SKU:
 
@@ -293,7 +294,7 @@ The product-page workflow is preferred because the control is already scoped to 
 
 Before browser actions that will add or update items, inspect the current cart when practical. Classify existing cart rows by product title and item/SKU pair:
 
-- `requested`: the row matches an item on the current grocery list after catalog matching.
+- `requested`: the row matches an ordinary item on the current grocery list or a member SKU requested through its parent basket.
 - `unrequested`: the row is in the cart but is not on the current grocery list.
 
 Default behavior is to add or update requested items and leave unrequested rows alone. If unrequested rows are present, tell the user they are already in the cart, preserve them, and continue. Ask a blocking keep/remove question only when the user's wording makes removal intent genuinely ambiguous.
@@ -305,10 +306,11 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 - Use the selected signed-in browser surface and profile for the entire run.
 - Keep the real browser window and controlled tab visible throughout browser work. If a person takes control, pause automation and re-read the settled page before resuming.
 - Treat harness availability, browser-control availability, tab ownership, website permission, profile selection, and Lazada authentication as separate states. A missing or stale tab does not prove the surface is unavailable or the account is signed out.
+- If a Lazada/RedMart tab is not open, the agent should open one on its own volition (navigating to `https://cart.lazada.sg/cart`).
 - Recover a missing tab within the same selected browser and profile. If the control surface is unavailable, follow its explicit recovery path: ChatGPT Desktop Browser settings for `iab`, or one relay reconnect followed by user-directed relay/CDP recovery in OMP.
 - For an extension or relay surface, retry one lightweight connection after asking the user to focus the exact intended tab. If it still fails, ask the user to reconnect that profile rather than claiming sign-out or silently selecting another profile.
 - After navigating to Lazada or RedMart, allow the visible page state to settle before deciding whether the account or cart is available. A header `login` link by itself is not authoritative because the outer Lazada shell may render before account and cart content.
-- Before reporting sign-out, make a second settled read and look for an explicit blocking login gate. Account-name text, real cart rows, and row-level item/SKU links are stronger signed-in signals than an early shell link. If signals conflict, record stale state in scratch notes and re-read the same claimed tab rather than rapidly reloading or switching profiles.
+- Before reporting sign-out, make a second settled read and look for an explicit blocking login gate. If signed out, check for `.env` credentials (`USERNAME`/`PASSWORD` or `LAZADA_USERNAME`/`LAZADA_PASSWORD`) and use them to log in automatically in the visible browser if possible. If `.env` is absent or an interactive challenge appears, prompt the user in the visible browser. Account-name text, real cart rows, and row-level item/SKU links are stronger signed-in signals than an early shell link. If signals conflict, record stale state in scratch notes and re-read the same claimed tab rather than rapidly reloading or switching profiles.
 - Prefer `canonical_url` over search.
 - Product pages usually have a visible `Add to cart` button near the product details and price.
 - If the main add button is missing, distinguish "already in cart" from "not available." An exact main-product stepper, quantity input, or `Go to cart` control usually means the product is already in the cart. Continue with the Product-Page Quantity Workflow when the exact stepper is available; otherwise defer the quantity to the final cart audit instead of adding again.
@@ -329,17 +331,17 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 
 The final cart audit is a reconciliation pass, not a reason to repeat every quantity change in the cart.
 
-1. Include every selected requested SKU and target quantity in the expected manifest, including product-page-`unresolved` entries, plus every preserved pre-existing row. Track unresolved status separately; never omit an expected SKU from reconciliation. Compute the expected total unit count.
+1. Include every selected requested SKU and target quantity in the expected manifest, including product-page-`unresolved` entries, plus every preserved pre-existing row. The manifest has one entry per expanded member SKU, tagged with its source basket. Compute the expected total unit count from all manifest target quantities; each basket's total is the sum of its member quantities. Exclude `unavailable` entries from the expected total, because they were deliberately never added.
 2. Load the cart once after the product-page pass, let it settle, and perform a second read.
 3. Use the cart header item count only as a quick checksum against the expected total. It is not proof of exact contents, and checkout selected counts, subtotals, and order summaries are not verification.
-4. Match ordinary rendered rows by exact item ID and SKU ID, then verify title, pack size, and quantity. Classify each expected SKU as `normal-row match`, `promotion-group match`, `actual mismatch`, or `unresolved`.
+4. Match ordinary rendered rows by exact item ID and SKU ID, then verify title, pack size, and quantity. Classify each expected SKU as `normal-row match`, `promotion-group match`, `actual mismatch`, `unresolved`, or `unavailable`.
 5. Lazada can collapse products into promotional groups, hide their ordinary rows, or show only part of a product's full quantity in an ordinary row. A missing row or partial-looking quantity is not automatically a mismatch. Do not change it yet.
 6. For each expected SKU that is missing, collapsed, or partial-looking, inspect the relevant promotion summary through its `EDIT` control. Process one promotion group at a time. On the promotion editor page, verify the exact item/SKU, title, pack size, and full quantity, record the result, then return to the cart and reacquire its settled state before inspecting another group.
 7. Promotion labels can repeat. After any navigation or rerender, reacquire the promotion group and its control; do not reuse a stale locator or rely on a previous global index. Treat the promotion editor's exact product and quantity as authoritative for a grouped SKU.
 8. If an exact promotion `EDIT` activation is a no-op, obtain a fresh settled cart read, reacquire that exact group and control, and retry once. A second no-op becomes `unresolved`; do not force repeated activations.
-9. After two settled cart reads and inspection of every relevant promotion group, classify an expected SKU as `actual mismatch` when it is absent from every ordinary and promotion representation, or when its authoritative quantity differs from the manifest target. If page state or promotion-group coverage remains uncertain, keep it `unresolved` and do not correct it yet.
+9. After two settled cart reads and inspection of every relevant promotion group, classify an expected SKU as `actual mismatch` when it is absent from every ordinary and promotion representation, or when its authoritative quantity differs from the manifest target. If page state or promotion-group coverage remains uncertain, keep it `unresolved` and do not correct it yet. An `unavailable` entry can never become an `actual mismatch`: its absence from the cart is the intended outcome, so report the unfulfilled packs instead of adding them.
 10. Record unexpected extra rows separately. Preserve and report them unless exact evidence proves they are removable artifacts created by the current test; never broaden cleanup by inference.
-11. Correct only entries proven to be `actual mismatch`. Use controls scoped to the exact item/SKU representation, apply one change at a time, and wait/reacquire as required. Do not alter `normal-row match` or `promotion-group match` entries.
+11. Correct only entries proven to be `actual mismatch`. Use controls scoped to the exact item/SKU representation, apply one change at a time, and wait/reacquire as required. Do not alter `normal-row match`, `promotion-group match`, or `unavailable` entries.
 12. If corrections were required, reload once and re-audit the corrected exact entries plus the manifest checksum. If no corrections were required, leave the matching cart unchanged.
 
 ### Test Cleanup And Baseline Restoration
@@ -356,7 +358,7 @@ Before touching the browser:
 
 - Parse the image, typed list, or voice-dictated list.
 - Normalize quantities from explicit text if present; otherwise use `default_quantity`.
-- Produce a proposed cart table with matched item, product title, quantity, and uncertain matches.
+- Produce a proposed cart table with matched item, product title, quantity, and uncertain matches; for each basket, show the basket total and per-member allocation.
 - Ask for approval if there are uncertain matches, surprising quantities, or existing cart rows that may need removal. Unknown items alone do not block confidently matched items; report the unknowns and continue when the original request already authorized cart filling.
 
 During browser work:
@@ -381,8 +383,8 @@ To add a new item later:
 1. Search or add the preferred product manually once in RedMart/Lazada.
 2. Leave the product page or cart open in the active controlled browser.
 3. Scrape the title, item ID, SKU ID, canonical URL, pack size, current quantity, price reference, and aliases.
-4. Add a new item to `grocery-catalog.yaml`, or add another ranked product under an existing item.
+4. Add a new item to `grocery-catalog.yaml`, add another ranked product under an existing item, or add a `household_baskets` entry that references existing items for a new mix.
 
-Use the words the family actually writes or says. For example, one product can have aliases like `big garbage bags`, `trash bags`, and `bin bags`.
+Use the words the family actually writes or says. An ordinary product may have aliases such as `big garbage bags`, `trash bags`, and `bin bags`; use a basket when one family word deliberately denotes a mix of catalogued flavours.
 
 Alcohol items can be normal catalog entries. Delivery handles age checks; the agent should still stop before final checkout and payment confirmation.

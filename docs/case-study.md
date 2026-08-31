@@ -16,6 +16,7 @@ The design therefore makes the agent's action space explicit:
 
 - Family phrases map to catalog aliases.
 - Each household item has a known default quantity.
+- A family word may instead denote a small deliberate mix of catalogued products, with its quantity understood as a total.
 - Products have canonical retailer item and SKU identifiers.
 - Ranked fallbacks constrain alternatives.
 - Availability rules determine when a fallback is acceptable.
@@ -31,7 +32,7 @@ Consistency comes from state, constraints, and verification—not a stronger pro
 flowchart LR
     A["Photo, voice, or typed list"] --> B["Normalize items and quantities"]
     B --> C["Match household aliases"]
-    C --> D["Ranked canonical products"]
+    C -->|Expand family mixes into member products| D["Ranked canonical products"]
     D --> E["Human reviews proposed cart"]
     E --> F["Check product availability"]
     F --> G["Update logged-in browser cart"]
@@ -55,7 +56,7 @@ Lazada overview pagination can update visible order cards while embedded data or
 
 ### Preference and availability are separate
 
-Rank 1 is the household preference, not an unconditional choice. The workflow accepts delivery today, tomorrow, or within two days, then tries a ranked fallback. Beyond that boundary, it asks the human.
+Rank 1 is the household preference, not an unconditional choice. A family mix expands into its members first; each is checked independently for availability and ranked fallback, and an unavailable member is reported rather than rebalanced. The workflow accepts delivery today, tomorrow, or within two days, then tries a ranked fallback. Beyond that boundary, it asks the human.
 
 ### An action is not an outcome
 
