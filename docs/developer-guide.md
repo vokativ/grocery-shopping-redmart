@@ -29,9 +29,10 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 
 ## Repository map
 
-- `grocery-catalog.yaml` — household aliases, quantities, and ranked canonical products.
+- `grocery-catalog.yaml` — household aliases, quantities, ranked canonical products, and household baskets.
 - `AGENTS.md` — browser-operating, seeding, verification, and safety rules.
-- `tools/catalog.mjs` — catalog loading, validation, and exact alias matching.
+- `.env.example` — template for optional household login credentials used for automated sign-in.
+- `tools/catalog.mjs` — catalog loading, validation, exact alias matching, and basket expansion.
 - `tools/dry-run.mjs` — credential-free proposed-cart diagnostic.
 - `tools/validate-catalog.mjs` — catalog integrity checks.
 - `tools/render-catalog-review.mjs` — renderer for the shared catalog seeding and incremental-update approval page.
@@ -52,8 +53,19 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - Item and SKU IDs contain digits.
 - Canonical URLs match the stored item and SKU IDs.
 - Item/SKU pairs do not collide across the catalog.
+- `household_baskets`, when present, is an array.
+- Basket IDs are unique and do not collide with item IDs.
+- Basket default quantities are positive integers.
+- Every basket has at least two distinct members, each referring to an existing item; baskets cannot contain other baskets.
+- Aliases are unique across the whole catalog and cannot begin with a quantity prefix.
 
 Live RedMart behavior cannot be tested in CI because it depends on a household's logged-in browser. Perform a careful smoke test on an allowed real, visible browser surface before meaningful releases or after credible breakage reports. Record the harness, model/reasoning setting when exposed, browser control channel (`iab`, OMP relay, or loopback CDP), and whether the run was direct or Remote.
+
+### Household baskets
+
+`household_baskets` is an optional list of family-level aliases that deliberately resolve to a mix of catalog items. A basket has an ID, category, default total quantity, aliases, and two or more item members. Its total packs are allocated in declared member order: each member receives `floor(total / members)` packs, then the earliest members absorb the remainder, and members allocated zero packs are omitted. Flavour-specific aliases on the member items keep resolving to that single item. Availability and ranked fallback are evaluated per member, and an unavailable member is reported rather than rebalanced onto a sibling.
+
+`matchList` returns one result for every non-empty input line. Each result has a `selections[]` array of its concrete product selections, and basket matches also include a `basket_id`. Ordinary items no longer expose flat `product`/`pack_size`/`canonical_url` fields on the result itself — read `selections[0]` instead. That deliberate shape change is why `catalog_version` moved from `1` to `2`. The dry run prints the matched-input ratio and the resulting cart-row count separately, so expansion is visible before browser work.
 
 ## Contribution boundaries
 

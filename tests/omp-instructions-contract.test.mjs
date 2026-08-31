@@ -58,3 +58,17 @@ test("benchmark accepts only qualifying visible OMP control channels", () => {
   assert.match(benchmark, /generic\s+.*headless Puppeteer browser/s);
   assert.match(benchmark, /does \*\*not\*\* qualify/);
 });
+
+test("household basket rules survive in the agent instructions", () => {
+  assert.match(agents, /`items\[\]\.aliases` or `household_baskets\[\]\.aliases`/);
+  assert.match(agents, /Expand a matched basket into its members first/);
+  assert.match(agents, /availability and ranked fallback independently for each requested ordinary item and each member of a matched basket/i);
+  // The safety rule the whole feature depends on: an out-of-stock flavour is reported,
+  // never quietly absorbed by its sibling.
+  assert.match(agents, /Never silently rebalance an unavailable basket member's packs onto another member or change the basket total/);
+  assert.match(agents, /one entry per expanded member SKU/);
+  assert.match(agents, /show the basket total and per-member allocation/);
+  assert.match(agents, /Aliases must be globally unique across items and baskets/);
+  assert.match(agents, /baskets cannot nest/);
+  assert.match(agents, /member SKU requested through its parent basket/);
+});

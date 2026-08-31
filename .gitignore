@@ -8,3 +8,6 @@ node_modules/
 /redmart-order-reading-scratch*
 /redmart-*-scratch*
 .worktrees/
+.env
+.env.*
+!.env.example

@@ -21,14 +21,32 @@ const lines = input.split(/[,\n]/).map((line) => line.trim()).filter(Boolean);
 const results = matchList(catalog, lines);
 
 console.log("PROPOSED CART — DRY RUN ONLY (no browser actions)\n");
-console.table(results.map((result) => result.matched ? {
-  input: result.input,
-  item: result.item_id,
-  product: result.product,
-  pack: result.pack_size,
-  quantity: result.quantity
-} : { input: result.input, item: "UNMATCHED", product: "Not added", pack: "—", quantity: "—" }));
 
+const rows = [];
+for (const result of results) {
+  if (!result.matched) {
+    rows.push({ input: result.input, item: "UNMATCHED", product: "Not added", pack: "—", quantity: "—" });
+    continue;
+  }
+  if (!result.selections.length) {
+    rows.push({ input: result.input, item: result.basket_id ?? result.item_id, product: "No packs allocated", pack: "—", quantity: 0 });
+    continue;
+  }
+  result.selections.forEach((selection, index) => {
+    rows.push({
+      input: index === 0 ? result.input : "",
+      item: result.basket_id ? `${result.basket_id} → ${selection.item_id}` : selection.item_id,
+      product: selection.product,
+      pack: selection.pack_size,
+      quantity: selection.quantity
+    });
+  });
+}
+console.table(rows);
+
+// One result per input line, so this count stays input-level even when baskets expand.
 const unmatched = results.filter((result) => !result.matched);
+const cartRows = results.reduce((total, result) => total + result.selections.length, 0);
 console.log(`Matched ${results.length - unmatched.length}/${results.length} list items.`);
+console.log(`Proposed cart rows after basket expansion: ${cartRows}.`);
 if (unmatched.length) console.log(`Unmatched (requires human handling): ${unmatched.map((item) => item.input).join(", ")}`);

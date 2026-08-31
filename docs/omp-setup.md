@@ -11,7 +11,7 @@ OMP changes only the browser control channel. It must still control a real, head
 Use Browser Relay when the household already has a signed-in Chrome profile:
 
 1. Install and enable the OMP Browser Relay extension in the intended Chrome profile.
-2. Open or focus a visible Lazada/RedMart tab in that profile.
+2. Open or focus a visible Lazada/RedMart tab in that profile (or let OMP open one on its own volition).
 3. Ask OMP to use Browser Relay for the task. OMP should connect with relay enabled and target the exact Lazada tab when possible.
 4. Keep that Chrome window and controlled tab visible, with the host awake and unlocked, until the final cart read or test restoration finishes.
 
@@ -60,7 +60,7 @@ OMP's browser device exposes Puppeteer-style page access. Apply these rules:
 
 ## Sign-in and challenges
 
-Open `https://cart.lazada.sg/cart`, let it settle, and read it twice. Only an explicit blocking login gate after those reads is sign-out evidence. If sign-in, OTP, passkey, CAPTCHA, slider, or unusual-traffic verification appears, keep the browser visible and ask the user to complete it there. Credentials and challenge answers never belong in chat.
+Open `https://cart.lazada.sg/cart` (opening a tab on your own volition if none is open), let it settle, and read it twice. Only an explicit blocking login gate after those reads is sign-out evidence. If signed out, check for `.env` credentials (`USERNAME`/`PASSWORD` or `LAZADA_USERNAME`/`LAZADA_PASSWORD`) and attempt automatic login in the visible browser. If `.env` is absent or if sign-in, OTP, passkey, CAPTCHA, slider, or unusual-traffic verification appears, keep the browser visible and ask the user to complete it there. Credentials and challenge answers never belong in chat.
 
 ## Reversible live test
 

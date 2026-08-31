@@ -37,9 +37,9 @@ This example starts with a family whiteboard. A voice note or typed list works t
   </tr>
 </table>
 
-Before touching RedMart, the agent shows you a proposed cart like this. You can correct anything, add an item, or say `skip ham this time`.
+Before touching RedMart, the agent shows you a proposed cart like this. A familiar word can stand for one usual product or a small mix your family has chosen. You can correct anything, add an item, or say `skip ham this time`.
 
-After you approve it, the agent checks your saved products, uses an available backup when appropriate, and changes quantities through the exact product-page control when possible. It then performs one complete cart review, including promotion groups, and corrects only a product or quantity that the cart evidence proves is wrong.
+After you approve it, the agent checks your saved products, or each part of a saved mix, uses an available backup when appropriate, and changes quantities through the exact product-page control when possible. It then performs one complete cart review, including promotion groups, and corrects only a product or quantity that the cart evidence proves is wrong.
 
 It does not go to checkout.
 
@@ -75,6 +75,7 @@ The computer needs to stay awake, online, and signed into the right built-in bro
 - A Mac or Windows computer with the [ChatGPT desktop app](https://chatgpt.com/download/). On Mac, the current app requires macOS 14 and Apple Silicon (M1 or newer).
 - The built-in Browser available in Codex. Availability can depend on your ChatGPT plan and workspace settings; 5.6 Terra with Medium reasoning is the tested setting for routine carts when the model control offers it.
 - The ChatGPT mobile app if you want to use Remote from your phone.
+- (Optional) A `.env` file with `USERNAME` and `PASSWORD`: copy `.env.example` to `.env` so the agent can automatically log back in if your Lazada session expires.
 
 Chrome and its control extension are optional fallbacks, not requirements. They can be useful when the built-in browser is unavailable to the main agent, during the documented signed-out recovery flow, or when you deliberately want to use an existing Chrome profile. A subagent that cannot expose the built-in browser should remain the planner or auditor while the main agent operates the visible built-in browser; that limitation is not a reason to switch browser profiles.
 
@@ -112,6 +113,8 @@ update the catalog. Do not choose delivery, go to checkout, or pay.
 ```
 
 You do not need to build the entire catalog in one sitting. Start with recent repeat purchases and let it improve as your family shops normally.
+
+Some family words can mean a small mix rather than one product: for example, `Sodaly` can be set up to fill with the flavours your family already buys. The total number you ask for is shared across those flavours. If you name a flavour, you still get just that flavour. If one flavour is out of stock, the agent tells you rather than quietly doubling the other.
 
 ### Add products from a later order
 
@@ -160,9 +163,9 @@ This is intentionally different from asking AI to shop around and recommend rand
 
 Your family catalog remembers:
 
-- The words your family uses, such as `big garbage bags` or `persil powder`.
+- The words your family uses, such as `big garbage bags` or `persil powder`, including words that can mean a small usual mix.
 - The exact products and pack sizes you normally buy.
-- Your usual quantities.
+- Your usual quantities, including how a mix is shared.
 - Backup products you have already accepted.
 
 The agent also waits for the progressively loaded product page, checks when the exact saved SKU can be delivered, and confirms each product-page quantity change before moving on. It then reconciles the complete cart by exact item/SKU and quantity. Lazada can hide or split quantities inside promotion groups, so the agent checks the relevant promotion editor before treating a missing or partial-looking ordinary row as an error. If the match is unclear or no acceptable product is available soon enough, it leaves the decision to you.
