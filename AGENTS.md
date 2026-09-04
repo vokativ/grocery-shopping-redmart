@@ -238,9 +238,9 @@ Never place an order, choose delivery slots, confirm payment, save payment detai
 
 An explicit request such as `put these in my cart` authorizes adding the confidently matched catalog items after showing the proposed cart. Unmatched list entries do not block those matched items.
 
-- Report unmatched entries clearly and leave them untouched unless the user explicitly asks to search or expand the catalog.
+- Report unmatched entries clearly and leave them untouched unless the user explicitly asks to search or expand the catalog. In the completion response, place unmatched items at the very bottom under Action Required so they are immediately visible in the chat view without scrolling.
 - Ask a blocking question only when uncertainty changes a matched product, quantity, or whether an existing cart row should be removed.
-- If the user says `I'll handle the rest`, `I'll do the others`, or similar after unmatched entries were identified, default to: the user will handle the unmatched remainder and the agent should continue with the matched items.
+- If the user says `I'll handle the rest`, `I'll do the others`, or similar after unmatched entries were identified, default to: the user will handle the unmatched remainder and the agent should continue with the matched items. In the completion response, confirm which entries were left untouched for the user at the bottom of the message.
 - Stop the cart workflow only when the user explicitly says they will handle the whole cart, asks the agent not to proceed, or the browser cannot safely continue.
 
 ## Core Flow
@@ -370,12 +370,27 @@ During browser work:
 - After all product pages, perform one Manifest Cart Verification And Promotions pass. Inspect promotion editors only for expected SKUs that ordinary exact rows do not fully resolve.
 - Correct only confirmed actual mismatches, then verify any corrections once.
 
-After browser work:
+After browser work (Human Handoff Order):
 
-- Report added, skipped, unavailable, duplicate, and uncertain items.
-- Offer to close agent-opened product/order tabs, while keeping the cart open if the user still needs it.
-- Leave the cart open for human checkout, delivery slot selection, payment, and purchase confirmation.
+Structure the final completion message so that what the human must do is at the very bottom (the first part visible in a scrolled chat view):
 
+1. **Completed Items:**
+   - Briefly summarize what was successfully added or already present in the cart.
+   - Keep this concise so it does not crowd the response.
+
+2. **Cart Handoff:**
+   - Confirm the cart remains open in the user's browser.
+   - Offer to close agent-opened product/order tabs while keeping the cart open.
+
+3. **Technical & Verification Details (Optional / Collapsed):**
+   - Detailed audit artifacts (proposed cart table, product-page logs, pre-existing row checks, and manifest reconciliation) are internal verification steps.
+   - Keep them omitted or in a collapsed block; never let them push the human action items out of view.
+
+4. **Action Required (MUST BE LAST / AT THE VERY BOTTOM):**
+   - This must always be the final section at the very end of the message so the user immediately sees it first in the chat interface.
+   - Explicitly list every requested item that was unmatched, unavailable, uncertain, or left untouched for human handling.
+   - State clearly that these items were not added and require human action (e.g. manual search, substitution, or buying in store).
+   - State the remaining human checkout steps (delivery slot selection, payment, and purchase confirmation).
 ## Adding Future Items
 
 To add a new item later:
