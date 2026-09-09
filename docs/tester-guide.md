@@ -13,7 +13,7 @@ Thank you for testing. The goal is to learn where a busy household gets blocked,
 
 1. **README-only onboarding:** follow the quick start without live help.
 2. **Catalog setup:** review a small batch of RedMart order history and approve the local catalog page.
-3. **Everyday cart:** use a short real list, approve the proposed cart, and verify the cart. Stop before delivery and checkout.
+3. **Everyday cart:** request a short real list, review the proposed cart, and verify the result. Known items and approved backups should proceed without another confirmation. Stop before delivery and checkout.
 
 ## Feedback questionnaire
 

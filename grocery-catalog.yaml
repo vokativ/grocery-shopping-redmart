@@ -96,6 +96,7 @@ items:
     default_quantity: 1
     aliases:
       - capsicum
+      - capcicum
       - bell peppers
       - peppers
       - traffic light capsicum
@@ -581,7 +582,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301100809-s527084959.html"
         pack_size: "450 g"
         observed_price_sgd: 8.95
-    notes: "Maps the 2026-07-03 whiteboard item 'avocado'."
+      - rank: 2
+        title: "RedMart Hass Avocado 3PCS Australia"
+        item_id: "1933997102"
+        sku_id: "10339963745"
+        canonical_url: "https://www.lazada.sg/products/i1933997102-s10339963745.html"
+        pack_size: "500 g"
+        observed_price_sgd: 9.95
+    notes: "The Mexico/USA 4-piece pack remains first; the approved RedMart Australia 3-piece pack from the 2026-09-09 order is the fallback."
 
   - id: apples
     category: produce
@@ -772,20 +780,20 @@ items:
       - greek feta
     preferred_products:
       - rank: 1
-        title: "Supervalu Greek Feta Cheese 200G"
-        item_id: "2443619723"
-        sku_id: "14475877469"
-        canonical_url: "https://www.lazada.sg/products/i2443619723-s14475877469.html"
-        pack_size: "200 g"
-        observed_price_sgd: 8.02
-      - rank: 2
         title: "Kolios Authentic Traditional Greek Feta"
         item_id: "2634307789"
         sku_id: "16772993862"
         canonical_url: "https://www.lazada.sg/products/i2634307789-s16772993862.html"
         pack_size: "150 g"
         observed_price_sgd: 7.40
-    notes: "Default quantity updated to 2 from the approved 2026-07-18 Kolios order; Supervalu remains first and Kolios is the fallback."
+      - rank: 2
+        title: "Supervalu Greek Feta Cheese 200G"
+        item_id: "2443619723"
+        sku_id: "14475877469"
+        canonical_url: "https://www.lazada.sg/products/i2443619723-s14475877469.html"
+        pack_size: "200 g"
+        observed_price_sgd: 8.02
+    notes: "Default quantity is 2. The approved 2026-09-09 order promoted Kolios after the Supervalu product page could not confirm a stable cart quantity."
 
   - id: cucumber
     category: produce
@@ -1301,15 +1309,61 @@ items:
     default_quantity: 1
     aliases:
       - floor cleaner
+      - magic clean floor cleaner
+      - magiclean floor cleaner
+      - magiclean
     preferred_products:
       - rank: 1
+        title: "Magiclean Aromatic Lavender Floor Cleaner 3L"
+        item_id: "301120477"
+        sku_id: "527190523"
+        canonical_url: "https://www.lazada.sg/products/i301120477-s527190523.html"
+        pack_size: "3 L"
+        observed_price_sgd: 7.50
+      - rank: 2
         title: "RedMart Anti Bacterial Lavender Floor Cleaner 2L"
         item_id: "301194057"
         sku_id: "527232835"
         canonical_url: "https://www.lazada.sg/products/i301194057-s527232835.html"
         pack_size: "2 L"
         observed_price_sgd: 3.96
-    notes: "Approved from RedMart order 169640089478810 placed on 2026-08-10."
+    notes: "The approved Magiclean 3 L product from the 2026-09-09 order is preferred; the existing RedMart 2 L product remains a fallback."
+
+  - id: lotus_biscoff
+    category: pantry_snacks
+    default_quantity: 1
+    aliases:
+      - biscoff
+      - biscoffi
+      - lotus biscoff
+      - biscoff biscuits
+    preferred_products:
+      - rank: 1
+        title: "Lotus Biscoff - Caramelized Biscuit Cookies - 312.5G - Non-Gmo Project Verified And Vegan"
+        item_id: "328720557"
+        sku_id: "699598527"
+        canonical_url: "https://www.lazada.sg/products/i328720557-s699598527.html"
+        pack_size: "312.5 g"
+        observed_price_sgd: 8.83
+    notes: "Approved from RedMart order 172647935378810 placed on 2026-09-09; 'biscoffi' preserves the photographed household spelling."
+
+  - id: cream_cleanser
+    category: household
+    default_quantity: 1
+    aliases:
+      - cif
+      - cif cleaner
+      - cream cleanser
+      - scouring cream
+    preferred_products:
+      - rank: 1
+        title: "RedMart Concentrated Cream Cleanser 500ml"
+        item_id: "303382284"
+        sku_id: "536724690"
+        canonical_url: "https://www.lazada.sg/products/i303382284-s536724690.html"
+        pack_size: "500 ml"
+        observed_price_sgd: 1.40
+    notes: "Approved from RedMart order 172647935378810 placed on 2026-09-09; the household uses 'Cif' for this selected RedMart cream-cleanser substitute."
 
   - id: pickles
     category: pantry

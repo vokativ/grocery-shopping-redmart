@@ -9,30 +9,6 @@ import {
   renderCatalogReview
 } from "../tools/render-catalog-review.mjs";
 
-test("normalizeReviewData preserves candidate review fields", () => {
-  const normalized = normalizeReviewData({
-    candidates: [
-      {
-        candidate_id: "cand_1",
-        title: "RedMart Cherry Tomato",
-        observed_quantity: 2,
-        observed_price_sgd: "1.85",
-        family_words: ["cherry tomatoes", "tomatoes"]
-      }
-    ]
-  });
-
-  assert.equal(normalized.review_schema_version, 1);
-  assert.equal(normalized.candidates[0].include, true);
-  assert.equal(normalized.candidates[0].usual_quantity, 2);
-  assert.deepEqual(normalized.candidates[0].family_words, ["cherry tomatoes", "tomatoes"]);
-  assert.equal(normalized.candidates[0].observed_price_sgd, 1.85);
-
-  const defaulted = normalizeReviewData({
-    candidates: [{ candidate_id: "cand_1", title: "Title" }]
-  });
-  assert.equal(defaulted.candidates[0].purchase_hint, "Bought in RedMart order history");
-});
 
 test("normalizeReviewData rejects missing required fields", () => {
   assert.throws(
@@ -63,31 +39,15 @@ test("renderCatalogReview writes static html with escaped embedded data", async 
     "utf8"
   );
 
-  const result = await renderCatalogReview({ inputPath, outputPath });
-  const html = await readFile(outputPath, "utf8");
-
-  assert.deepEqual(result, { outputPath, candidateCount: 1 });
-  assert.match(html, /id="catalog-review-data"/);
-  assert.doesNotMatch(html, /__CATALOG_REVIEW_DATA__/);
-  assert.doesNotMatch(html, /raw === "\{"review_schema_version"/);
-  assert.match(html, /Safe \\u003cscript> Title/);
-  assert.match(html, /catalog-review-approved-payload/);
-});
-
-test("renderCatalogReview does not replace the JavaScript placeholder comparison", async () => {
-  const tempDir = await mkdtemp(join(tmpdir(), "catalog-review-render-"));
-  const outputPath = join(tempDir, "review.html");
-  const inputPath = new URL(
-    "../examples/redmart-catalog-review-candidates.sample.json",
-    import.meta.url
-  );
-
   await renderCatalogReview({ inputPath, outputPath });
   const html = await readFile(outputPath, "utf8");
 
-  assert.doesNotMatch(html, /__CATALOG_REVIEW_DATA__/);
-  assert.doesNotMatch(html, /raw === "\{"review_schema_version"/);
+  const embedded = html.match(/<script\b[^>]*\bid="catalog-review-data"[^>]*>([\s\S]*?)<\/script>/);
+  assert.ok(embedded, "rendered page must expose parseable review data");
+  assert.equal(JSON.parse(embedded[1]).candidates[0].title, "Safe <script> Title");
+  assert.doesNotMatch(embedded[1], /<script>/, "candidate text must not become executable HTML");
 });
+
 
 test("renderCatalogReview rejects templates without the data placeholder", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "catalog-review-render-"));

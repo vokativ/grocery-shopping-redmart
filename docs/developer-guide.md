@@ -4,7 +4,7 @@ This document contains the technical and open-source details intentionally kept 
 
 ## Project status
 
-RedMart/Lazada Singapore is the maintained reference workflow. The easiest and best-established path is Codex in the ChatGPT desktop app using its own signed-in built-in browser on Mac or Windows. **GPT-5.6 Terra with Medium reasoning is the tested recommendation for routine ChatGPT Desktop cart filling:** two supervised live sessions reached verified carts with zero observed judgment errors. That model evidence does not cover catalog seeding, OMP, or Claude Desktop. Direct use and Remote control of a Windows host have both been exercised. OMP Browser Relay has one reversible three-product smoke test; loopback CDP remains live-test pending. These alternative control channels do not relax any page-state, cart-verification, privacy, or checkout boundary.
+RedMart/Lazada Singapore is the maintained reference workflow. ChatGPT Desktop's visible built-in browser has two historical supervised Terra/Medium cart runs with no observed judgment errors. That limited evidence does not cover catalog seeding, OMP, Claude Desktop, or every failure branch. OMP Browser Relay has a reversible three-product smoke test and the later household failure report below; loopback CDP remains live-test pending. Model choice remains user-controlled, and alternative channels do not relax identity, visibility, approval, privacy, or checkout boundaries.
 
 The project is currently being hardened for a small tester cohort and will then move to best-effort maintenance. There is no response-time, retailer, browser, operating-system, or agent compatibility guarantee.
 
@@ -38,7 +38,7 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - `tools/render-catalog-review.mjs` — renderer for the shared catalog seeding and incremental-update approval page.
 - `tools/serve-catalog-review.mjs` — loopback-only server that makes the generated approval page available to the selected visible browser.
 - `templates/redmart-catalog-review-template.html` — reusable local approval UI.
-- `tests/` — catalog, renderer, and template contract tests.
+- `tests/` — behavioral catalog, CLI, renderer and loopback-server tests; source-text assertions are not evidence that an agent follows instructions.
 - `.github/workflows/ci.yml` — credential-free CI.
 
 ## Validation rules
@@ -66,6 +66,29 @@ Live RedMart behavior cannot be tested in CI because it depends on a household's
 `household_baskets` is an optional list of family-level aliases that deliberately resolve to a mix of catalog items. A basket has an ID, category, default total quantity, aliases, and two or more item members. Its total packs are allocated in declared member order: each member receives `floor(total / members)` packs, then the earliest members absorb the remainder, and members allocated zero packs are omitted. Flavour-specific aliases on the member items keep resolving to that single item. Availability and ranked fallback are evaluated per member, and an unavailable member is reported rather than rebalanced onto a sibling.
 
 `matchList` returns one result for every non-empty input line. Each result has a `selections[]` array of its concrete product selections, and basket matches also include a `basket_id`. Ordinary items no longer expose flat `product`/`pack_size`/`canonical_url` fields on the result itself — read `selections[0]` instead. That deliberate shape change is why `catalog_version` moved from `1` to `2`. The dry run prints the matched-input ratio and the resulting cart-row count separately, so expansion is visible before browser work.
+
+Every `selection.candidates` array now retains **all** approved products in ascending rank order, with exact catalog item/SKU IDs and canonical URLs. The existing `product`, `pack_size`, and `canonical_url` selection fields describe only the initial preferred proposal. Neither matching nor a dry run checks live availability. `node tools/dry-run.mjs --json "feta cheese"` exposes the complete result without human-table output; use it to initialize an agent manifest, not as proof of a filled cart.
+
+## Session reliability review 2026-09-09
+
+This is a session analysis, not a controlled model benchmark. The household reports Terra for the cart run; assistant messages named different models without consistent runtime evidence. Do not use those names or the two historical Desktop successes to certify a model across harnesses.
+
+| Observed failure | Cause or evidence limit | Change |
+|---|---|---|
+| Feta was left for the human despite an existing Kolios backup | Supervalu was unresolved; the old incomplete-page branch stopped the concept, while only the late-delivery branch clearly advanced ranks. The dry-run proposal dropped all backups. | One cross-model candidate table, complete ranked chains in tool output, and a no-unchecked-safe-backups handoff gate. |
+| Unrelated out-of-stock text affected availability reasoning | Page-wide text included a mini-cart wine row. The earlier session did not establish Supervalu was actually out of stock. | Exact product-region evidence; distinguish incomplete from unavailable; no stock claims from global text. |
+| Repeated order-navigation attempts | The old tab's unchanged URL was treated as failure even though an order-detail tab had opened. | Inspect destination tabs before retrying; one bounded retry after fresh state. |
+| User approval was not recovered safely | The agent observed an empty payload, then clicked Approve itself. The transcript does not prove the user's edits were recovered. | Human-only approval rule, element-property/DOM-text recovery, and identical JSON mirrored on both surfaces. This is not durable storage across reloads. |
+| Catalog identity claims were stronger than the browser proof | Item-only product pages and the first parsed SKU were used without opening each exact canonical URL. | Item-only navigation is discovery; confirm the selected variant at its exact item/SKU URL before insertion. |
+| Human friction and misleading handoff | Extra generic-cleaner question, oversized logs, and a promise of a cart tab that had been repurposed. | Proceed with known items, separate brand mismatch from ambiguity, compact final status, and verify the final foreground tab. |
+
+Do not “fix” a missed fallback by automatically promoting it in the catalog. Preference changes and brand-to-generic aliases need explicit review. Existing household choices are not reinterpreted during instruction maintenance.
+
+Verification has two layers: local tests prove candidate preservation and input handling; a visible **synthetic** review page proves approval/exclusion/quantity behavior without touching a shopping account. Neither proves an arbitrary model will follow the operating rules. Model qualification must separately exercise unavailable rank 1, incomplete rank 1 with a clean baseline, uncertain Add before substitution, mini-cart stock contamination, new-tab navigation, and approval-read failure.
+
+For review UI changes, render disposable sample data, edit a quantity and aliases, exclude one candidate, and exercise Approve only on that synthetic fixture. Verify the live value and DOM text are identical JSON, included choices survive, excluded entries remain excluded, and both surfaces are empty before approval. Never use a real household approval page as this test.
+
+Verification for this change: catalog/CLI, renderer and loopback-server behavioral checks passed; a JSON dry run matched all ten photographed grocery terms and retained the feta/avocado backup chains. A disposable review page was exercised in visible OMP Chrome relay: quantity 2 → 3, special-character aliases preserved without HTML execution, one excluded candidate, and identical live-value/DOM-text approval JSON. The fixture tab, server and HTML were removed. No new Lazada cart run or cross-model qualification was performed; approval recovery across a reload is still not provided.
 
 ## Contribution boundaries
 

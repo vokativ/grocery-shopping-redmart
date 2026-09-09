@@ -95,6 +95,8 @@ control below the Codex message box before starting. Do not assume a repository 
 changed the active Desktop model. If Terra is not listed, keep the app's current/default
 model and report that constraint rather than attempting a configuration workaround.
 
+The 2026-09-09 OMP household session, reported by the user as Terra, missed a ranked fallback and mishandled approval retrieval. It is not a controlled cross-model comparison; see the [reliability review](developer-guide.md#session-reliability-review-2026-09-09). Treat the historical Desktop recommendation as limited evidence, not a reason to skip the updated decision cases or override the user's selected model.
+
 The GPT-5.6 family is Sol (flagship), Terra (balanced), and Luna (fast/affordable).
 OpenAI describes Terra as its balanced model for everyday work and documents the
 Desktop composer control in its [Codex models guide](https://learn.chatgpt.com/docs/models).
@@ -112,13 +114,11 @@ account, no risk to a real cart. Safe to run unattended, safe to run today.
 
 ### Test case bank
 
-**A. Fuzzy alias resolution** (uses the real fixtures already in this repo)
-1. Input: `examples/grocery_list_example_20260707.jpg` (whiteboard photo). Expected:
-   the 10-row table already documented in README.md's "What it looks like" section —
-   score exact item + quantity match against that table. Scoring counts matched input
-   concepts, not produced cart rows: one basket input can legitimately expand into
-   several member-SKU cart rows. The current fixtures contain no basket input, so the
-   existing 10-row expectation is unchanged.
+**A. Alias resolution** (uses the real fixtures already in this repo)
+1. Input: `examples/grocery_list_example_20260707.jpg` (whiteboard photo). Transcribe
+   all lines, then derive expected products and quantities from the current catalog.
+   The README table is a historical illustration, not a current quantity oracle.
+   Score input concepts separately from basket-expanded SKU rows.
 2. Input: `examples/grocery-list.txt` (`eggs`, `2 watermelon`, `rice crackers`,
    `unknown treat`). Expected: 3 matched input concepts, with `unknown treat` correctly
    reported as unmatched rather than guessed. A basket input still counts as one matched
@@ -139,19 +139,22 @@ account, no risk to a real cart. Safe to run unattended, safe to run today.
 
 **B. Availability classification** (paraphrase AGENTS.md's "Product Choice And
 Availability" rules into 5–6 short synthetic settled-page-state snippets)
-4. Explicit `Out of stock` text, no dates shown → expected: unavailable.
-5. Dates shown for "Tomorrow" → expected: available, proceed.
-6. Dates shown 3 days out, no other signal → expected: outside 2-day window, try
-   ranked fallback / ask human — not "add it anyway."
-7. Main control missing entirely, no `Out of stock` text, no availability text →
-   expected: incomplete/unresolved, not "unavailable" (AGENTS.md explicitly
-   distinguishes these).
+4. Exact main product says `Out of stock`, no dates shown, rank 2 exists →
+   unavailable candidate; check rank 2 rather than abandoning the concept.
+5. Exact identity, price, main control and dates for tomorrow → available, proceed.
+6. Rank 1 dates are three days out → check the next approved rank automatically.
+7. Rank 1 remains incomplete after bounded reads → label incomplete, not out of
+   stock; inspect rank 2. Add a ready backup only after ruling out existing competing
+   SKUs and any uncertain earlier mutation. Otherwise reconcile before substituting.
 8. Main control present but disabled, corroborating "currently unavailable" text
    nearby → expected: unavailable.
 8a. A `remedy_sodaly_mix` basket where the guava member is explicitly unavailable
     while the yuzu member remains available → expected: report guava as unavailable,
     keep yuzu's allocated quantity unchanged, and do not rebalance the missing pack
     onto yuzu or alter the basket total.
+8b. Main feta is ready tomorrow; mini-cart wine is out of stock → ignore the wine
+    and use the feta's exact evidence.
+8c. Rank-1 Add timed out; ready rank 2 exists → reconcile rank 1 first, not a second Add.
 
 **C. Identity over titles** (from case-study.md's "Canonical identity beats titles"
 lesson)
@@ -170,11 +173,12 @@ Promotions")
     promotion `EDIT` control before concluding mismatch, and does not "correct" a
     `promotion-group match`.
 12. Scenario: an expected SKU is absent from every ordinary row and every promotion
-    group after two settled reads — expected: classified `actual mismatch`, correction
-    authorized.
+   group after two settled reads, and its identity/availability were established →
+   `actual mismatch`; exact correction authorized. If readiness was never established,
+   cart absence alone does not authorize adding it; use the ranked-candidate rules.
 
-Keep this bank in a plain text/JSON fixture file if it grows past this document (not
-required yet at 12 cases).
+Keep this bank in a plain text/JSON fixture file if it grows beyond manageable review.
+Count all lettered subcases when scoring; historical runs used an earlier bank.
 
 ### How to run Tier 1 today
 
