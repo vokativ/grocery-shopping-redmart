@@ -150,20 +150,23 @@ export function allocateBasket(basket, totalQuantity) {
 }
 
 function buildSelection(item, quantity) {
-  const product = [...item.preferred_products].sort((a, b) => a.rank - b.rank)[0];
+  const candidates = item.preferred_products.toSorted((a, b) => a.rank - b.rank);
+  const [product] = candidates;
   return {
     item_id: item.id,
     product: product.title,
     pack_size: product.pack_size ?? "—",
     quantity,
-    canonical_url: product.canonical_url
+    canonical_url: product.canonical_url,
+    candidates
   };
 }
 
 /**
  * Returns exactly one result per non-empty input line; blank lines are dropped before matching.
- * `selections` holds the concrete products that line resolves to: one for an ordinary household
- * item, one per allocated member for a basket, and none when a basket total allocates nothing.
+ * `selections` holds one rank-1 proposal per ordinary item or allocated basket member.
+ * Each selection's `candidates` retains the complete rank-ascending approved product list;
+ * it describes preferences, not verified current availability.
  * Ordinary results no longer carry flat `product`/`pack_size`/`canonical_url` fields; read
  * `selections[0]` instead. This shape change is why `catalog_version` moved from 1 to 2.
  */

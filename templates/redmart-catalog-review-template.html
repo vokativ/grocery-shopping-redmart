@@ -400,10 +400,9 @@
     </div>
   </main>
 
-  <section id="approved-panel" class="approved-panel" aria-live="polite">
-    <h2>Approved. Go back to the agent to continue.</h2>
-    <p class="do-not-close">DO NOT CLOSE THIS TAB.</p>
-    <p>The agent will close it for you when it is done.</p>
+  <section id="approved-panel" class="approved-panel" aria-labelledby="catalog-review-approval-heading" tabindex="-1">
+    <h2 id="catalog-review-approval-heading">Approved. Return to the agent to continue.</h2>
+    <p id="catalog-review-approval-status" role="status">Your choices are ready. Keep this tab open until the agent confirms it has read them.</p>
   </section>
 
   <script>
@@ -684,7 +683,9 @@
     approveButtons.forEach((button) => {
       button.addEventListener("click", () => {
         document.querySelectorAll("[data-candidate-key]").forEach(syncRowState);
-        approvedPayloadNode.value = JSON.stringify(buildApprovedPayload(), null, 2);
+        const serializedPayload = JSON.stringify(buildApprovedPayload(), null, 2);
+        approvedPayloadNode.value = serializedPayload;
+        approvedPayloadNode.textContent = serializedPayload;
         reviewUi.style.display = "none";
         approvedPanel.style.display = "block";
         approvedPanel.focus();

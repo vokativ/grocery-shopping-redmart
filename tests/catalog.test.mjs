@@ -16,7 +16,7 @@ const basketCatalog = () => ({
       default_quantity: 2,
       aliases: ["yuzu sodaly"],
       preferred_products: [
-        { rank: 2, title: "Yuzu fallback 6 x 250ml", item_id: "111", sku_id: "211", canonical_url: "https://www.lazada.sg/products/i111-s211.html", pack_size: "6 x 250 ml" },
+        { rank: 2, title: "Yuzu fallback 6 x 250ml", item_id: "111", sku_id: "211", canonical_url: "https://www.lazada.sg/products/i111-s211.html", pack_size: "6 x 250 ml", observed_price_sgd: 4.2 },
         { rank: 1, title: "Yuzu preferred 4 x 250ml", item_id: "11", sku_id: "21", canonical_url: "https://www.lazada.sg/products/i11-s21.html", pack_size: "4 x 250 ml" }
       ]
     },
@@ -46,21 +46,9 @@ const basketCatalog = () => ({
 
 const allocationOf = (result) => result.selections.map((selection) => [selection.item_id, selection.quantity]);
 
-test("the repository catalog is valid and still declares the Sodaly mix", async () => {
+test("the repository catalog is valid", async () => {
   const catalog = await loadCatalog();
   assert.deepEqual(validateCatalog(catalog), []);
-
-  const basket = catalog.household_baskets.find((entry) => entry.id === "remedy_sodaly_mix");
-  assert.ok(basket, "remedy_sodaly_mix must exist in the repository catalog");
-  assert.equal(basket.default_quantity, 2);
-  for (const alias of ["sodaly", "remedy sodaly"]) {
-    assert.ok(basket.aliases.includes(alias), `basket must keep the ${alias} alias`);
-  }
-  assert.deepEqual(
-    basket.members.map((member) => member.item),
-    ["remedy_sodaly_guava", "remedy_sodaly_yuzu"],
-    "member order decides who absorbs an odd remainder"
-  );
 });
 
 test("matching uses exact normalized aliases and quantity overrides", async () => {
@@ -79,44 +67,95 @@ test("matching uses exact normalized aliases and quantity overrides", async () =
   assert.deepEqual(results[2], { input: "unknown treat", input_index: 2, matched: false, selections: [] });
 });
 
-test("a generic basket alias expands into a mixed selection and keeps one result per input", async () => {
-  const catalog = await loadCatalog();
-  const results = matchList(catalog, ["Sodaly", "guava sodaly"]);
-  assert.equal(results.length, 2, "each input line yields exactly one result");
-
-  const [mix, singleFlavour] = results;
+test("a generic basket alias expands into a mixed selection and keeps one result per input", () => {
+  const [mix, singleFlavour] = matchList(basketCatalog(), ["sodaly", "guava sodaly"]);
   assert.equal(mix.matched, true);
-  assert.equal(mix.basket_id, "remedy_sodaly_mix");
+  assert.equal(mix.basket_id, "mix");
   assert.equal(mix.item_id, undefined, "a basket result is not an item result");
-  assert.equal(mix.quantity, 2, "basket quantity is the total pack count");
-  assert.deepEqual(allocationOf(mix), [["remedy_sodaly_guava", 1], ["remedy_sodaly_yuzu", 1]]);
-  assert.equal(mix.selections[0].canonical_url, "https://www.lazada.sg/products/i2645682408-s17039227072.html");
-  assert.equal(mix.selections[1].canonical_url, "https://www.lazada.sg/products/i3182702274-s21649460937.html");
+  assert.equal(mix.quantity, 3, "basket quantity is the total pack count");
+  assert.deepEqual(allocationOf(mix), [["yuzu", 2], ["guava", 1]]);
 
   assert.equal(singleFlavour.basket_id, undefined, "an explicit flavour never expands");
-  assert.equal(singleFlavour.item_id, "remedy_sodaly_guava");
-  assert.deepEqual(allocationOf(singleFlavour), [["remedy_sodaly_guava", 2]]);
+  assert.equal(singleFlavour.item_id, "guava");
+  assert.deepEqual(allocationOf(singleFlavour), [["guava", 2]]);
 });
 
-test("each expanded member resolves to its own rank 1 product", () => {
-  const [mix] = matchList(basketCatalog(), ["sodaly"]);
-  assert.equal(mix.quantity, 3, "the basket default is the total, not a member default");
-  assert.deepEqual(mix.selections, [
+test("matching preserves rank-sorted approved candidates for ordinary and basket selections", () => {
+  const [ordinary, mix] = matchList(basketCatalog(), ["yuzu sodaly", "sodaly"]);
+  const yuzuCandidates = [
     {
-      item_id: "yuzu",
-      product: "Yuzu preferred 4 x 250ml",
-      pack_size: "4 x 250 ml",
-      quantity: 2,
-      canonical_url: "https://www.lazada.sg/products/i11-s21.html"
+      rank: 1,
+      title: "Yuzu preferred 4 x 250ml",
+      item_id: "11",
+      sku_id: "21",
+      canonical_url: "https://www.lazada.sg/products/i11-s21.html",
+      pack_size: "4 x 250 ml"
     },
     {
-      item_id: "guava",
-      product: "Guava preferred 4 x 250ml",
-      pack_size: "4 x 250 ml",
-      quantity: 1,
-      canonical_url: "https://www.lazada.sg/products/i12-s22.html"
+      rank: 2,
+      title: "Yuzu fallback 6 x 250ml",
+      item_id: "111",
+      sku_id: "211",
+      canonical_url: "https://www.lazada.sg/products/i111-s211.html",
+      pack_size: "6 x 250 ml",
+      observed_price_sgd: 4.2
     }
-  ]);
+  ];
+  const guavaCandidates = [
+    {
+      rank: 1,
+      title: "Guava preferred 4 x 250ml",
+      item_id: "12",
+      sku_id: "22",
+      canonical_url: "https://www.lazada.sg/products/i12-s22.html",
+      pack_size: "4 x 250 ml"
+    },
+    {
+      rank: 2,
+      title: "Guava fallback 6 x 250ml",
+      item_id: "122",
+      sku_id: "222",
+      canonical_url: "https://www.lazada.sg/products/i122-s222.html",
+      pack_size: "6 x 250 ml"
+    }
+  ];
+
+  assert.deepEqual(ordinary.selections[0], {
+    item_id: "yuzu",
+    product: "Yuzu preferred 4 x 250ml",
+    pack_size: "4 x 250 ml",
+    quantity: 2,
+    canonical_url: "https://www.lazada.sg/products/i11-s21.html",
+    candidates: yuzuCandidates
+  });
+  assert.deepEqual(
+    mix.selections.map(({ item_id, product, pack_size, quantity, canonical_url, candidates }) => ({
+      item_id,
+      product,
+      pack_size,
+      quantity,
+      canonical_url,
+      candidates
+    })),
+    [
+      {
+        item_id: "yuzu",
+        product: "Yuzu preferred 4 x 250ml",
+        pack_size: "4 x 250 ml",
+        quantity: 2,
+        canonical_url: "https://www.lazada.sg/products/i11-s21.html",
+        candidates: yuzuCandidates
+      },
+      {
+        item_id: "guava",
+        product: "Guava preferred 4 x 250ml",
+        pack_size: "4 x 250 ml",
+        quantity: 1,
+        canonical_url: "https://www.lazada.sg/products/i12-s22.html",
+        candidates: guavaCandidates
+      }
+    ]
+  );
 });
 
 test("an explicit basket quantity overrides the total and gives the remainder to earlier members", async () => {
@@ -323,15 +362,17 @@ test("a missing household_baskets section is valid but a malformed one is not", 
   }
 });
 
-test("the dry run prints member rows and counts inputs separately from cart rows", async () => {
+test("the dry run prints member rows, ranked approved candidates, and counts inputs separately from cart rows", async () => {
   const { stdout } = await run(process.execPath, [
     "tools/dry-run.mjs",
     "Sodaly, eggs, unknown thing, 0 sodaly"
   ], { cwd: new URL("..", import.meta.url) });
 
+  assert.match(stdout, /availability unverified/);
   assert.match(stdout, /remedy_sodaly_mix → remedy_sodaly_guava/, "member rows must be attributed to their basket");
   assert.match(stdout, /remedy_sodaly_mix → remedy_sodaly_yuzu/);
   assert.match(stdout, /Remedy Sodaly Guava - Multipack 250ML X 4/);
+  assert.match(stdout, /Rank 2: RedMart Fresh Local Eggs \(Large\) 15X60G \(15 x 60 g\)/);
   assert.match(stdout, /No packs allocated/, "a zero-total basket stays visible in the table");
   assert.match(
     stdout,
@@ -344,4 +385,53 @@ test("the dry run prints member rows and counts inputs separately from cart rows
     "cart rows count selections, not input lines"
   );
   assert.match(stdout, /Unmatched \(requires human handling\): unknown thing/);
+});
+
+test("the dry run JSON output exposes a rank-sorted item/SKU manifest", async () => {
+  const { stdout, stderr } = await run(process.execPath, [
+    "tools/dry-run.mjs",
+    "--json",
+    "eggs"
+  ], { cwd: new URL("..", import.meta.url) });
+  assert.equal(stderr, "");
+
+  const [result] = JSON.parse(stdout);
+  const manifest = result.selections.flatMap((selection) =>
+    selection.candidates.map(({ rank, item_id, sku_id }) => ({ rank, item_id, sku_id }))
+  );
+  assert.deepEqual(manifest, [
+    { rank: 1, item_id: "301088929", sku_id: "527120220" },
+    { rank: 2, item_id: "3229271520", sku_id: "21867677118" }
+  ]);
+});
+
+test("the dry run supports JSON file input and reports malformed invocations clearly", async () => {
+  const cwd = new URL("..", import.meta.url);
+  const { stdout } = await run(process.execPath, [
+    "tools/dry-run.mjs",
+    "--json",
+    "--file",
+    "examples/grocery-list.txt"
+  ], { cwd });
+  assert.deepEqual(JSON.parse(stdout).map(({ input }) => input), [
+    "eggs",
+    "2 watermelon",
+    "rice crackers",
+    "unknown treat"
+  ]);
+
+  for (const [args, message] of [
+    [["--json"], /Missing grocery list input/],
+    [["--file"], /--file requires a path/],
+    [["--not-an-option", "eggs"], /Unknown option: --not-an-option/]
+  ]) {
+    await assert.rejects(
+      run(process.execPath, ["tools/dry-run.mjs", ...args], { cwd }),
+      (error) => {
+        assert.match(error.stderr, message);
+        assert.match(error.stderr, /Usage: npm run dry-run/);
+        return true;
+      }
+    );
+  }
 });

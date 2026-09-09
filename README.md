@@ -39,7 +39,7 @@ This example starts with a family whiteboard. A voice note or typed list works t
 
 Before touching RedMart, the agent shows you a proposed cart like this. A familiar word can stand for one usual product or a small mix your family has chosen. You can correct anything, add an item, or say `skip ham this time`.
 
-After you approve it, the agent checks your saved products, or each part of a saved mix, uses an available backup when appropriate, and changes quantities through the exact product-page control when possible. It then performs one complete cart review, including promotion groups, and corrects only a product or quantity that the cart evidence proves is wrong.
+When you ask it to fill the cart, the agent proceeds with the shown catalog matches—there is no second routine approval prompt. It checks approved backup products automatically when the first choice is unavailable, too late, or cannot be read safely. It changes quantities through exact product controls, then audits the cart, including promotion groups. An uncertain earlier Add click must be reconciled before any substitute is added.
 
 It does not go to checkout.
 
@@ -59,7 +59,7 @@ The practical everyday flow is simple:
 
 1. Install the [ChatGPT desktop app](https://chatgpt.com/download/) on the Mac or Windows computer that will prepare the cart.
 2. Open this project in Codex mode and use **Set up Remote** to pair the ChatGPT mobile app with that computer.
-3. Under the Codex message box, open the model and reasoning control. For an everyday cart, choose **5.6 Terra** with **Medium** reasoning when available. This is the tested, lower-cost routine setting; leave the app's default selected if Terra is not offered.
+3. Keep your chosen model and reasoning setting. If you want a starting recommendation for ChatGPT Desktop, **5.6 Terra / Medium** has two historical supervised cart tests; it is not a reliability guarantee or evidence for other harnesses.
 4. In the desktop app’s built-in browser, open Lazada/RedMart. When ChatGPT asks for website access, verify that the hostname belongs to Lazada/RedMart and choose the persistent or **Always allow** option if it is offered. Then sign in once. Enter credentials only in the browser, never in chat.
 5. Leave the desktop app running and the computer awake. Keep a Windows host unlocked while it is doing browser work.
 6. From **Remote** in the mobile app, send a photo, dictate the list, or type it, then review the proposed cart.
@@ -87,7 +87,7 @@ See the [OMP browser setup guide](docs/omp-setup.md). It maps OMP page observati
 
 You do **not** need to understand the code or edit the grocery catalog yourself. Give the project to your agent and ask it to guide you.
 
-Two supervised everyday-cart tests used 5.6 Terra with Medium reasoning and reached verified carts with no observed product, availability, quantity, or promotion-audit errors. The test did not cover catalog setup, where a more capable model remains a reasonable user choice. See the [full test notes](docs/model-benchmark-results-2026-08-14.md).
+Two historical ChatGPT Desktop tests used 5.6 Terra with Medium reasoning and reached verified carts with no observed judgment errors. A later OMP session, reported by the user as Terra, missed an approved backup and exposed browser/approval handling problems. The cross-model rules now explicitly cover those branches; they do not establish that every model passes them. See the [historical test notes](docs/model-benchmark-results-2026-08-14.md) and [reliability review](docs/developer-guide.md#session-reliability-review-2026-09-09).
 
 The project itself is free. Your AI service may have its own plan or usage costs, and you still pay RedMart for the groceries you order.
 
@@ -126,7 +126,9 @@ Reuse the existing catalog review page, focus only on that order, and let me
 approve the candidates before you edit grocery-catalog.yaml.
 ```
 
-The agent should reuse the existing candidate JSON and HTML renderer, resolve canonical item/SKU IDs only for approved products, avoid duplicates, validate the catalog, and clean up temporary review files afterward.
+You can also say: `Compare today's order with my photo. Add missing family words or products, but show preference changes separately.` You should get one review page for the useful differences, not another review of every unchanged purchase. Buying a backup once does not silently make it the new default.
+
+The agent reuses the candidate JSON and HTML renderer, resolves exact item/SKU IDs for included products, avoids duplicates, validates the catalog, and removes temporary review files afterward. After approving, leave that tab open until the agent confirms it read your choices. Approval lives in the open page, not in a saved account: reloading or closing it can lose the choices. If the agent cannot retrieve them, it must recover the existing page or explain the problem—not click Approve on your behalf.
 
 ## 🛒 Prepare the everyday cart
 
@@ -157,6 +159,8 @@ Useful changes can be as simple as:
 
 If something on the list is not in your family catalog, the agent reports it instead of guessing what you might want. Confidently matched items can still be added; an unmatched item does not hold up the rest of the cart.
 
+The agent should interrupt you only for a real product/quantity ambiguity, a login challenge, browser access, or a safety blocker. Approved backups and normal default quantities need no extra question. If a requested brand is not catalogued, it stays untouched; the agent should not pause the whole cart to offer another brand.
+
 ## How it stays consistent
 
 This is intentionally different from asking AI to shop around and recommend random products.
@@ -185,8 +189,8 @@ Your catalog and grocery-list photos describe household preferences. Keep the pr
 
 - **ChatGPT asks to access a website:** check the hostname, then allow Lazada/RedMart or the local `127.0.0.1` review page. For Lazada/RedMart, choose the persistent or **Always allow** option if offered so future grocery runs do not need the same approval. Use one-time access for any hostname you do not recognize or do not expect. You can manage allowed and blocked sites under **Settings > Browser**.
 - **Lazada asks you to sign in:** sign in manually in the visible built-in browser, then ask the agent to continue. Its login state is separate from Chrome.
-- **A saved product has disappeared:** the agent can try a product you previously approved as a backup or ask you to choose a replacement.
-- **An item is not recognised:** tell the agent which product you mean and ask it to add the family wording for next time.
+- **A saved product is unavailable or its page will not load fully:** the agent must check the approved backup chain before handing that item back. If an earlier Add click is uncertain or a competing SKU is already in the cart, it first reconciles the cart to avoid duplicates. “Could not verify” is different from “out of stock.”
+- **An item is not recognised:** tell the agent which product you mean and ask it to add the family wording for next time. “Not catalogued” means no household match; failure to read a product page must not be reported as a missing catalog entry.
 - **The cart count looks strange:** ask the agent to reconcile the complete expected list by exact product and quantity. The header is only a quick checksum, and promotion groups can hide or split ordinary rows; the agent should inspect the relevant promotion editor before changing anything.
 - **A verification challenge appears:** complete it yourself; the agent should not try to bypass it.
 - **A real Windows or macOS firewall alert appears:** do not disable the firewall or open a public port. The catalog review server is loopback-only. Stop and verify the alert identifies the expected ChatGPT or Node process before allowing anything.

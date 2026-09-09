@@ -2,14 +2,26 @@
 
 Use these instructions when setting up this repository for a household or filling a RedMart/Lazada cart from this repository.
 
+## Everyday Execution Contract — All Models
+
+These rules apply regardless of model, reasoning level, or supported harness. Harness setup sections change the control channel, not the shopping decisions. For an everyday cart, follow this contract, then the decision table in **Product Choice And Availability**; catalog work uses the separate approval flow.
+
+1. Transcribe every grocery line and explicit quantity. Keep the original wording beside any confident spelling normalization. Read the entire matched catalog item, including **all** ranked products, not only the first search hit. Use `node tools/dry-run.mjs --json "<comma-separated list>"` to obtain each selection's complete `candidates` chain; the first proposal is not an availability result.
+2. Show a compact proposed cart in chat. An explicit cart-fill request already authorizes confidently matched items and their approved ranked backups. Proceed without a second approval prompt. Unmatched brands/items stay untouched and do not block the rest.
+3. Record a settled exact-SKU cart baseline and keep one manifest entry per requested concept or allocated basket member, with its full candidate chain, candidate observations, selected SKU, target quantity, and mutation state. A catalog match and an available SKU are different facts.
+4. For every candidate rejected as unavailable or too late, check the next rank automatically. An incomplete page is not out of stock: use the safe incomplete-page branch below instead of abandoning the concept. Never substitute after an uncertain cart mutation without reconciling it.
+5. Audit exact cart rows and relevant promotions. Never report a concept as unavailable while an approved backup remains unchecked unless a named safety blocker prevents continuing. Never add an unresolved SKU merely because it is missing from the cart.
+6. Give a short result and put remaining human actions last. Do not dump tool logs, internal reasoning, account details, or the whole manifest into chat. Keep only a useful fallback note, such as “Used Kolios feta ×2; first choice unavailable.”
+
 ## Model Selection And Harness Reporting
 
 Before routine browser work, identify the execution harness and state the model and reasoning setting that its user-visible control or runtime metadata actually exposes.
 
-- **ChatGPT Desktop:** read the model and reasoning control beneath the Codex composer. When the user has not chosen otherwise and the control offers it, use **5.6 Terra** with **Medium** reasoning for normal cart filling. This repository has two supervised everyday-cart runs with that setting and zero observed judgment errors.
+- **ChatGPT Desktop:** read the model and reasoning control beneath the Codex composer. If the user wants a recommendation and the control offers it, **5.6 Terra / Medium** has two historical supervised everyday-cart runs with no observed judgment errors. That limited evidence is not a guarantee; the 2026-09-09 OMP session reported by the user as Terra missed a catalog fallback.
 - **Oh My Pi (OMP):** report the runtime model and reasoning setting when OMP exposes them. If either value is unavailable, say so and continue with the current setting; the missing ChatGPT Desktop composer is not a blocker. Do not claim that the Desktop Terra evidence applies to another model or harness.
+- **Other models in a documented harness:** use exactly the same execution contract. Report only the model/reasoning the active runtime or visible control exposes. Claude Desktop remains an unvalidated proposal, not an implicitly authorized replacement browser.
 
-Do not silently switch models or reasoning levels merely because a cart task has several browser steps. For catalog seeding, unresolved product identity, or another genuinely open-ended decision, explain why a more capable setting may help and let the user choose it. Model selection is user-controlled; do not claim that a repository configuration file changed the ChatGPT Desktop app or OMP runtime selection.
+Model selection is user-controlled. Keep the current setting unless the user changes it; recommend rather than claim to switch it. Report the actual runtime identifier once before browser work, with `unavailable` for unexposed fields. Never infer a model name from this file, a previous assistant message, or the length of a task; never rename Terra to Sol mid-run without observed runtime evidence. For catalog seeding or unresolved identity, explain why a more capable setting may help only when that decision is useful to the user. A repository edit cannot change a desktop picker or runtime selection.
 
 
 ## Browser Surface, Sign-In, And Remote
@@ -22,7 +34,7 @@ Choose exactly one primary surface before the first shopping navigation:
 - **OMP Browser Relay:** preferred in OMP when the household already uses a signed-in Chrome profile. Connect through the OMP Browser Relay extension to the exact user-visible Chrome tab/profile. The relay is the control channel; the real Chrome window is the visible surface.
 - **OMP CDP:** use only when the user deliberately selected a headed Chrome/Chromium instance with a loopback-only CDP endpoint. Connect to that existing endpoint; do not launch an implicit browser or guess a profile.
 
-Before navigation, announce the chosen surface. Do not silently switch among `iab`, OMP relay, OMP CDP, extension surfaces, browsers, profiles, or tabs: each can have different authentication and cart state.
+Before navigation, announce the chosen surface and the intended task tabs (cart/product, or orders/detail/review). Do not silently switch among `iab`, OMP relay, OMP CDP, browsers, or profiles. Routine navigation among those task tabs in the selected profile needs no repeated permission; identify and foreground the destination before operating it. Leave unrelated tabs unchanged.
 
 Common rules:
 
@@ -63,6 +75,14 @@ Treat the browser application, OMP control channel, selected browser profile, se
 7. Keep a single root browser operator. Never drive the same relayed or CDP tab concurrently from root and subagent sessions.
 8. On Browser Relay, prefer OMP's `tab` action helpers over raw Puppeteer `ElementHandle` actions. When an unlabeled stepper requires a selector, scope it beneath the already verified exact product detail or cart row.
 9. Never mutate the cart with `page.evaluate(() => element.click())`. A DOM click can change a local stepper value without persisting the server-side cart. If an action times out or errors, reread the exact SKU state before deciding whether it occurred; retry only when the persisted state is unchanged. A changed local control alone is not proof.
+
+### Bounded Browser Recovery — All Supported Surfaces
+
+- After a click, inspect both the source tab and any newly opened task tab before calling it a no-op. Order headers and product links can open a new tab while leaving the old URL unchanged. Claim the exact new tab, verify its page type and identity, and bring it to the foreground. Never repeat navigation merely because the original tab did not move.
+- A timed-out action is an unknown outcome, not a failed mutation. Reacquire settled state first. For a true no-op, retry once using a fresh exact control; then change the reading/control strategy or report the blocker. Do not suppress tool errors or run the same failing selector in a loop.
+- Prefer semantic observation and fresh element references. If those omit a visible control, inspect its verified local container and use a unique scoped selector. If a selector is not actionable, scroll the control into view and take a fresh visual observation before any supported physical click. Never use DOM-click cart mutations or global input indices.
+- Read the smallest sufficient rendered evidence: semantic heading, exact URL IDs, selected pack, price, availability dates, and main control. Exclude scripts, recommendations and mini-cart text. Full-body “Out of stock” and generic “Go to cart” matches do not describe the requested product.
+- Follow the installed harness API rather than guessing signatures. Nested browser callbacks do not inherit outer variables unless the API explicitly passes them. On OMP relay, when a live form value is absent from a serialized DOM observation, try a fresh element-scoped property read (for example `page.$eval(selector, el => el.value)`) and compare the visible form; do not infer that the user's interaction failed.
 
 ### ChatGPT Desktop Browser Selection
 
@@ -146,6 +166,8 @@ Do not invent a separate update UI or bypass review just because the catalog alr
 9. Do not update `grocery-catalog.yaml` until the user has approved the HTML review page.
 10. After reading the payload, stop the temporary loopback review server, offer to close the review tab, and remove the temporary per-run review page unless the user asks to keep it.
 
+Approval is a **human-only** action. The agent must never click `Approve`, call its handler, construct a replacement “approved” payload, or reset/re-render a review after the user says they finished. “Done in the browser” means recover the user's choices, not approve the defaults on their behalf.
+
 ### Discovery Pass
 
 1. Start from the selected signed-in browser profile on the active desktop or connected host.
@@ -158,12 +180,14 @@ Do not invent a separate update UI or bypass review just because the catalog alr
 
 For an incremental update from the last/recent order:
 
-1. Start with the specific order the user named, or the newest visible RedMart order when they said `last order`.
+1. Start with the specific order the user named, or the newest visible RedMart order when they said `last order`. Confirm the placed date on its detail page; a delivery date or card position alone does not prove it was ordered today.
 2. Draft candidates only from that small scope; do not rescan the household's full history unless the user asks.
 3. Compare visible candidates with existing catalog entries before rendering the review page. Suppress exact existing item/SKU pairs unless they reveal title drift or useful alias/quantity changes that need review.
 4. Put new pack sizes under the existing household concept when appropriate, and surface genuinely new concepts as new-item candidates.
 5. Set `source.kind` to a descriptive value such as `redmart-order-update` and record only the minimum non-sensitive order context needed in temporary notes.
 6. Continue through the same HTML approval, detail/product resolution, insertion, validation, and cleanup steps below.
+
+Use the review notes to distinguish **new concept**, **additional ranked SKU**, **alias change**, and **preference change**. Keep existing ranks by default; one out-of-stock or incomplete page does not prove a permanent preference change. A rank promotion must be an explicit review proposal. Brand-to-generic mappings such as “Cif” to a RedMart cleanser also need explicit approval, not fuzzy matching. Suppress free gifts and unchanged rows by default. Group questions into this one review page instead of asking for each product in chat.
 
 The `My Orders` overview is the discovery page, not the final source of canonical product IDs. During testing, overview product links appeared as JavaScript/hash links rather than stable `https://www.lazada.sg/products/i<item_id>-s<sku_id>.html` URLs. Overview SKU titles and photos may not navigate to product pages. Do not treat overview rows as canonical product identity.
 
@@ -191,9 +215,11 @@ Start the temporary loopback-only review server in a background/helper process:
 node tools/serve-catalog-review.mjs --file redmart-catalog-review-<date>.html
 ```
 
-Record the process and printed `http://127.0.0.1:<port>/` URL in the scratch file. Open that URL in the built-in browser; do not replace `127.0.0.1` with `0.0.0.0`, a LAN address, or a public host. The user may need to approve first-time website access for `127.0.0.1`. The page keeps all items included by default. The user can mark one-offs as `Do not include`, adjust `Usual quantity`, optionally edit `Family words`, and approve the included product count.
+Record the process and printed `http://127.0.0.1:<port>/` URL in the scratch file. Open that URL in the already selected visible browser/profile, in a dedicated review tab; do not replace `127.0.0.1` with `0.0.0.0`, a LAN address, or a public host. The user may need to approve first-time website access for `127.0.0.1`. The user can exclude one-offs, adjust quantities and family words, then approve the included count once.
 
-When the user returns after seeing `Approved. Go back to the agent to continue.`, read the approved JSON from the open page's `#catalog-review-approved-payload` field. Treat that approved payload as the approval boundary for catalog insertion. Keep the server running until the payload has been read, then stop it during cleanup even if later catalog resolution fails.
+When the user returns, reacquire the existing review tab without navigating or reloading it. Read `#catalog-review-approved-payload` through an element-scoped live `.value` read; the current template also mirrors the same JSON in `.textContent` for DOM readers. The payload must parse, correspond to this run's candidate IDs, and preserve every exclusion, quantity and alias edit. If the reads disagree, stop before catalog edits.
+
+If the payload appears empty, inspect the visible approval panel, verify tab ownership, and try the other supported DOM/property read. Check only this run's review tabs for duplicates. A blank tool read does not negate the user's report. Do not click Approve yourself. If the user's payload cannot be recovered, explain that exact retrieval problem and ask them to return to the existing review tab; request a new review only if the previous choices are genuinely lost. Keep the server and scratch state until recovery or explicit cancellation; after a valid payload is captured, stop the server even if later product resolution fails.
 
 ### Detail And Product Resolution Pass
 
@@ -203,6 +229,7 @@ When the user returns after seeing `Approved. Go back to the agent to continue.`
 4. From each order detail page, click the SKU title or product photo to reach the product page when possible.
 5. If a detail-page SKU click fails but the detail page exposes `itemUrl`, `itemId`, and `skuId`, use those fields as a recorded fallback instead of generic product search.
 6. Open canonical product URLs to confirm current title and pack size before inserting catalog entries.
+   If only an item ID is exposed, the item-only page is a discovery step, not final SKU proof. Read its selected variant data, then open the resulting exact item/SKU canonical URL and verify the settled heading and pack. Do not choose the first entry of a multi-variant array or guess a SKU. Bound detail-click recovery using the browser recovery rules before falling back to page data.
 7. Offer to close agent-opened order and product tabs when catalog seeding or catalog updating is done.
 
 For HTML-reviewed catalog updates, treat the approved payload as the candidate source of truth. Do not re-add products the user marked as not included. Resolve canonical item IDs and SKU IDs only for approved included products, unless a skipped row is needed to detect a duplicate or title drift.
@@ -239,7 +266,7 @@ Never place an order, choose delivery slots, confirm payment, save payment detai
 An explicit request such as `put these in my cart` authorizes adding the confidently matched catalog items after showing the proposed cart. Unmatched list entries do not block those matched items.
 
 - Report unmatched entries clearly and leave them untouched unless the user explicitly asks to search or expand the catalog. In the completion response, place unmatched items at the very bottom under Action Required so they are immediately visible in the chat view without scrolling.
-- Ask a blocking question only when uncertainty changes a matched product, quantity, or whether an existing cart row should be removed.
+- Ask a blocking question only when a genuine ambiguity changes an otherwise matched product, quantity, or removal decision. A specifically requested brand absent from the catalog is unmatched, not permission to offer a generic substitute before filling the known items. A normal catalog default or ranked backup is already approved; no extra question is needed.
 - If the user says `I'll handle the rest`, `I'll do the others`, or similar after unmatched entries were identified, default to: the user will handle the unmatched remainder and the agent should continue with the matched items. In the completion response, confirm which entries were left untouched for the user at the bottom of the message.
 - Stop the cart workflow only when the user explicitly says they will handle the whole cart, asks the agent not to proceed, or the browser cannot safely continue.
 
@@ -256,18 +283,29 @@ An explicit request such as `put these in my cart` authorizes adding the confide
 
 If an item does not match `grocery-catalog.yaml`, do not add it and do not search for or guess a substitute unless the user explicitly asks to search, add a new catalog item, or expand the catalog. Report unmatched items for human handling, then continue with the confidently matched portion of an authorized cart request.
 
+The matcher is exact-alias only. The agent may confidently normalize a clear transcription typo (“capcicum” → “capsicum”) when there is one unambiguous concept; preserve the original text in the proposal. Do not normalize away an explicit brand or guess a product from a vague word. New permanent aliases belong in the catalog-review flow.
+
 ## Product Choice And Availability
 
-Rank is a preference, not an absolute rule. Evaluate availability and ranked fallback independently for each requested ordinary item and each member of a matched basket:
+Evaluate each ordinary item and each basket member independently. The complete rank-ascending candidate list is the search boundary; ranked backups are pre-approved, including their recorded pack sizes. Keep the requested pack quantity unchanged unless the list explicitly specified a weight/count incompatible with a fallback; ask only for that real quantity ambiguity.
 
-1. Open the `rank: 1` product page.
-2. Let the product page settle and perform a second read before making an availability or cart-state decision. Lazada progressively hydrates product and SKU pages; `DOMContentLoaded` or a visible product title alone is not a readiness signal.
-3. Wait for the page to show its price, the visible page-level `Product Availability` section, and either the exact main `Add to cart` control or an exact existing-product quantity control. These signals do not need to share one DOM container; on observed RedMart pages, `Product Availability` can sit outside the main product-detail block. If the settled page explicitly says `Out of stock`, or its main control is disabled with corroborating unavailable state, classify it as unavailable even though dates or an Add/stepper control may be absent. Otherwise, if a readiness signal is missing after the required two settled reads, treat the page as incomplete and allow one additional gentle wait and settled read. If the signal is still missing, return the SKU as `unresolved` for human review rather than treating it as unavailable.
-4. Prefer products available today or tomorrow; tomorrow is the normal expected outcome for RedMart.
-5. Availability two days from now is acceptable.
-6. If rank 1 is only available more than two days from now, try rank 2, then rank 3.
-7. When a ranked fallback is selected, replace that concept's selected manifest item/SKU with the chosen fallback before mutation. For a test, record the fallback SKU's own pre-test baseline so restoration remains exact.
-8. If no ranked product is available within two days from now, report it for human review instead of adding it automatically. Never silently rebalance an unavailable basket member's packs onto another member or change the basket total; report that member for human review exactly as an unavailable ordinary item. Only classify a product as unavailable when the settled page explicitly indicates unavailability or the main product control is disabled with corroborating page state.
+Before selecting a SKU for mutation, compare the **whole candidate chain** with the cart baseline. If one approved candidate is already present, use that exact SKU when its availability and quantity can be confirmed rather than adding a second choice. If multiple candidates are present or replacing an existing one would require removal, preserve them and resolve that ambiguity; an unavailable product is not permission to remove a baseline row.
+
+1. Open the first ranked canonical URL. Obtain two settled reads of exact identity, price, the page-level `Product Availability` dates, and the exact main add/quantity control. These signals need not share a container. A heading or `DOMContentLoaded` alone is insufficient.
+2. If signals are missing, allow one additional gentle wait and settled read, using a visual check when semantic extraction is incomplete. Then apply the table; do not poll indefinitely.
+
+| Candidate evidence | Classification and next action |
+|---|---|
+| Exact identity; main control usable; availability today, tomorrow, or within two days | Select this SKU and follow the quantity workflow. |
+| Exact requested product explicitly out of stock, discontinued, or disabled with corroborating unavailability | Record this candidate as `unavailable`; **open the next ranked SKU**. Do not stop at rank 1. |
+| Exact candidate's earliest delivery is more than two days away | Record `too-late`; **open the next ranked SKU**. |
+| Readiness still incomplete after the bounded reads | Record `incomplete`, not unavailable. Inspect the next approved candidate read-only. Before adding a fallback, establish that no competing candidate for this concept is already in the cart and no mutation is outstanding; use the baseline or a bounded exact-row/promotion check when needed. If clear, select a ready fallback. Otherwise use the existing exact row or leave this concept `unresolved` for reconciliation. |
+| Exact SKU is already in cart but its product-page control is unusable | Prefer its exact cart-row controls when identity and availability are established; do not add a second ranked SKU for the same request. |
+| Any attempted add/change has an uncertain result | Stop mutating this concept. Reconcile that exact SKU, including promotions, before retrying or substituting. Other independent items may continue. |
+| Changed item/SKU identity, incompatible concept, verification challenge, or lost visible control | Do not treat this as stock status. Stop the affected operation for identity/safety recovery; a challenge or lost surface pauses all browser work. |
+
+3. Before a fallback mutation, update the manifest's selected item/SKU and record why the earlier candidate was skipped. Retain attempted-candidate evidence, especially any uncertain mutation, until reconciled. For tests, record the fallback's own pre-test baseline first.
+4. Do not hand back an unfulfilled concept with unchecked candidates unless an explicit safety or duplicate-risk blocker prevents continuing. If every candidate is explicitly unavailable, report `unavailable`; if all are too late, report the delivery constraint; if any remain incomplete or unsafe to mutate, report `unresolved` with the reason. Never silently rebalance an unavailable basket member's packs onto another member or change the basket total.
 
 The page structure can change. Do not depend on a single fragile CSS selector for availability. A reliable computer-use fallback is to visually inspect the right-side product details area near `Delivery Options` and `Product Availability`, then read date labels such as `Today`, `Tomorrow`, or weekday/date chips.
 
@@ -277,7 +315,7 @@ Interpret pack-size evidence semantically. Normalize harmless typography such as
 
 ## Product-Page Quantity Workflow
 
-Complete the settled availability check above before changing quantity. Maintain an expected manifest while processing products. Include one manifest entry for each expanded member SKU, tagged with its source basket when applicable. Each manifest entry must include the requested household item, selected item ID and SKU ID, product title, pack size, target quantity, and current processing status. Keep selected SKUs in the manifest when their product-page result becomes `unresolved`; status is not permission to omit an expected product from final reconciliation. Mark a basket member with no available ranked product as `unavailable` and keep its recorded allocation for reporting only; it is never added and never becomes an expected cart row.
+Complete the availability decision above before changing quantity. Each concept/member manifest entry records all ranked candidates and their evidence, selected item ID and SKU ID, title, pack size, target quantity, baseline quantity, and mutation state (`not-attempted`, `confirmed`, or `uncertain`). Retain unresolved selected SKUs for final reconciliation. An unselected exhausted concept remains in the manifest for reporting, but is not an instruction to add its rank-1 SKU.
 
 For each available selected SKU:
 
@@ -313,8 +351,7 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 - Before reporting sign-out, make a second settled read and look for an explicit blocking login gate. If signed out, check for `.env` credentials (`USERNAME`/`PASSWORD` or `LAZADA_USERNAME`/`LAZADA_PASSWORD`) and use them to log in automatically in the visible browser if possible. If `.env` is absent or an interactive challenge appears, prompt the user in the visible browser. Account-name text, real cart rows, and row-level item/SKU links are stronger signed-in signals than an early shell link. If signals conflict, record stale state in scratch notes and re-read the same claimed tab rather than rapidly reloading or switching profiles.
 - Prefer `canonical_url` over search.
 - Product pages usually have a visible `Add to cart` button near the product details and price.
-- If the main add button is missing, distinguish "already in cart" from "not available." An exact main-product stepper, quantity input, or `Go to cart` control usually means the product is already in the cart. Continue with the Product-Page Quantity Workflow when the exact stepper is available; otherwise defer the quantity to the final cart audit instead of adding again.
-- If the main add button is disabled or the page says the item is unavailable, try the next ranked product or report the issue.
+- A main-product stepper can establish existing quantity. A generic `Go to cart` button in the mini-cart cannot. If the exact main control is missing or disabled, use **Product Choice And Availability** to choose between exact-row recovery and the next approved SKU; do not conclude “already in cart” or “unavailable” from unrelated controls.
 - Ignore recommendation, carousel, and sponsored-item `Add to Cart` buttons on product pages. Use only the main product add or quantity controls for the requested product.
 - Cart rows contain the product title, pack size, price, and a quantity text field. Quantity changes in ordinary cart rows are the fallback path after the product-page workflow.
 - To change quantity, find the cart row whose product link contains the item/sku pair and scope every control to that exact row. Never identify a cart quantity control by a global input index or `nth` position.
@@ -331,7 +368,7 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 
 The final cart audit is a reconciliation pass, not a reason to repeat every quantity change in the cart.
 
-1. Include every selected requested SKU and target quantity in the expected manifest, including product-page-`unresolved` entries, plus every preserved pre-existing row. The manifest has one entry per expanded member SKU, tagged with its source basket. Compute the expected total unit count from all manifest target quantities; each basket's total is the sum of its member quantities. Exclude `unavailable` entries from the expected total, because they were deliberately never added.
+1. Include all requested concepts/members, selected target SKUs (including uncertain mutations), and preserved baseline rows. Retain unselected, exhausted or unresolved concepts for reporting only; compute the expected cart checksum from selected target quantities plus unrequested baseline quantities, counting each exact item/SKU once. Do not count read-only candidate attempts as additional expected rows.
 2. Load the cart once after the product-page pass, let it settle, and perform a second read.
 3. Use the cart header item count only as a quick checksum against the expected total. It is not proof of exact contents, and checkout selected counts, subtotals, and order summaries are not verification.
 4. Match ordinary rendered rows by exact item ID and SKU ID, then verify title, pack size, and quantity. Classify each expected SKU as `normal-row match`, `promotion-group match`, `actual mismatch`, `unresolved`, or `unavailable`.
@@ -339,9 +376,9 @@ The final cart audit is a reconciliation pass, not a reason to repeat every quan
 6. For each expected SKU that is missing, collapsed, or partial-looking, inspect the relevant promotion summary through its `EDIT` control. Process one promotion group at a time. On the promotion editor page, verify the exact item/SKU, title, pack size, and full quantity, record the result, then return to the cart and reacquire its settled state before inspecting another group.
 7. Promotion labels can repeat. After any navigation or rerender, reacquire the promotion group and its control; do not reuse a stale locator or rely on a previous global index. Treat the promotion editor's exact product and quantity as authoritative for a grouped SKU.
 8. If an exact promotion `EDIT` activation is a no-op, obtain a fresh settled cart read, reacquire that exact group and control, and retry once. A second no-op becomes `unresolved`; do not force repeated activations.
-9. After two settled cart reads and inspection of every relevant promotion group, classify an expected SKU as `actual mismatch` when it is absent from every ordinary and promotion representation, or when its authoritative quantity differs from the manifest target. If page state or promotion-group coverage remains uncertain, keep it `unresolved` and do not correct it yet. An `unavailable` entry can never become an `actual mismatch`: its absence from the cart is the intended outcome, so report the unfulfilled packs instead of adding them.
+9. After two settled cart reads and inspection of every relevant promotion group, a selected expected SKU is an `actual mismatch` when absent everywhere or its authoritative quantity differs from target. An unselected or deliberately unavailable candidate is never a missing-cart correction. Uncertain coverage stays `unresolved`. If an incomplete candidate is confirmed absent and no mutation remains outstanding, return to its next ranked candidate before human handoff.
 10. Record unexpected extra rows separately. Preserve and report them unless exact evidence proves they are removable artifacts created by the current test; never broaden cleanup by inference.
-11. Correct only entries proven to be `actual mismatch`. Use controls scoped to the exact item/SKU representation, apply one change at a time, and wait/reacquire as required. Do not alter `normal-row match`, `promotion-group match`, or `unavailable` entries.
+11. Correct only proven `actual mismatch` entries with established identity and acceptable availability. Missing-cart evidence alone never authorizes adding a previously incomplete product. Scope every control to the exact item/SKU, apply one change at a time, and wait/reacquire. Do not alter matches or unavailable entries.
 12. If corrections were required, reload once and re-audit the corrected exact entries plus the manifest checksum. If no corrections were required, leave the matching cart unchanged.
 
 ### Test Cleanup And Baseline Restoration
@@ -365,7 +402,7 @@ During browser work:
 
 - Identify which existing cart rows are requested versus unrequested when practical.
 - Check product-page availability dates before adding.
-- Prefer today/tomorrow, accept two days from now, and try the next ranked product when rank 1 is later than two days from now.
+- Follow the complete ranked-candidate decision table for unavailable, too-late, and incomplete pages; do not leave a safe approved fallback unchecked.
 - Use the Product-Page Quantity Workflow to reach and stably confirm each target when the exact main-product stepper is available.
 - After all product pages, perform one Manifest Cart Verification And Promotions pass. Inspect promotion editors only for expected SKUs that ordinary exact rows do not fully resolve.
 - Correct only confirmed actual mismatches, then verify any corrections once.
@@ -379,8 +416,8 @@ Structure the final completion message so that what the human must do is at the 
    - Keep this concise so it does not crowd the response.
 
 2. **Cart Handoff:**
-   - Confirm the cart remains open in the user's browser.
-   - Offer to close agent-opened product/order tabs while keeping the cart open.
+   - Confirm the cart is open only after actually returning to and foregrounding the cart tab.
+   - Offer once to close agent-opened tabs; name only tabs that are still open. Never promise a cart tab that was repurposed as an order-history tab.
 
 3. **Technical & Verification Details (Optional / Collapsed):**
    - Detailed audit artifacts (proposed cart table, product-page logs, pre-existing row checks, and manifest reconciliation) are internal verification steps.
@@ -389,7 +426,7 @@ Structure the final completion message so that what the human must do is at the 
 4. **Action Required (MUST BE LAST / AT THE VERY BOTTOM):**
    - This must always be the final section at the very end of the message so the user immediately sees it first in the chat interface.
    - Explicitly list every requested item that was unmatched, unavailable, uncertain, or left untouched for human handling.
-   - State clearly that these items were not added and require human action (e.g. manual search, substitution, or buying in store).
+   - Distinguish “not catalogued,” “all approved options unavailable,” “delivery too late,” and “could not verify.” State which product was tried and whether backups were exhausted or blocked. If a mutation is uncertain, say “cart quantity not confirmed,” not “not added.” Never claim an item was absent from the image/catalog because its first product page failed.
    - State the remaining human checkout steps (delivery slot selection, payment, and purchase confirmation).
 ## Adding Future Items
 

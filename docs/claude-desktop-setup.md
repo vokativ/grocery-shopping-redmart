@@ -13,6 +13,8 @@ The rest of this document captures what is known, what is assumed, and what need
 testing, so that the first person doing a live Claude Cowork trial has a structured
 starting point rather than starting from scratch.
 
+All models use the same **Everyday Execution Contract**, ranked-candidate decision table, and human-only approval boundary in `AGENTS.md`. This proposal translates tool capabilities, not safety rules. No model may stop after an unavailable first SKU while a safe approved backup remains, or approve a catalog review on the human's behalf.
+
 ## What Claude Desktop offers
 
 Claude Desktop (macOS and Windows) has a **Cowork** agentic mode that can:
@@ -47,19 +49,19 @@ the Pro plan or above.
 
 ## Concept map: ChatGPT terms → Claude equivalents
 
-When reading AGENTS.md, translate these terms:
+For a deliberately authorized Claude trial, these are capability comparisons, not instructions to pretend one surface is another:
 
 | AGENTS.md / README term | Claude Desktop equivalent |
 |---|---|
 | ChatGPT desktop app | Claude Desktop app |
 | Codex mode | Cowork mode |
-| Built-in browser (`iab`) | Claude in Chrome (extension + sidebar) |
+| Built-in browser (`iab`) | No equivalent identity: explicitly select and verify Claude in Chrome for this trial |
 | `Cmd+Shift+B` / `Ctrl+Shift+B` | Open Chrome and the Claude Cowork sidebar |
 | ChatGPT Plus plan | Claude Pro plan |
 | Remote (mobile → desktop pairing) | Dispatch (Claude's mobile-to-desktop task delegation, via the Claude mobile app) |
 | Settings → Browser (allowlist) | Chrome extension permissions; Claude's per-site permission prompts |
 | "Set up Remote" | Use Dispatch from the Claude mobile app |
-| `iab` surface type | Cowork browser surface |
+| `iab` surface type | Not applicable; report the actual Cowork control surface |
 
 ## Key behavioral differences to expect [INFERENCE]
 
@@ -90,11 +92,11 @@ Each needs real testing:
    applies unchanged — Claude should stop and surface the challenge in the visible
    Chrome window rather than attempting to automate the verification.
 
-5. **Computer Use fallback.** If the Chrome extension is insufficient, Claude falls
-   back to screen/keyboard/mouse Computer Use. AGENTS.md's visibility rules still
-   apply — the screen must be visible and the user must be able to interrupt. Anthropic
-   recommends against Computer Use with sensitive accounts; a real-money grocery
-   cart qualifies as sensitive. Use the Chrome extension as the primary surface.
+5. **Computer Use fallback.** If the Chrome extension is insufficient, stop and
+   announce that limitation before switching to Computer Use. Obtain the user's
+   approval for the control-surface change and retain the exact visible profile/tab.
+   Do not automatically switch browsers or treat Computer Use as permission to
+   weaken product identity, challenge handling, or checkout boundaries.
 
 ## Setup steps
 
@@ -118,14 +120,17 @@ AGENTS.md contains the detailed browser rules and safety boundaries — follow t
 exactly, including the rules about visible browser, stopping before checkout, and
 stopping if Lazada shows a CAPTCHA or slider.
 
-When AGENTS.md refers to "the built-in browser" or "the iab surface," use the
-Claude in Chrome sidebar showing my signed-in Chrome session.
-When it refers to "ChatGPT desktop app" or "Codex mode," those mean this Claude
-Desktop app and Cowork mode.
+This is an explicitly authorized Claude trial, not a claim that Claude in Chrome
+is ChatGPT's iab. Use the visible Claude in Chrome surface in my selected profile;
+report the actual model/reasoning controls when exposed. Ask before switching
+control surfaces. Do not use a hidden browser.
 
-Ask me before doing anything that modifies the cart. Stop if you are unsure about
-any product match, quantity, or browser action. Do not proceed to checkout, delivery
-slot selection, or payment under any circumstances.
+Show the proposed cart, then proceed with confidently matched catalog items and
+their approved ranked backups. Only ask about genuine product/quantity ambiguity
+or a safety blocker. If the first SKU is unavailable or incomplete, follow the
+shared candidate decision table; reconcile uncertain mutations before substituting.
+Do not proceed to checkout, delivery selection, or payment. Only I may approve a
+catalog review.
 
 Here is my grocery list: [paste your list here]
 ```

@@ -51,12 +51,22 @@ OMP's browser device exposes Puppeteer-style page access. Apply these rules:
 4. Do not mutate the cart with `page.evaluate(() => element.click())`. A DOM click can update a local React control without persisting the server-side cart.
 5. If an action times out or errors, reread the exact SKU and quantity before retrying. Retry only when persisted state is unchanged; never infer success or repeat blindly.
 6. Treat the final product URL's item ID and SKU ID as authoritative identity. Verify the semantic product heading describes the same household concept; pack text is corroborating metadata.
-7. A product page is ready only after settled reads show price, the page-level `Product Availability` section, and the exact main-product add/quantity control, or an explicit corroborated out-of-stock state. Follow the additional-wait and `unresolved` rule in `AGENTS.md` when signals remain incomplete.
+7. Follow the cross-model **Product Choice And Availability** table in `AGENTS.md`. Explicit unavailability and late delivery require the next ranked SKU. An incomplete page permits a read-only backup check; before fallback mutation, prove no competing candidate is already in cart and no previous mutation is uncertain. Do not hand back an item with unchecked safe backups. `selections[].candidates` in `node tools/dry-run.mjs --json "feta cheese"` preserves the complete approved chain.
 8. Scope mutations to the exact main product control or exact cart row identified by item ID and SKU ID. Ignore recommendation, sponsored, carousel, mini-cart, and floating controls even if their accessible labels also say `Add to Cart`.
 9. Perform quantity changes one unit at a time. Wait for the expected next value, reacquire the control, and perform another settled read before continuing.
 10. In the cart, match ordinary rows by exact item/SKU links. Use header counts only as checksums. Inspect a promotion editor only for an expected SKU not fully resolved by ordinary rows.
 11. Stop on stale or ambiguous state, unexpected quantities, challenges, or human interaction. Do not compensate with repeated clicks or global element positions.
 12. Never activate checkout, delivery-slot, payment, saved-payment, or purchase controls.
+
+### Recovery without extra human work
+
+An order or product click can open a new tab without changing the old URL. Check for the expected new task tab before retrying; foreground and verify it. A missing Lazada target is different from a disconnected relay: open a fresh task tab in the same connected profile, leaving unrelated tabs unchanged.
+
+After a timeout, obtain a fresh observation and exact state before one retry. Repeating a selector that already failed twice, swallowing the error, or using global positions is not recovery. Use a fresh semantic reference or a unique selector inside the verified row. Read only the relevant rendered region; an out-of-stock mini-cart wine row says nothing about the main feta product.
+
+Use the installed tool schema for callback arguments; a `tab.run`/page callback must not reach for outer-cell variables it did not receive. Keep runtime evidence separate from serialized DOM snapshots. For a form property, an element-scoped read such as `page.$eval("#catalog-review-approved-payload", el => el.value)` can recover state that a DOM snapshot omits. The review template also mirrors the approved JSON as textarea text content.
+
+After the human says the review is done, reuse that exact tab without reloading. An empty read means recovery is needed, not permission to click Approve yourself. Follow `AGENTS.md`'s approval recovery; report an unrecoverable payload without changing the catalog.
 
 ## Sign-in and challenges
 
@@ -87,6 +97,8 @@ On 2026-08-25, the OMP Browser Relay path completed a reversible live RedMart sm
 - The loopback-CDP branch was not exercised in this smoke test; its attachment and security rules are documented but remain live-test pending.
 
 The test also exposed a relay-specific failure mode. A raw `ElementHandle.click()` timed out twice during corn cleanup and the persisted quantity remained 2. A direct DOM `element.click()` then changed the local stepper to 0 but did not persist; reloading returned quantity 2. After a fresh state read, OMP `tab.click()` performed each exact decrement and the cart count persisted. The `tab`-helper preference, timeout reread, and prohibition on DOM-click mutations above are grounded in that observation.
+
+On 2026-09-09, a separate household session reported by the user as Terra exposed a missed rank-2 feta candidate, page-wide stock checks contaminated by mini-cart content, navigation retries despite a new detail tab, and agent activation of the catalog approval button after an empty payload read. Assistant model-name claims in that transcript were inconsistent; they do not establish a controlled model/effort comparison. The resulting instruction and local-tool changes are recorded in the [reliability review](developer-guide.md#session-reliability-review-2026-09-09). They are not a new live-shopping qualification result.
 
 ## Suggested OMP prompt
 
