@@ -142,7 +142,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i318264428-s611366135.html"
         pack_size: "150 g"
         observed_price_sgd: 4.40
-    notes: "Maps the whiteboard item 'HAM'."
+      - rank: 2
+        title: "RedMart Honey Baked Ham (No added Nitrate And Nitrite)"
+        item_id: "2804375009"
+        sku_id: "19369866895"
+        canonical_url: "https://www.lazada.sg/products/i2804375009-s19369866895.html"
+        pack_size: "150 g"
+        observed_price_sgd: 6.00
+    notes: "Smoked chicken ham remains first; the honey baked ham from the 2026-09-14 order is the approved fallback."
 
   - id: chicken_breast
     category: chilled
@@ -312,6 +319,11 @@ items:
       - edam slices
       - emmental cheese
       - emmental slices
+    alias_product_ranks:
+      cheddar slices: [2]
+      edam slices: [1]
+      emmental cheese: [3, 4]
+      emmental slices: [3, 4]
     preferred_products:
       - rank: 1
         title: "RedMart Sliced Edam Cheese (100% Natural Cheese)"
@@ -438,6 +450,22 @@ items:
         pack_size: "600 ml"
         observed_price_sgd: 1.65
     notes: "RedMart lemon dishwashing liquid remains first; the approved Mama Lemon refill is the ranked fallback."
+
+  - id: handwash
+    category: household
+    default_quantity: 2
+    aliases:
+      - handwash
+      - hand wash
+    preferred_products:
+      - rank: 1
+        title: "RedMart Anti-Bacterial Lavender Foaming Handwash Hand Soap Wash"
+        item_id: "301168260"
+        sku_id: "527252610"
+        canonical_url: "https://www.lazada.sg/products/i301168260-s527252610.html"
+        pack_size: "250 ml"
+        observed_price_sgd: 3.15
+    notes: "Approved from the 2026-09-14 RedMart order with the reviewed default quantity of 2."
 
   - id: toilet_wipes
     category: household
@@ -599,6 +627,11 @@ items:
       - apple
       - green apples
       - granny smith apples
+      - red apples
+    alias_product_ranks:
+      green apples: [1]
+      granny smith apples: [1]
+      red apples: [2]
     preferred_products:
       - rank: 1
         title: "Granny Smith Green Apples"
@@ -607,7 +640,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301072998-s527094932.html"
         pack_size: "1 kg"
         observed_price_sgd: 4.95
-    notes: "Maps the 2026-07-03 whiteboard item 'apples'."
+      - rank: 2
+        title: "RedMart Organic Royal Gala Apples"
+        item_id: "721442990"
+        sku_id: "2285408425"
+        canonical_url: "https://www.lazada.sg/products/i721442990-s2285408425.html"
+        pack_size: "500 g"
+        observed_price_sgd: 5.85
+    notes: "Generic apples prefer Granny Smith, then Organic Royal Gala. Explicit red apples use Royal Gala only; explicit green/Granny Smith apples use Granny Smith only."
 
   - id: pears
     category: produce
@@ -676,6 +716,21 @@ items:
         pack_size: "200 g"
         observed_price_sgd: 4.33
     notes: "Maps the 2026-07-03 whiteboard item 'cream cheese'."
+
+  - id: cottage_cheese
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - cottage cheese
+    preferred_products:
+      - rank: 1
+        title: "Bulla Cottage Cheese Plain And Low Fat"
+        item_id: "301150670"
+        sku_id: "527232247"
+        canonical_url: "https://www.lazada.sg/products/i301150670-s527232247.html"
+        pack_size: "200 g"
+        observed_price_sgd: 6.60
+    notes: "Approved as a distinct household concept from the 2026-09-14 RedMart order."
 
   - id: pepsi_black
     category: beverages

@@ -4,10 +4,10 @@ Thank you for testing. The goal is to learn where a busy household gets blocked,
 
 ## Before testing
 
-- Use a computer and built-in browser profile you trust.
+- Use a computer and visible household browser profile you trust.
 - Read the README safety and privacy sections.
 - Remove addresses, names, order numbers, payment details, and cookies from anything you share.
-- Start with `npm run dry-run -- --file examples/grocery-list.txt` before connecting the signed-in built-in browser.
+- Start with `npm run dry-run -- --file examples/grocery-list.txt` before connecting the selected visible household browser using the [connection hierarchy](browser-connections.md).
 
 ## Suggested sessions
 
@@ -17,10 +17,19 @@ Thank you for testing. The goal is to learn where a busy household gets blocked,
 
 ## Feedback questionnaire
 
+For instruction regression checks, use an authorized session or a synthetic fixture:
+
+- Integrated browser unavailable, existing household CDP/relay available: the agent should discover/reuse it and retain prior permission.
+- Shredded cheddar requested: find rank-2 sliced cheddar and disclose the form difference; after acceptance, do not choose Edam or ask again.
+- Red apples requested: select Royal Gala when catalogued; in a fixture with only green apples, offer that related option or new-product discovery without adding green apples automatically.
+- Review tab resized after edits: preserve quantities, exclusions, aliases, and human approval without reload.
+
+Report these as observed behavior, not as guaranteed by passing local tests.
+
 ```text
 Operating system and version:
-ChatGPT desktop app version:
-Browser surface (built-in, Chrome fallback, or other):
+Agent application/harness and version:
+Browser application/profile and control channel (integrated, relay, CDP, computer use):
 Direct desktop or Remote:
 Model and reasoning selected:
 Did the model control remain at that selection: yes/no/unclear

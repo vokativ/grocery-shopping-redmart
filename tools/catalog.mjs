@@ -90,6 +90,26 @@ export function validateCatalog(catalog) {
       if (pairs.has(pair)) errors.push(`${productAt} duplicates item/SKU pair ${pair}`);
       else pairs.add(pair);
     });
+
+    if (item.alias_product_ranks !== undefined) {
+      const restrictions = item.alias_product_ranks;
+      if (!restrictions || typeof restrictions !== "object" || Array.isArray(restrictions)) {
+        errors.push(`${at}.alias_product_ranks must be an object`);
+      } else {
+        const aliases = new Set((Array.isArray(item.aliases) ? item.aliases : []).filter((alias) => typeof alias === "string").map(normalizeAlias));
+        const seen = new Set();
+        for (const [alias, allowed] of Object.entries(restrictions)) {
+          const key = normalizeAlias(alias);
+          if (!aliases.has(key)) errors.push(`${at}.alias_product_ranks key "${alias}" is not an item alias`);
+          if (seen.has(key)) errors.push(`${at}.alias_product_ranks duplicates normalized alias "${alias}"`);
+          seen.add(key);
+          if (!Array.isArray(allowed) || !allowed.length ||
+              new Set(allowed).size !== allowed.length || allowed.some((rank) => !ranks.has(rank))) {
+            errors.push(`${at}.alias_product_ranks["${alias}"] must contain distinct existing product ranks`);
+          }
+        }
+      }
+    }
   });
 
   // Baskets are validated after every item id is known, so a basket may reference a member
@@ -149,22 +169,58 @@ export function allocateBasket(basket, totalQuantity) {
     .filter((allocation) => allocation.quantity > 0);
 }
 
-function buildSelection(item, quantity) {
+function buildSelection(item, quantity, alias) {
   const candidates = item.preferred_products.toSorted((a, b) => a.rank - b.rank);
-  const [product] = candidates;
+  const restriction = Object.entries(item.alias_product_ranks ?? {})
+    .find(([key]) => normalizeAlias(key) === alias)?.[1];
+  const eligible = restriction ? candidates.filter((product) => restriction.includes(product.rank)) : candidates;
+  const [product] = eligible;
+  if (!product) throw new Error(`no eligible products for ${item.id}; run validateCatalog first`);
   return {
     item_id: item.id,
     product: product.title,
     pack_size: product.pack_size ?? "—",
     quantity,
     canonical_url: product.canonical_url,
-    candidates
+    candidates,
+    ...(restriction ? { eligible_candidates: eligible } : {})
   };
+}
+
+// Discovery only: token overlap is not semantic equivalence or substitution approval.
+// Keep every rank so a secondary SKU can be found even when the preferred title differs.
+function discoveryWords(text) {
+  return normalizeAlias(text).replace(/hand\s+wash/g, "handwash")
+    .replace(/sliced/g, "slice").match(/[a-z0-9]+/g)
+    ?.filter((word) => !["and", "the", "of", "with", "for"].includes(word))
+    .map((word) => word.length > 3 && word.endsWith("s") ? word.slice(0, -1) : word) ?? [];
+}
+
+export function suggestCatalogItems(catalog, words, limit = 3) {
+  const query = new Set(discoveryWords(words));
+  if (!query.size) return [];
+  return catalog.items.map((item) => {
+    const fields = [...item.aliases, ...item.preferred_products.map((product) => product.title ?? "")];
+    const matches = fields.map((text) => ({ text, tokens: discoveryWords(text) }))
+      .map(({ text, tokens }) => ({ text, overlap: [...query].filter((word) => tokens.includes(word)) }))
+      .filter(({ overlap }) => overlap.length);
+    const score = Math.max(0, ...matches.map(({ overlap }) => overlap.length / query.size));
+    return { item, matches, score };
+  }).filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || a.item.id.localeCompare(b.item.id))
+    .slice(0, limit)
+    .map(({ item, matches }) => ({
+      item_id: item.id,
+      requires_confirmation: true,
+      matching_text: [...new Set(matches.map(({ text }) => text))],
+      default_quantity: item.default_quantity,
+      candidates: item.preferred_products.toSorted((a, b) => a.rank - b.rank)
+    }));
 }
 
 /**
  * Returns exactly one result per non-empty input line; blank lines are dropped before matching.
- * `selections` holds one rank-1 proposal per ordinary item or allocated basket member.
+ * `selections` holds one eligible proposal per ordinary item or allocated basket member.
  * Each selection's `candidates` retains the complete rank-ascending approved product list;
  * it describes preferences, not verified current availability.
  * Ordinary results no longer carry flat `product`/`pack_size`/`canonical_url` fields; read
@@ -188,7 +244,11 @@ export function matchList(catalog, lines) {
     const unusableQuantity = requestedQuantity !== null && !Number.isSafeInteger(requestedQuantity);
     const words = normalizeAlias(quantityMatch ? quantityMatch[2] : line);
     const hit = unusableQuantity ? undefined : aliasMap.get(words);
-    if (!hit) return { input: line, input_index: inputIndex, matched: false, selections: [] };
+    if (!hit) {
+      const suggestions = unusableQuantity ? [] : suggestCatalogItems(catalog, words);
+      return { input: line, input_index: inputIndex, matched: false, selections: [],
+        ...(suggestions.length ? { suggestions } : {}) };
+    }
 
     const quantity = requestedQuantity ?? hit.entry.default_quantity;
     if (hit.kind === "item") {
@@ -198,7 +258,7 @@ export function matchList(catalog, lines) {
         matched: true,
         item_id: hit.entry.id,
         quantity,
-        selections: [buildSelection(hit.entry, quantity)]
+        selections: [buildSelection(hit.entry, quantity, words)]
       };
     }
 

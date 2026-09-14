@@ -6,7 +6,9 @@ OMP changes only the browser control channel. It must still control a real, head
 
 ## Choose one browser surface
 
-### OMP Browser Relay — preferred
+Use the shared [browser discovery hierarchy](../AGENTS.md#browser-discovery-hierarchy--all-harnesses) and [connection matrix](browser-connections.md). Reuse a user-selected working connection first. Inventory existing sessions and already enabled loopback CDP/relay channels before concluding the browser is unavailable. The options below describe setup when a working session is not already selected.
+
+### OMP Browser Relay
 
 Use Browser Relay when the household already has a signed-in Chrome profile:
 
@@ -15,14 +17,14 @@ Use Browser Relay when the household already has a signed-in Chrome profile:
 3. Ask OMP to use Browser Relay for the task. OMP should connect with relay enabled and target the exact Lazada tab when possible.
 4. Keep that Chrome window and controlled tab visible, with the host awake and unlocked, until the final cart read or test restoration finishes.
 
-The extension connection, Chrome profile, selected tab, and Lazada sign-in are separate states. A relay connection failure is not evidence that Lazada signed out. OMP retries one lightweight connection after the user focuses the intended tab; a second failure requires the user to reconnect the relay or deliberately choose CDP.
+The extension connection, Chrome profile, selected tab, and Lazada sign-in are separate states. A relay connection failure is not evidence that Lazada signed out. OMP retries one lightweight connection after the user focuses the intended tab; after that, inspect already authorized alternatives for the same session. Ask for reconnection only if no suitable channel is available.
 
 ### Loopback CDP — explicit alternative
 
-Use CDP only when Browser Relay is unavailable or the user deliberately prefers it:
+Use an existing deliberately enabled CDP session when already authorized, or when the discovery hierarchy identifies it as the suitable connection:
 
 1. The user starts a headed Chrome/Chromium instance with a deliberate profile and remote debugging bound to `127.0.0.1` or `localhost` only.
-2. The user provides or confirms the loopback CDP endpoint.
+2. Recover the endpoint from prior session authorization or narrow read-only host discovery. Ask for confirmation only if profile identity or access is unresolved; do not ask again for an endpoint already approved.
 3. OMP connects to that existing endpoint and operates only the required Lazada/RedMart and `127.0.0.1` catalog-review tabs.
 4. Keep the browser window visible and close the debugging surface after the task if it is no longer needed.
 
@@ -37,7 +39,7 @@ Before the first shopping navigation, OMP should state:
 - the browser/profile/tab it intends to control; and
 - whether this is a normal cart fill, catalog task, or reversible live test.
 
-The missing ChatGPT Desktop composer is not a blocker in OMP. The two existing Terra/Medium results are evidence for ChatGPT Desktop only, not for the current OMP model.
+The missing ChatGPT Desktop composer or integrated browser is not a blocker in OMP. The two existing Terra/Medium results are evidence for ChatGPT Desktop only, not for the current OMP model.
 
 Use one root browser operator. Subagents may plan or audit but must not control the same relay/CDP tab concurrently.
 
@@ -51,7 +53,7 @@ OMP's browser device exposes Puppeteer-style page access. Apply these rules:
 4. Do not mutate the cart with `page.evaluate(() => element.click())`. A DOM click can update a local React control without persisting the server-side cart.
 5. If an action times out or errors, reread the exact SKU and quantity before retrying. Retry only when persisted state is unchanged; never infer success or repeat blindly.
 6. Treat the final product URL's item ID and SKU ID as authoritative identity. Verify the semantic product heading describes the same household concept; pack text is corroborating metadata.
-7. Follow the cross-model **Product Choice And Availability** table in `AGENTS.md`. Explicit unavailability and late delivery require the next ranked SKU. An incomplete page permits a read-only backup check; before fallback mutation, prove no competing candidate is already in cart and no previous mutation is uncertain. Do not hand back an item with unchecked safe backups. `selections[].candidates` in `node tools/dry-run.mjs --json "feta cheese"` preserves the complete approved chain.
+7. Follow the cross-model **Product Choice And Availability** table in `AGENTS.md`. Explicit unavailability and late delivery require the next eligible ranked SKU. Use `eligible_candidates` when present; `candidates` preserves the complete discovery chain. An incomplete page permits a read-only backup check; before fallback mutation, prove no competing candidate is already in cart and no previous mutation is uncertain. Do not hand back an item with unchecked safe, request-compatible backups. Unmatched `suggestions` are recommendations only.
 8. Scope mutations to the exact main product control or exact cart row identified by item ID and SKU ID. Ignore recommendation, sponsored, carousel, mini-cart, and floating controls even if their accessible labels also say `Add to Cart`.
 9. Perform quantity changes one unit at a time. Wait for the expected next value, reacquire the control, and perform another settled read before continuing.
 10. In the cart, match ordinary rows by exact item/SKU links. Use header counts only as checksums. Inspect a promotion editor only for an expected SKU not fully resolved by ordinary rows.
@@ -99,6 +101,8 @@ On 2026-08-25, the OMP Browser Relay path completed a reversible live RedMart sm
 The test also exposed a relay-specific failure mode. A raw `ElementHandle.click()` timed out twice during corn cleanup and the persisted quantity remained 2. A direct DOM `element.click()` then changed the local stepper to 0 but did not persist; reloading returned quantity 2. After a fresh state read, OMP `tab.click()` performed each exact decrement and the cart count persisted. The `tab`-helper preference, timeout reread, and prohibition on DOM-click mutations above are grounded in that observation.
 
 On 2026-09-09, a separate household session reported by the user as Terra exposed a missed rank-2 feta candidate, page-wide stock checks contaminated by mini-cart content, navigation retries despite a new detail tab, and agent activation of the catalog approval button after an empty payload read. Assistant model-name claims in that transcript were inconsistent; they do not establish a controlled model/effort comparison. The resulting instruction and local-tool changes are recorded in the [reliability review](developer-guide.md#session-reliability-review-2026-09-09). They are not a new live-shopping qualification result.
+
+The September 14 T3 Code catalog update exercised visible Chrome loopback CDP for order/product reads, full-tab review, and human approval recovery. This is separate evidence from the OMP relay cart test; it does not qualify CDP cart mutations.
 
 ## Suggested OMP prompt
 
