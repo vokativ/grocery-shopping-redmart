@@ -39,6 +39,16 @@ The [Playwright MCP documentation](https://github.com/microsoft/playwright-mcp#b
 
 [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) is another browser-control server to inspect when installed. Its availability does not prove attachment to the intended existing window. No new connector installation or browser relaunch is part of routine discovery.
 
+### Setup choices when no connection already works
+
+Offer choices in terms of what the user must enable and what the agent gains:
+
+1. A supported browser relay/extension is usually the least disruptive route to an already signed-in profile, but may show a per-site access prompt and must explicitly support the selected browser.
+2. OS accessibility keeps the existing visible session and avoids a browser debugging port. It can expose named controls and actions, but page state and text editing may be incomplete; combine it only with permitted platform input when necessary.
+3. Loopback CDP gives the most exact Chromium page and element state, but should use a dedicated automation profile. Since Chrome 136, remote-debugging switches are not honored for the default Chrome data directory and must be paired with a non-default `--user-data-dir`; Chrome recommends that isolation for debugging and Chrome for Testing for automation. See [Chrome's remote-debugging security change](https://developer.chrome.com/blog/remote-debugging-port).
+
+Do not frame CDP as a switch to add casually to a user's normal Chrome shortcut. State that a dedicated profile has separate cookies and sign-in, keep its endpoint on loopback, and let the user choose the relay or accessibility route when preserving the current household session matters more than protocol precision.
+
 ## Host discovery and remote use
 
 ### OS-specific structured control
@@ -61,7 +71,7 @@ Do not infer a model's available control interfaces from its provider. The host 
 
 Start with a small read-only probe: identify OS/session, inspect relevant browser debugging flags/listeners, and test the discovered endpoint with a version/status command. For accessibility, query only application roots, then a bounded target subtree if the browser is registered. Classify each route as working, present but unverified, unavailable, or requiring setup. Stop a route after bounded failure; retain successful session evidence rather than repeating broad discovery before each page.
 
-For Chrome, a successful CDP `Browser.getVersion` proves the protocol is reachable, but not visible window state, target-tab ownership, or website authentication. Current Firefox Remote Agent uses WebDriver BiDi; Mozilla documents that CDP support ended and the old protocol-selection preference was removed in Firefox 141. Enabling the Remote Agent requires an explicit launch flag. A normal running Firefox process does not imply a debugging listener. See [Firefox Remote Agent](https://firefox-source-docs.mozilla.org/remote/Security.html) and [protocol preferences](https://firefox-source-docs.mozilla.org/remote/Prefs.html).
+For Chrome, a successful CDP `Browser.getVersion` proves the protocol is reachable, but not visible window state, target-tab ownership, or website authentication. Chrome accessibility is enabled on demand; for a deterministic accessibility probe, Chromium documents `--force-renderer-accessibility` (optionally with `complete`) or the per-tab `chrome://accessibility` controls. See the [Chromium accessibility overview](https://chromium.googlesource.com/chromium/src/+/main/docs/accessibility/overview.md). Current Firefox Remote Agent uses WebDriver BiDi; Mozilla documents that CDP support ended and the old protocol-selection preference was removed in Firefox 141. Enabling the Remote Agent requires an explicit launch flag. A normal running Firefox process does not imply a debugging listener. See [Firefox Remote Agent](https://firefox-source-docs.mozilla.org/remote/Security.html) and [protocol preferences](https://firefox-source-docs.mozilla.org/remote/Prefs.html).
 
 Prefer short, scoped semantic reads and named actions over repeated full-screen images or full-tree dumps. This can reduce model input and ambiguity, but there is no measured token-cost ratio for this repository. Large accessibility trees can also be expensive. Use a screenshot when needed for an unlabelled/canvas control, omitted state, layout, or confirmation that the user-visible surface is correct. Keep exact identity and persistence checks regardless of representation.
 
@@ -75,7 +85,9 @@ For the catalog review page, open a dedicated foreground tab and use the availab
 
 ## Evidence and limits
 
-A subsequent read-only Linux probe in this conversation found an active Chrome loopback listener and successfully executed `Browser.getVersion` over its WebSocket. Installed Firefox was version 155.0.1; observed Firefox processes had no remote-debugging flag and no Firefox listener was shown by the process-labelled listener check. Firefox debugging was therefore not established for that running session. The Firefox desktop environment reported X11. AT-SPI bus/root enumeration worked, but none of the three returned application roots was named Chrome/Chromium/Firefox. Browser accessibility controls were not established. No profile was launched, no browser was restarted, and no shopping page was changed. These observations are historical evidence, not hardcoded discovery results for another host or run.
+A read-only Linux probe in this conversation found an active agent-owned Chrome loopback listener and successfully executed `Browser.getVersion` over its WebSocket. Installed Firefox was version 155.0.1; its existing Nemanja-owned process had no remote-debugging flag or listener, so Firefox debugging was not established. The desktop session was X11. The initial desktop accessibility setting was the Ubuntu/GNOME schema default `false`, with no explicit user override. After the user authorized enabling it and restarting Firefox, Firefox exposed a useful AT-SPI tree and the `Restore Session` button's named `press` action succeeded.
+
+On the same host, Google Chrome 153.0.8010.36 was launched as Nemanja in a visible disposable profile with no debugging switches. It registered with AT-SPI but initially exposed only seven top-level objects. Relaunching that disposable instance with `--force-renderer-accessibility=complete` exposed 227 objects, including named browser controls and a local test page's heading, button, status text, and input value. An AT-SPI `press` action changed the page and the new labels were read back. That Chrome input did not expose the AT-SPI EditableText interface: AT-SPI focus plus permitted X11 keyboard input changed the value, which AT-SPI then verified. The test browser, server, profile, log, and screenshot were closed or removed afterward; the normal Chrome profiles were not used or changed. These observations are historical evidence, not hardcoded discovery results for another host or run.
 
 The September 14, 2026 conversation demonstrated visible Chrome loopback-CDP order inspection, full-tab review, and recovery of human approval in T3 Code. It did not qualify CDP cart mutations, Firefox/Safari automation, all MCP clients, or all models. The historical [OMP smoke test](omp-setup.md#validation-status) covers its recorded relay workflow only.
 
