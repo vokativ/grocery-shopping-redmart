@@ -51,6 +51,77 @@ test("the repository catalog is valid", async () => {
   assert.deepEqual(validateCatalog(catalog), []);
 });
 
+test("specific apple and cheese aliases preserve meaning without promoting generic ranks", async () => {
+  const catalog = await loadCatalog();
+  const [red, generic, green, cheddar, cheese, emmental] = matchList(catalog,
+    ["2 RED APPLES", "apples", "green apples", "cheddar slices", "sliced cheese", "emmental slices"]);
+  assert.equal(red.selections[0].canonical_url, "https://www.lazada.sg/products/i721442990-s2285408425.html");
+  assert.equal(red.quantity, 2);
+  assert.deepEqual(red.selections[0].candidates.map((p) => p.rank), [1, 2]);
+  assert.deepEqual(red.selections[0].eligible_candidates.map((p) => p.rank), [2]);
+  assert.match(generic.selections[0].product, /Granny Smith/);
+  assert.equal(generic.selections[0].eligible_candidates, undefined);
+  assert.deepEqual(green.selections[0].eligible_candidates.map((p) => p.rank), [1]);
+  assert.match(cheddar.selections[0].product, /Cheddar/);
+  assert.deepEqual(cheddar.selections[0].eligible_candidates.map((p) => p.rank), [2]);
+  assert.match(cheese.selections[0].product, /Edam/);
+  assert.deepEqual(emmental.selections[0].eligible_candidates.map((p) => p.rank), [3, 4]);
+});
+
+test("local discovery finds secondary titles and alternate wording without selecting substitutions", async () => {
+  const catalog = await loadCatalog();
+  const [cheddar, soap, absent] = matchList(catalog, ["shredded cheddar cheese", "liquid hand soap", "zzzzzz"]);
+  for (const result of [cheddar, soap, absent]) {
+    assert.equal(result.matched, false);
+    assert.deepEqual(result.selections, []);
+  }
+  const suggestion = cheddar.suggestions.find((item) => item.item_id === "sliced_cheese");
+  assert.equal(suggestion.requires_confirmation, true);
+  assert.ok(suggestion.matching_text.some((text) => text.includes("Cheddar")));
+  assert.deepEqual(suggestion.candidates.map((p) => p.rank), [1, 2, 3, 4]);
+  assert.ok(soap.suggestions.some((item) => item.item_id === "handwash"));
+  assert.equal(absent.suggestions, undefined);
+
+  // Before red apples were catalogued, green apples were only a related suggestion.
+  const apples = catalog.items.find((item) => item.id === "apples");
+  apples.aliases = apples.aliases.filter((alias) => alias !== "red apples");
+  apples.preferred_products = apples.preferred_products.filter((p) => p.rank === 1);
+  delete apples.alias_product_ranks["red apples"];
+  const [beforeUpdate] = matchList(catalog, ["red apples"]);
+  assert.equal(beforeUpdate.matched, false);
+  assert.deepEqual(beforeUpdate.selections, []);
+  assert.match(beforeUpdate.suggestions.find((item) => item.item_id === "apples").candidates[0].title, /Green/);
+});
+
+test("alias restrictions validate ownership, normalized uniqueness and existing ranks", () => {
+  for (const restriction of [null, [], { missing: [1] }, { "yuzu sodaly": [] },
+    { "yuzu sodaly": [9] }, { "yuzu sodaly": [1, 1] }, { "yuzu sodaly": ["1"] },
+    { "yuzu sodaly": [1], " YUZU SODALY ": [2] }]) {
+    const catalog = basketCatalog();
+    catalog.items[0].alias_product_ranks = restriction;
+    assert.ok(validateCatalog(catalog).some((error) => error.includes("alias_product_ranks")));
+  }
+  const catalog = basketCatalog();
+  catalog.items[0].alias_product_ranks = { " YUZU SODALY ": [2] };
+  assert.deepEqual(validateCatalog(catalog), []);
+  const [item, basket] = matchList(catalog, ["yuzu sodaly", "sodaly"]);
+  assert.match(item.selections[0].product, /fallback/);
+  assert.match(basket.selections[0].product, /preferred/, "ordinary alias restriction does not change basket preference");
+});
+
+test("dry-run text and JSON expose restrictions and recommendation-only misses", async () => {
+  const cwd = new URL("..", import.meta.url);
+  const { stdout } = await run(process.execPath, ["tools/dry-run.mjs", "red apples, shredded cheddar cheese"], { cwd });
+  assert.match(stdout, /only ranks 2 satisfy this alias/);
+  assert.match(stdout, /requires confirmation; no selection made/);
+  assert.match(stdout, /Rank 2: RedMart Australian Sliced Cheddar/);
+  const json = await run(process.execPath, ["tools/dry-run.mjs", "--json", "red apples, shredded cheddar cheese"], { cwd });
+  const [red, cheddar] = JSON.parse(json.stdout);
+  assert.equal(red.selections[0].eligible_candidates[0].rank, 2);
+  assert.equal(cheddar.matched, false);
+  assert.deepEqual(cheddar.selections, []);
+});
+
 test("matching uses exact normalized aliases and quantity overrides", async () => {
   const catalog = await loadCatalog();
   const results = matchList(catalog, ["EGGS", "2 watermelon", "unknown treat"]);

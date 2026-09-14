@@ -4,7 +4,7 @@ This document contains the technical and open-source details intentionally kept 
 
 ## Project status
 
-RedMart/Lazada Singapore is the maintained reference workflow. ChatGPT Desktop's visible built-in browser has two historical supervised Terra/Medium cart runs with no observed judgment errors. That limited evidence does not cover catalog seeding, OMP, Claude Desktop, or every failure branch. OMP Browser Relay has a reversible three-product smoke test and the later household failure report below; loopback CDP remains live-test pending. Model choice remains user-controlled, and alternative channels do not relax identity, visibility, approval, privacy, or checkout boundaries.
+RedMart/Lazada Singapore is the maintained reference workflow. ChatGPT Desktop's visible built-in browser has two historical supervised Terra/Medium cart runs with no observed judgment errors. That limited evidence does not cover catalog seeding, OMP, Claude Desktop, or every failure branch. OMP Browser Relay has a reversible three-product smoke test and the later household failure report below; visible Chrome loopback CDP was used for catalog work in T3 Code on September 14. CDP cart mutations remain unqualified. Model choice remains user-controlled, and alternative channels do not relax identity, visibility, approval, privacy, or checkout boundaries.
 
 The project is currently being hardened for a small tester cohort and will then move to best-effort maintenance. There is no response-time, retailer, browser, operating-system, or agent compatibility guarantee.
 
@@ -32,7 +32,8 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - `grocery-catalog.yaml` — household aliases, quantities, ranked canonical products, and household baskets.
 - `AGENTS.md` — browser-operating, seeding, verification, and safety rules.
 - `.env.example` — template for optional household login credentials used for automated sign-in.
-- `tools/catalog.mjs` — catalog loading, validation, exact alias matching, and basket expansion.
+- `tools/catalog.mjs` — catalog loading, validation, exact aliases, alias-specific eligibility, local discovery hints, and basket expansion.
+- `docs/browser-connections.md` — shared connection hierarchy, compatibility matrix, and source references.
 - `tools/dry-run.mjs` — credential-free proposed-cart diagnostic.
 - `tools/validate-catalog.mjs` — catalog integrity checks.
 - `tools/render-catalog-review.mjs` — renderer for the shared catalog seeding and incremental-update approval page.
@@ -50,6 +51,7 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - Default quantities are positive integers.
 - Aliases and preferred product lists are present.
 - Product ranks are positive and unique within an item.
+- Optional `alias_product_ranks` maps existing item aliases to nonempty, distinct existing ranks; normalized alias keys cannot collide.
 - Item and SKU IDs contain digits.
 - Canonical URLs match the stored item and SKU IDs.
 - Item/SKU pairs do not collide across the catalog.
@@ -67,7 +69,24 @@ Live RedMart behavior cannot be tested in CI because it depends on a household's
 
 `matchList` returns one result for every non-empty input line. Each result has a `selections[]` array of its concrete product selections, and basket matches also include a `basket_id`. Ordinary items no longer expose flat `product`/`pack_size`/`canonical_url` fields on the result itself — read `selections[0]` instead. That deliberate shape change is why `catalog_version` moved from `1` to `2`. The dry run prints the matched-input ratio and the resulting cart-row count separately, so expansion is visible before browser work.
 
-Every `selection.candidates` array now retains **all** approved products in ascending rank order, with exact catalog item/SKU IDs and canonical URLs. The existing `product`, `pack_size`, and `canonical_url` selection fields describe only the initial preferred proposal. Neither matching nor a dry run checks live availability. `node tools/dry-run.mjs --json "feta cheese"` exposes the complete result without human-table output; use it to initialize an agent manifest, not as proof of a filled cart.
+Every `selection.candidates` array retains **all** approved products in ascending rank order, with exact catalog item/SKU IDs and canonical URLs. Optional `alias_product_ranks` maps a specific alias to its compatible ranks (for example `red apples: [2]`). For those aliases, `eligible_candidates` contains only compatible products in catalog rank order, and the proposal fields use its first product. Generic aliases and basket members retain their original preferences. This is an additive version-2 extension; consumers must honor `eligible_candidates` when present. Neither matching nor a dry run checks live availability. `node tools/dry-run.mjs --json "feta cheese"` exposes the complete result without human-table output; use it to initialize an agent manifest, not as proof of a filled cart.
+
+## Session reliability review 2026-09-14
+
+This review uses the conversation and local repository evidence, not a new shopping benchmark. The user authorized instruction/code fixes and commit/push. The four previously HTML-approved catalog additions are included; generic product ranks remain unchanged.
+
+| Observed issue | Improvement |
+|---|---|
+| Missing integrated view was treated as a missing browser, despite an existing Chrome session | One discovery hierarchy: integrated view, existing sessions, authorized CDP/relay, supported computer use. Recover prior selection/permission before asking. |
+| Cheddar at rank 2 was missed when the list said shredded cheddar | Local suggestions inspect aliases and every product title; disclose sliced/shredded mismatch and obtain acceptance only for that difference. |
+| Adding “red apples” as a generic alias still selected green apples | Alias-specific rank restrictions select Royal Gala; corresponding cheese aliases select their named variety. Generic ranks and full chains remain intact. |
+| Literal unmatched handling stopped useful recommendations | Lexical hints are returned separately from selections. Agents also search alternate local wording and distinguish equivalence from substitution. |
+| Review appeared in a narrow viewport | Foreground full-tab review, remove accidental emulation, and resize without reloading or losing edits. |
+| Repeated browser-specific rules contradicted fallback behavior | Consolidated discovery/sign-in rules and a source-linked connection matrix replace obsolete branches rather than leaving commented-out instructions. |
+
+Unmatched JSON results may include `suggestions`, each with `requires_confirmation: true`, matching text, default quantity, and the complete ranked chain. This is bounded lexical overlap, not semantic matching: it can miss synonyms or find irrelevant neighbours. Suggestions never populate `selections`, change quantities, update aliases, or authorize substitutions. The agent still checks the user's original constraints. Invalid/unrepresentable quantities produce no suggestions.
+
+Local regression tests cover pre-update red apples (green suggestion only), current red apples (Royal Gala only), rank-2 cheddar discovery, hand-soap wording, specific cheese restrictions, preserved generic/basket behavior, malformed restrictions, and text/JSON output. No live cart mutation is needed for these instruction and matching fixes; browser compatibility remains subject to the evidence in [the connection guide](browser-connections.md).
 
 ## Session reliability review 2026-09-09
 

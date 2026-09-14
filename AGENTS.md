@@ -7,10 +7,10 @@ Use these instructions when setting up this repository for a household or fillin
 These rules apply regardless of model, reasoning level, or supported harness. Harness setup sections change the control channel, not the shopping decisions. For an everyday cart, follow this contract, then the decision table in **Product Choice And Availability**; catalog work uses the separate approval flow.
 
 1. Transcribe every grocery line and explicit quantity. Keep the original wording beside any confident spelling normalization. Read the entire matched catalog item, including **all** ranked products, not only the first search hit. Use `node tools/dry-run.mjs --json "<comma-separated list>"` to obtain each selection's complete `candidates` chain; the first proposal is not an availability result.
-2. Show a compact proposed cart in chat. An explicit cart-fill request already authorizes confidently matched items and their approved ranked backups. Proceed without a second approval prompt. Unmatched brands/items stay untouched and do not block the rest.
+2. Show a compact proposed cart in chat. An explicit cart-fill request already authorizes confidently matched items and their approved ranked backups. Proceed without a second approval prompt. Search local aliases and all ranked titles for related options before declaring an item unmatched; suggestions do not authorize substitutions or block the rest.
 3. Record a settled exact-SKU cart baseline and keep one manifest entry per requested concept or allocated basket member, with its full candidate chain, candidate observations, selected SKU, target quantity, and mutation state. A catalog match and an available SKU are different facts.
-4. For every candidate rejected as unavailable or too late, check the next rank automatically. An incomplete page is not out of stock: use the safe incomplete-page branch below instead of abandoning the concept. Never substitute after an uncertain cart mutation without reconciling it.
-5. Audit exact cart rows and relevant promotions. Never report a concept as unavailable while an approved backup remains unchecked unless a named safety blocker prevents continuing. Never add an unresolved SKU merely because it is missing from the cart.
+4. For every candidate rejected as unavailable or too late, check the next eligible rank automatically. Explicit request constraints and `eligible_candidates` limit substitutions even when the complete chain includes other varieties. An incomplete page is not out of stock: use the safe incomplete-page branch below instead of abandoning the concept. Never substitute after an uncertain cart mutation without reconciling it.
+5. Audit exact cart rows and relevant promotions. Never report a concept as unavailable while an eligible approved backup remains unchecked unless a named safety blocker prevents continuing. Never add an unresolved SKU merely because it is missing from the cart.
 6. Give a short result and put remaining human actions last. Do not dump tool logs, internal reasoning, account details, or the whole manifest into chat. Keep only a useful fallback note, such as “Used Kolios feta ×2; first choice unavailable.”
 
 ## Model Selection And Harness Reporting
@@ -19,7 +19,7 @@ Before routine browser work, identify the execution harness and state the model 
 
 - **ChatGPT Desktop:** read the model and reasoning control beneath the Codex composer. If the user wants a recommendation and the control offers it, **5.6 Terra / Medium** has two historical supervised everyday-cart runs with no observed judgment errors. That limited evidence is not a guarantee; the 2026-09-09 OMP session reported by the user as Terra missed a catalog fallback.
 - **Oh My Pi (OMP):** report the runtime model and reasoning setting when OMP exposes them. If either value is unavailable, say so and continue with the current setting; the missing ChatGPT Desktop composer is not a blocker. Do not claim that the Desktop Terra evidence applies to another model or harness.
-- **Other models in a documented harness:** use exactly the same execution contract. Report only the model/reasoning the active runtime or visible control exposes. Claude Desktop remains an unvalidated proposal, not an implicitly authorized replacement browser.
+- **Other models in a documented harness:** use exactly the same execution contract. Report only the model/reasoning the active runtime or visible control exposes. Use the shared browser hierarchy in T3 Code, Codex CLI/IDE, Claude Code, and other harnesses; a documented connection is not a live-shopping qualification.
 
 Model selection is user-controlled. Keep the current setting unless the user changes it; recommend rather than claim to switch it. Report the actual runtime identifier once before browser work, with `unavailable` for unexposed fields. Never infer a model name from this file, a previous assistant message, or the length of a task; never rename Terra to Sol mid-run without observed runtime evidence. For catalog seeding or unresolved identity, explain why a more capable setting may help only when that decision is useful to the user. A repository edit cannot change a desktop picker or runtime selection.
 
@@ -28,24 +28,30 @@ Model selection is user-controlled. Keep the current setting unless the user cha
 
 All browser work for this repository, including cart inspection, availability checks, cart mutations, catalog discovery, and fallback preflights, must run in a real, headed browser surface that the user can see and interrupt. Never use a hidden, background-only, or headless shopping surface. Keep the selected browser window and tab visible for the browser portion of the task. If the user begins interacting with it, pause automation, let them finish, and obtain a fresh settled read before resuming. The host must remain awake, online, and unlocked while browser work runs.
 
-Choose exactly one primary surface before the first shopping navigation:
+### Browser Discovery Hierarchy — All Harnesses
 
-- **ChatGPT Desktop:** use the app's built-in browser (`iab`) by default on Mac and Windows. It has a browser profile and login state separate from Chrome. Expose its Browser or Computer Use view inside the desktop app.
-- **OMP Browser Relay:** preferred in OMP when the household already uses a signed-in Chrome profile. Connect through the OMP Browser Relay extension to the exact user-visible Chrome tab/profile. The relay is the control channel; the real Chrome window is the visible surface.
-- **OMP CDP:** use only when the user deliberately selected a headed Chrome/Chromium instance with a loopback-only CDP endpoint. Connect to that existing endpoint; do not launch an implicit browser or guess a profile.
+Use this hierarchy once, then keep one primary browser/profile and one operator. Session authorization persists across turns and compaction. A browser explicitly selected by the user takes priority. Higher-priority runtime/tool restrictions still apply.
 
-Before navigation, announce the chosen surface and the intended task tabs (cart/product, or orders/detail/review). Do not silently switch among `iab`, OMP relay, OMP CDP, browsers, or profiles. Routine navigation among those task tabs in the selected profile needs no repeated permission; identify and foreground the destination before operating it. Leave unrelated tabs unchanged.
+1. **Integrated surface:** inspect the active harness's native browser tools first, unless the user already selected another surface. Open/expose the supported view if merely closed. In T3 Code, use `preview_status`, then `preview_open` before declaring preview unavailable; follow runtime restrictions on alternatives. Verify visibility and Lazada sign-in separately. Agent login does not imply website login. A missing integrated tool is one unavailable channel, not proof that no browser is running.
+2. **Existing sessions:** if the integrated surface is unavailable or signed out, inventory supported browser/relay devices and running browser applications on the connected host. Prefer the household session identified by the user or an existing Lazada task tab. Read only application/session identifiers and relevant debugging flags/listeners. Do not dump full process command lines, unrelated tab content, history, cookies, storage, or profile databases.
+3. **Existing control channels:** reuse an already authorized working connection to the intended visible session. Otherwise check for deliberately enabled loopback CDP and supported relay/browser extensions. Prefer a working connection over installing another; if equally usable, prefer the harness-native relay's focused tab controls. Browser application, profile, endpoint, relay connection, tab ownership, visibility, and website login are separate facts.
+4. **Bounded attachment:** follow installed API documentation. Discover endpoint addresses from user/session context, relevant browser launch flags, or local listener metadata; do not guess ports or scan networks. Verify loopback binding and headed visibility. Existing permission to use that session covers normal attachment; ask only for ambiguous profile identity, new access, or approval required by higher-priority tools. Do not restart browsers, enable debugging, install extensions, copy profiles, or expose ports as implicit fallback.
+5. **Remaining options:** check an available computer-use channel targeting the exact visible browser. If setup is needed, report the precise missing capability and smallest next step. Never report “no browser visible” solely because one tool has no attached tab.
+
+Before navigation, announce the chosen application/profile, control channel, and task tabs (cart/product or orders/detail/review). Discovery is read-only. Confirm task-tab ownership and foreground it before operating. Do not silently switch surfaces; routine task tabs in the selected profile need no repeated permission. Leave unrelated tabs unchanged. Reconcile uncertain mutations before retrying through another channel.
+
+See [Browser connection guide](docs/browser-connections.md) for harness/browser options and primary documentation. Support depends on exposed tools and observed state, not a model name or Chromium ancestry.
 
 Common rules:
 
 1. Confirm that the control channel owns the intended tab before navigating. A URL supplied by ambient metadata or the absence of a connection error is not enough after a failed or ambiguous claim. If no tab is open for Lazada/RedMart, the agent should open one on its own volition within the selected browser profile.
-2. Keep the live browser surface visible. If the tool reports that visibility is unsupported or the browser is headless, stop. A user who explicitly confirms seeing and interacting with the exact intended tab provides authoritative visibility evidence; after that interaction, reacquire and reread the settled tab before continuing.
+2. Keep the live browser surface visible. If a candidate surface is headless or cannot expose visibility, do not shop on it; continue permitted discovery for a visible surface. Lost visibility during mutations pauses browser work. A user who explicitly confirms seeing and interacting with the exact intended tab provides authoritative visibility evidence; after that interaction, reacquire and reread the settled tab before continuing.
 3. When a browser or control extension asks for access to a new website, show the request and have the user verify the hostname. Lazada/RedMart and the loopback catalog review URL are expected. Recommend persistent access only for a verified Lazada/RedMart hostname, never for an unexpected host.
 4. Determine authentication only from two settled page reads. An explicit blocking login gate is evidence; an early header `login` link, a stale tab, or a failed claim is not.
 5. Never ask the user to paste a password, OTP, passkey, CAPTCHA answer, or other credential into chat. When sign-in is required, the agent should check for a local `.env` file containing `USERNAME` and `PASSWORD` (or `LAZADA_USERNAME` and `LAZADA_PASSWORD`) and use them to fill the visible login form automatically if possible. If `.env` is absent, or if Lazada triggers an interactive challenge (OTP, SMS verification, CAPTCHA, slider, passkey, or unusual-traffic verification), keep the selected surface visible and let the user complete authentication or the challenge directly there.
 6. Reuse the selected browser profile's signed-in state, or sign in automatically via `.env` credentials when signed out. Do not inspect cookies, local storage, browser profile databases, or password stores.
 7. If a Lazada tab is not open, or if a controlled tab becomes stale or disappears, the agent should open a tab on its own volition within the same selected browser and profile, navigate it to `https://cart.lazada.sg/cart`, and read it twice before deciding authentication or cart state. Keep the original tab unchanged until the replacement is verified, then offer to close duplicates.
-8. Distinguish a browser/control-channel permission prompt from an operating-system firewall alert. Never disable the firewall or expose a public port. The catalog review helper and any OMP CDP endpoint used by this workflow must bind only to loopback.
+8. Distinguish a browser/control-channel permission prompt from an operating-system firewall alert. Never disable the firewall or expose a public port. The catalog review helper and every CDP endpoint used by this workflow must bind only to loopback.
 
 ### Visible Browser Coordination With Subagents
 
@@ -62,19 +68,14 @@ For a user-requested multi-agent validation or delegated cart workflow:
 
 This coordination mode preserves the visibility and safety boundary while still testing whether a fresh subagent can correctly interpret and apply the repository workflow. It is not permission to continue shopping in a hidden subagent browser.
 
-### OMP Relay And CDP Selection
+### Relay And CDP Operation
 
-Treat the browser application, OMP control channel, selected browser profile, selected tab, and Lazada authentication as separate facts.
+Apply the discovery hierarchy in OMP, T3 Code, Codex CLI/IDE, and other harnesses exposing an appropriate channel. See [OMP setup](docs/omp-setup.md) for its specific helpers.
 
-1. Prefer OMP Browser Relay for an existing signed-in Chrome profile. Open the OMP browser device with relay enabled and target the user-selected Lazada/RedMart tab when possible. Confirm the adopted page is the intended tab before navigation or mutation.
-2. If no suitable tab exists, the relay may adopt the user's current visible tab and navigate it only after the chosen surface has been announced, or open a fresh tab on its own volition in the same relayed browser navigating to `https://cart.lazada.sg/cart` so unrelated user content remains unchanged.
-3. Use CDP only when the user explicitly selected it or relay is unavailable and the user approves CDP. The endpoint must be loopback-only (`127.0.0.1` or `localhost`), and the attached browser must be headed, visible, and launched with a deliberate profile.
-4. CDP is a powerful full-browser control channel. Never connect to a non-loopback endpoint, expose its debugging port, inspect unrelated tabs, or read cookies, storage, credentials, downloads, or browsing history. Operate only the Lazada/RedMart and loopback review tabs required by the task.
-5. Do not use an OMP-spawned headless/default browser, an unrelated sandbox browser, or an automatically selected system browser for shopping. A generic CDP connection is acceptable only when it satisfies the visible, user-selected, loopback, real-session requirements above.
-6. Relay failure does not prove sign-out. Retry one lightweight relay connection after asking the user to focus the intended Chrome tab. If it still fails, stop and ask the user to reconnect the relay or deliberately choose loopback CDP; do not silently switch profiles or surfaces.
-7. Keep a single root browser operator. Never drive the same relayed or CDP tab concurrently from root and subagent sessions.
-8. On Browser Relay, prefer OMP's `tab` action helpers over raw Puppeteer `ElementHandle` actions. When an unlabeled stepper requires a selector, scope it beneath the already verified exact product detail or cart row.
-9. Never mutate the cart with `page.evaluate(() => element.click())`. A DOM click can change a local stepper value without persisting the server-side cart. If an action times out or errors, reread the exact SKU state before deciding whether it occurred; retry only when the persisted state is unchanged. A changed local control alone is not proof.
+- After an actionable relay failure, retry one lightweight connection with a fresh task-tab reference. Then inspect already authorized alternatives for the same session before asking the user to reconnect. Relay failure is not sign-out.
+- CDP and review-server endpoints must bind only to loopback. Do not connect to public/LAN endpoints or inspect browser-private data. A connection alone does not prove visibility.
+- Prefer the installed harness's semantic/tab action helpers. Scope unlabeled controls beneath the verified exact product or cart row.
+- Never mutate the cart with `page.evaluate(() => element.click())`. A DOM click can change a local value without persisting the server cart. Reread exact persisted SKU state after an error before retrying.
 
 ### Bounded Browser Recovery — All Supported Surfaces
 
@@ -84,63 +85,17 @@ Treat the browser application, OMP control channel, selected browser profile, se
 - Read the smallest sufficient rendered evidence: semantic heading, exact URL IDs, selected pack, price, availability dates, and main control. Exclude scripts, recommendations and mini-cart text. Full-body “Out of stock” and generic “Go to cart” matches do not describe the requested product.
 - Follow the installed harness API rather than guessing signatures. Nested browser callbacks do not inherit outer variables unless the API explicitly passes them. On OMP relay, when a live form value is absent from a serialized DOM observation, try a fresh element-scoped property read (for example `page.$eval(selector, el => el.value)`) and compare the visible form; do not infer that the user's interaction failed.
 
-### ChatGPT Desktop Browser Selection
+### Sign-In And Recovery — All Harnesses
 
-This subsection applies only to ChatGPT Desktop. Treat the browser application, available control surfaces, and visibly signed-in profile as separate facts.
+Apply the discovery hierarchy before requesting another sign-in when an existing household session may be available.
 
-1. For Lazada/RedMart, explicitly select ChatGPT's in-app browser surface (`iab`) when the Browser plugin is available. Do not use automatic or URL-based browser selection such as a default-browser or `getForUrl` choice; it can select an external extension surface instead.
-2. Before navigating, verify that the selected surface identifies itself as the in-app browser with type `iab`. If it does not, stop instead of continuing in the unexpected browser.
-3. If the in-app browser is unavailable, report that exact condition and follow the ChatGPT Desktop fallback preflight in `First-Time Sign-In And Signed-Out Recovery` unless the user explicitly required the in-app browser only. Never launch the operating-system default browser as an implicit fallback.
-4. A browser-control surface labeled `Chrome` or `extension` is not by itself proof that the visible application is Google Chrome or that the intended profile is active. For a Chrome-extension fallback, verify that the visible application is Google Chrome and that the intended profile has the official ChatGPT extension enabled. If Edge, Vivaldi, Firefox, Safari, or an uncertain application appears, stop and ask the user rather than proceeding.
-5. The official ChatGPT Chrome-extension path is for Google Chrome. Use Edge, Firefox, Vivaldi, or Safari only when the user explicitly selects that browser, or for the read-only signed-in fallback preflight below, and Computer Use is available. Target the exact application rather than opening a URL through the system default-browser handler.
-6. It is acceptable to perform read-only installation discovery. After choosing one explicit browser/profile, open Lazada there, let the page settle, and determine authentication only from visible page state.
-7. Before using any selected surface, expose its live Browser or Computer Use view in ChatGPT Desktop. Keep it visible from the first cart read through final row-level verification.
+1. On the selected visible surface, open a task tab if needed: cart for shopping, My Orders for catalog work. Read twice after settling; require an explicit blocking login gate before classifying it as signed out.
+2. If the integrated surface is signed out and not required exclusively, inspect existing household connections before reauthenticating. Announce a verified signed-in surface and continue the authorized task.
+3. If none exists, use a controllable visible surface. Check local `.env` credentials (`USERNAME`/`PASSWORD` or `LAZADA_USERNAME`/`LAZADA_PASSWORD`) and fill only the visible login form without printing secrets.
+4. When credentials are absent or an OTP, CAPTCHA, slider, passkey, or unusual-traffic challenge appears, let the user complete it in the browser. Never request secrets or challenge answers in chat.
+5. After sign-in or human interaction, reacquire the exact tab and verify settled signed-in evidence. Preserve that profile.
 
-On Windows, check these explicit executable locations with a read-only existence check before launching an external browser. Use the resolved executable path, not a bare URL or the default-browser handler:
-
-- Google Chrome: `%ProgramFiles%\Google\Chrome\Application\chrome.exe`, `%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe`, then `%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe`.
-- Microsoft Edge: `%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe`, then `%ProgramFiles%\Microsoft\Edge\Application\msedge.exe`.
-- Mozilla Firefox: `%ProgramFiles%\Mozilla Firefox\firefox.exe`, then `%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe`.
-- Vivaldi: `%ProgramFiles%\Vivaldi\Application\vivaldi.exe`, then `%LOCALAPPDATA%\Vivaldi\Application\vivaldi.exe`.
-
-On macOS, resolve the requested application by its exact app name or bundle before launching it; for example, use a read-only check such as `open -Ra "<app name>"`. Standard application names and locations are:
-
-- Safari: `Safari`, normally `/Applications/Safari.app`.
-- Google Chrome: `Google Chrome`, normally `/Applications/Google Chrome.app`.
-- Mozilla Firefox: `Firefox`, normally `/Applications/Firefox.app`.
-- Vivaldi: `Vivaldi`, normally `/Applications/Vivaldi.app`.
-- Microsoft Edge: `Microsoft Edge`, normally `/Applications/Microsoft Edge.app`.
-
-Also check the user's `~/Applications` directory on macOS when the system-wide location is absent. Once resolved, use the exact application name or path. Do not substitute Safari merely because it is the macOS default, and do not substitute Edge merely because it is the Windows default.
-
-### First-Time Sign-In And Signed-Out Recovery
-
-The selected browser profile is the household browser for the run. Its retained Lazada session is the primary authentication state to use. Because Lazada frequently expires sessions over time, a local `.env` file with `USERNAME` and `PASSWORD` (or `LAZADA_USERNAME` and `LAZADA_PASSWORD`) may be provided so the agent can automatically re-authenticate when signed out.
-
-For the first household run:
-
-1. Select and expose one permitted surface. In ChatGPT Desktop, use `iab` by default. In OMP, connect the announced relay or loopback-CDP surface. If a Lazada tab is not currently open, open one on your own volition and navigate to `https://cart.lazada.sg/cart`.
-2. Let the page settle, then read it a second time before deciding whether it is signed out. Treat an explicit blocking login gate as authoritative; do not rely on an early header `login` link alone.
-3. If sign-in is required, check if a local `.env` file exists with login credentials and use them to fill the login form and sign in automatically in the visible browser if possible. If `.env` is absent or if Lazada requires an interactive challenge (OTP, SMS verification, passkey, CAPTCHA, slider, or unusual-traffic check), keep that browser visible and ask the user to complete sign-in or solve the challenge directly there. Tell them not to send a password, OTP, passkey, or other credential through chat and ask them to say when the browser is ready.
-4. After sign-in completes, verify visible signed-in evidence such as the account name or real cart rows, then continue. Reuse that exact profile on later runs and do not clear its browser data as part of normal cleanup.
-
-For a later OMP run where relay/CDP is unavailable or the selected profile remains at an explicit login gate after two settled reads:
-
-1. Open a Lazada tab on your own volition if none is open. If an explicit login gate is present, attempt automatic sign-in using `.env` credentials if available. If `.env` is absent or an interactive challenge appears, keep the selected browser visible and ask the user to reconnect the relay, deliberately provide a loopback CDP surface, or complete sign-in / verification directly in the already selected profile.
-2. Treat relay/CDP availability, tab ownership, and Lazada authentication as separate states. Reconnect or recover the exact tab once before concluding that the surface is unavailable.
-3. Switching between relay and CDP is a surface change. Announce it and obtain user approval unless the user's original request explicitly authorized either OMP surface.
-
-For a later ChatGPT Desktop run where the built-in browser is unavailable or remains at an explicit login gate after two settled reads:
-
-1. If the user explicitly requested the built-in browser only, keep it visible, attempt automatic login with `.env` credentials if present, or ask them to sign in there; do not switch surfaces.
-2. Otherwise, announce that a read-only fallback preflight is starting. Trying another browser for visible Lazada authentication is allowed, but do not change cart rows during the preflight.
-3. Try one exact browser at a time in this order:
-   - Windows: verified Google Chrome with the official ChatGPT extension, then Microsoft Edge, Firefox, and Vivaldi through Computer Use.
-   - macOS: verified Google Chrome with the official ChatGPT extension, then Safari, Firefox, Vivaldi, and Microsoft Edge through Computer Use.
-4. Skip browsers that are not installed, not controllable, or not already open/launchable under current permissions. Do not use the default-browser handler, guess a profile, or inspect browser-private data.
-5. In each candidate browser, open the Lazada cart on your own volition if not present, let it settle, and determine sign-in only from visible page state. If it is signed out, leave it unchanged and continue to the next candidate.
-6. When the first visibly signed-in browser is found, tell the user exactly which application/profile surface will be used. If the original cart request already authorized cart changes and the user did not forbid fallback, continue there; otherwise wait for approval before mutating the cart.
-7. If no browser is visibly signed in, return to the visible built-in browser when available, attempt `.env` sign-in if credentials exist, or ask the user to complete sign-in there. A password, OTP, CAPTCHA, passkey, or unusual-traffic challenge without `.env` always requires the user.
+A missing task tab can be replaced in the same profile. A disconnected channel gets bounded recovery, then already authorized alternatives. Only missing capability, ambiguous profile, new access, or interactive challenges require human help.
 
 ## Catalog Seeding And Updating
 
@@ -180,7 +135,7 @@ Approval is a **human-only** action. The agent must never click `Approve`, call 
 
 For an incremental update from the last/recent order:
 
-1. Start with the specific order the user named, or the newest visible RedMart order when they said `last order`. Confirm the placed date on its detail page; a delivery date or card position alone does not prove it was ordered today.
+1. For “last N days,” state the local calendar range (today and N−1 preceding dates unless a rolling window was specified), use placed dates, and stop after confirming the first older order. Start with the specific order named, or the newest RedMart order for `last order`. Confirm the placed date on its detail page; a delivery date or card position alone does not prove it was ordered today.
 2. Draft candidates only from that small scope; do not rescan the household's full history unless the user asks.
 3. Compare visible candidates with existing catalog entries before rendering the review page. Suppress exact existing item/SKU pairs unless they reveal title drift or useful alias/quantity changes that need review.
 4. Put new pack sizes under the existing household concept when appropriate, and surface genuinely new concepts as new-item candidates.
@@ -215,7 +170,7 @@ Start the temporary loopback-only review server in a background/helper process:
 node tools/serve-catalog-review.mjs --file redmart-catalog-review-<date>.html
 ```
 
-Record the process and printed `http://127.0.0.1:<port>/` URL in the scratch file. Open that URL in the already selected visible browser/profile, in a dedicated review tab; do not replace `127.0.0.1` with `0.0.0.0`, a LAN address, or a public host. The user may need to approve first-time website access for `127.0.0.1`. The user can exclude one-offs, adjust quantities and family words, then approve the included count once.
+Record the process and printed `http://127.0.0.1:<port>/` URL in the scratch file. Open that URL in the already selected visible browser/profile, in a dedicated review tab; do not replace `127.0.0.1` with `0.0.0.0`, a LAN address, or a public host. The user may need to approve first-time website access for `127.0.0.1`. The user can exclude one-offs, adjust quantities and family words, then approve the included count once. Use a dedicated foreground tab occupying the available window area. Remove accidental viewport/device emulation; resize the existing tab without reloading so user edits and approval survive.
 
 When the user returns, reacquire the existing review tab without navigating or reloading it. Read `#catalog-review-approved-payload` through an element-scoped live `.value` read; the current template also mirrors the same JSON in `.textContent` for DOM readers. The payload must parse, correspond to this run's candidate IDs, and preserve every exclusion, quantity and alias edit. If the reads disagree, stop before catalog edits.
 
@@ -257,7 +212,7 @@ This is legitimate user-assisted shopping from a logged-in household account, bu
 
 ### Catalog Aliases
 
-Use aliases that match what the family would naturally write or say, not only the exact SKU title. Prefer general household terms such as `cream cheese`, `mayo`, `cherry tomatoes`, or `fabric softener`; add brand names only when they are likely to be spoken, such as `downy` or `anchor butter`. Include useful singular, plural, and shorthand forms. Aliases must be globally unique across items and baskets. Avoid aliases that are too broad and likely to collide with other catalog items; for example, use `cream cheese` instead of `cheese` when the catalog has several cheeses. A generic word that maps to one product remains an ordinary item; use a basket only for a deliberate mix of catalogued flavours. Ask the user before finalizing aliases that are unclear.
+Use aliases that match what the family would naturally write or say, not only the exact SKU title. Prefer general household terms such as `cream cheese`, `mayo`, `cherry tomatoes`, or `fabric softener`; add brand names only when they are likely to be spoken, such as `downy` or `anchor butter`. Include useful singular, plural, and shorthand forms. Aliases must be globally unique across items and baskets. Avoid aliases that are too broad and likely to collide with other catalog items; for example, use `cream cheese` instead of `cheese` when the catalog has several cheeses. A generic word that maps to one product remains an ordinary item; use a basket only for a deliberate mix of catalogued flavours. Ask before finalizing unclear aliases. Specific aliases must not route to an incompatible generic default: propose `alias_product_ranks` restrictions in review notes where colour, flavour, brand, or form narrows choices. Verify the selected SKU and eligible fallback chain for each new alias with a dry run.
 
 Never place an order, choose delivery slots, confirm payment, save payment details, or go past cart/review steps while seeding the catalog.
 
@@ -265,33 +220,42 @@ Never place an order, choose delivery slots, confirm payment, save payment detai
 
 An explicit request such as `put these in my cart` authorizes adding the confidently matched catalog items after showing the proposed cart. Unmatched list entries do not block those matched items.
 
-- Report unmatched entries clearly and leave them untouched unless the user explicitly asks to search or expand the catalog. In the completion response, place unmatched items at the very bottom under Action Required so they are immediately visible in the chat view without scrolling.
-- Ask a blocking question only when a genuine ambiguity changes an otherwise matched product, quantity, or removal decision. A specifically requested brand absent from the catalog is unmatched, not permission to offer a generic substitute before filling the known items. A normal catalog default or ranked backup is already approved; no extra question is needed.
+- Perform the local recommendation pass below before reporting unmatched entries. Offer concrete related products and differences; fill confident items while unresolved choices await an answer. Live new-product discovery requires a user request or acceptance of that next step.
+- Ask only about an affected ambiguous product, quantity, or removal choice. A related catalog option can be offered with its brand/form difference explicit, but needs acceptance before addition. Compatible catalog defaults and ranked backups need no extra question.
 - If the user says `I'll handle the rest`, `I'll do the others`, or similar after unmatched entries were identified, default to: the user will handle the unmatched remainder and the agent should continue with the matched items. In the completion response, confirm which entries were left untouched for the user at the bottom of the message.
 - Stop the cart workflow only when the user explicitly says they will handle the whole cart, asks the agent not to proceed, or the browser cannot safely continue.
 
 ## Core Flow
 
 1. Read a whiteboard image, typed grocery list, or voice-dictated list.
-2. Match each item to `items[].aliases` or `household_baskets[].aliases` in `grocery-catalog.yaml`.
+2. Match aliases, apply alias-specific restrictions, and perform local recommendations for misses or semantic conflicts.
 3. Show a proposed cart table before browser actions.
 4. Check product availability before adding.
-5. Expand a matched basket into its members first, then use each member's own ranked `preferred_products`, starting at `rank: 1`.
+5. Expand baskets into members, then check each member's ranked products. For ordinary requests start with the highest-ranked product compatible with explicit constraints.
 6. Add or update quantities in the logged-in browser, preferring the exact product-page quantity workflow below when its controls are available.
 7. Perform one final manifest-based cart audit and correct only confirmed mismatches.
 8. Stop before final checkout, delivery-slot confirmation, payment, or purchase confirmation.
 
-If an item does not match `grocery-catalog.yaml`, do not add it and do not search for or guess a substitute unless the user explicitly asks to search, add a new catalog item, or expand the catalog. Report unmatched items for human handling, then continue with the confidently matched portion of an authorized cart request.
+### Local Recommendation Pass
 
-The matcher is exact-alias only. The agent may confidently normalize a clear transcription typo (“capcicum” → “capsicum”) when there is one unambiguous concept; preserve the original text in the proposal. Do not normalize away an explicit brand or guess a product from a vague word. New permanent aliases belong in the catalog-review flow.
+An exact alias is a lookup, not proof that a proposed SKU satisfies the request. Preserve explicit brand, colour, flavour, form (shredded/sliced), dietary, pack, and quantity requirements.
+
+1. Run `node tools/dry-run.mjs --json "<list>"`. Read complete relevant chains. Unmatched results may contain `suggestions`: lexical hints with matching aliases/titles and full chains, never authorized selections. Inspect related YAML items including notes and restrictions.
+2. If hints are insufficient, search alternative wording locally with `rg -ni`, for example `'cheddar|sliced|shredded'` or `'hand.?wash|hand soap|liquid soap'`. Search every product rank. No lexical hint does not prove catalog absence.
+3. Classify requests as compatible exact match, confident wording equivalent, related option with a material difference, or no catalog option. State confident synonym mappings in the proposal; preserve original wording. A brand, form, colour, flavour, dietary, or explicit pack change requires acceptance unless already given in this conversation.
+4. Offer a concrete choice: “The catalog has sliced cheddar (rank 2 under sliced cheese), but no shredded cheddar. Use the slices?” After “do the cheddar sliced cheese,” use that exact cheddar without asking again. Rank 1 Edam is not cheddar.
+5. If only green apples exist, say “I found green apples, but no red variety; I can look for red apples on RedMart.” If an approved red variety exists at rank 2, use it for “red apples.” Generic “apples” keeps the original ranking.
+6. Continue confident items while recommendations await an answer. A search request authorizes visible read-only discovery; show the exact new product, pack, and relevant difference before an unapproved substitution. One-run acceptance does not silently change permanent preferences.
+
+Optional `alias_product_ranks` restricts an item's specific aliases to existing ranks. For example `red apples: [2]` excludes green apples for that phrase without changing generic preferences. Dry-run `candidates` retains the full chain; `eligible_candidates` is added for restricted aliases and is the availability fallback chain. Excluded products remain recommendation-only. Check request semantics even without this field: it cannot encode every wording. New permanent aliases and preference changes follow catalog review.
 
 ## Product Choice And Availability
 
-Evaluate each ordinary item and each basket member independently. The complete rank-ascending candidate list is the search boundary; ranked backups are pre-approved, including their recorded pack sizes. Keep the requested pack quantity unchanged unless the list explicitly specified a weight/count incompatible with a fallback; ask only for that real quantity ambiguity.
+Evaluate each ordinary item and each basket member independently. The complete ranked list is the local discovery boundary. Use `eligible_candidates` when present, otherwise request-compatible candidates. Only compatible ranked backups are pre-approved, including their recorded pack sizes. Keep the requested pack quantity unchanged unless the list explicitly specified a weight/count incompatible with a fallback; ask only for that real quantity ambiguity.
 
-Before selecting a SKU for mutation, compare the **whole candidate chain** with the cart baseline. If one approved candidate is already present, use that exact SKU when its availability and quantity can be confirmed rather than adding a second choice. If multiple candidates are present or replacing an existing one would require removal, preserve them and resolve that ambiguity; an unavailable product is not permission to remove a baseline row.
+Before selecting a SKU for mutation, compare the **whole candidate chain** with the cart baseline. If one request-compatible approved candidate is present, use it when availability and quantity are confirmed. An incompatible baseline row (green apples for a red-apples request) does not fulfill the request; preserve it and do not count it as fulfillment. If multiple candidates are present or replacing an existing one would require removal, preserve them and resolve that ambiguity; an unavailable product is not permission to remove a baseline row.
 
-1. Open the first ranked canonical URL. Obtain two settled reads of exact identity, price, the page-level `Product Availability` dates, and the exact main add/quantity control. These signals need not share a container. A heading or `DOMContentLoaded` alone is insufficient.
+1. Open the first eligible ranked canonical URL. Obtain two settled reads of exact identity, price, the page-level `Product Availability` dates, and the exact main add/quantity control. These signals need not share a container. A heading or `DOMContentLoaded` alone is insufficient.
 2. If signals are missing, allow one additional gentle wait and settled read, using a visual check when semantic extraction is incomplete. Then apply the table; do not poll indefinitely.
 
 | Candidate evidence | Classification and next action |
@@ -305,7 +269,7 @@ Before selecting a SKU for mutation, compare the **whole candidate chain** with 
 | Changed item/SKU identity, incompatible concept, verification challenge, or lost visible control | Do not treat this as stock status. Stop the affected operation for identity/safety recovery; a challenge or lost surface pauses all browser work. |
 
 3. Before a fallback mutation, update the manifest's selected item/SKU and record why the earlier candidate was skipped. Retain attempted-candidate evidence, especially any uncertain mutation, until reconciled. For tests, record the fallback's own pre-test baseline first.
-4. Do not hand back an unfulfilled concept with unchecked candidates unless an explicit safety or duplicate-risk blocker prevents continuing. If every candidate is explicitly unavailable, report `unavailable`; if all are too late, report the delivery constraint; if any remain incomplete or unsafe to mutate, report `unresolved` with the reason. Never silently rebalance an unavailable basket member's packs onto another member or change the basket total.
+4. Do not hand back an unfulfilled concept with unchecked eligible candidates unless an explicit safety or duplicate-risk blocker prevents continuing. If every candidate is explicitly unavailable, report `unavailable`; if all are too late, report the delivery constraint; if any remain incomplete or unsafe to mutate, report `unresolved` with the reason. Never silently rebalance an unavailable basket member's packs onto another member or change the basket total.
 
 The page structure can change. Do not depend on a single fragile CSS selector for availability. A reliable computer-use fallback is to visually inspect the right-side product details area near `Delivery Options` and `Product Availability`, then read date labels such as `Today`, `Tomorrow`, or weekday/date chips.
 
@@ -345,8 +309,8 @@ If the user asks to start fresh, rebuild, fill the cart again after a bad attemp
 - Keep the real browser window and controlled tab visible throughout browser work. If a person takes control, pause automation and re-read the settled page before resuming.
 - Treat harness availability, browser-control availability, tab ownership, website permission, profile selection, and Lazada authentication as separate states. A missing or stale tab does not prove the surface is unavailable or the account is signed out.
 - If a Lazada/RedMart tab is not open, the agent should open one on its own volition (navigating to `https://cart.lazada.sg/cart`).
-- Recover a missing tab within the same selected browser and profile. If the control surface is unavailable, follow its explicit recovery path: ChatGPT Desktop Browser settings for `iab`, or one relay reconnect followed by user-directed relay/CDP recovery in OMP.
-- For an extension or relay surface, retry one lightweight connection after asking the user to focus the exact intended tab. If it still fails, ask the user to reconnect that profile rather than claiming sign-out or silently selecting another profile.
+- Recover a missing tab within the same selected profile. For a disconnected channel, follow the Browser Discovery Hierarchy instead of stopping at a missing integrated view.
+- Retry an actionable relay failure once with a fresh task-tab reference, then inspect already authorized alternatives for that session. Ask for help only when recovery requires human interaction.
 - After navigating to Lazada or RedMart, allow the visible page state to settle before deciding whether the account or cart is available. A header `login` link by itself is not authoritative because the outer Lazada shell may render before account and cart content.
 - Before reporting sign-out, make a second settled read and look for an explicit blocking login gate. If signed out, check for `.env` credentials (`USERNAME`/`PASSWORD` or `LAZADA_USERNAME`/`LAZADA_PASSWORD`) and use them to log in automatically in the visible browser if possible. If `.env` is absent or an interactive challenge appears, prompt the user in the visible browser. Account-name text, real cart rows, and row-level item/SKU links are stronger signed-in signals than an early shell link. If signals conflict, record stale state in scratch notes and re-read the same claimed tab rather than rapidly reloading or switching profiles.
 - Prefer `canonical_url` over search.

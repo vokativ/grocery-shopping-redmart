@@ -83,9 +83,17 @@ if (!args.json) {
 
   for (const result of results) {
     for (const selection of result.selections) {
-      if (selection.candidates.length < 2) continue;
+      const eligible = selection.eligible_candidates ?? selection.candidates;
+      if (selection.eligible_candidates) console.log(`\n${result.input}: only ranks ${eligible.map((candidate) => candidate.rank).join(", ")} satisfy this alias.`);
+      if (eligible.length < 2) continue;
       console.log(`\nApproved backups for ${selection.item_id} (availability unverified):`);
-      for (const candidate of selection.candidates.slice(1)) {
+      for (const candidate of eligible.slice(1)) {
+        console.log(`  Rank ${candidate.rank}: ${candidate.title} (${candidate.pack_size ?? "—"})`);
+      }
+    }
+    for (const suggestion of result.suggestions ?? []) {
+      console.log(`\nRelated catalog option for "${result.input}": ${suggestion.item_id} (requires confirmation; no selection made)`);
+      for (const candidate of suggestion.candidates) {
         console.log(`  Rank ${candidate.rank}: ${candidate.title} (${candidate.pack_size ?? "—"})`);
       }
     }

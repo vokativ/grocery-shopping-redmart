@@ -77,13 +77,13 @@ The computer needs to stay awake, online, and signed into the right built-in bro
 - The ChatGPT mobile app if you want to use Remote from your phone.
 - (Optional) A `.env` file with `USERNAME` and `PASSWORD`: copy `.env.example` to `.env` so the agent can automatically log back in if your Lazada session expires.
 
-Chrome and its control extension are optional fallbacks, not requirements. They can be useful when the built-in browser is unavailable to the main agent, during the documented signed-out recovery flow, or when you deliberately want to use an existing Chrome profile. A subagent that cannot expose the built-in browser should remain the planner or auditor while the main agent operates the visible built-in browser; that limitation is not a reason to switch browser profiles.
+Other visible browser sessions are supported through the shared [browser connection hierarchy](docs/browser-connections.md): try an integrated signed-in view, then inspect existing household browsers and their authorized debugging/relay connections before requesting new setup. Browser selection already made in the conversation takes priority. Chrome and its control extension are optional fallbacks, not requirements. They can be useful when the built-in browser is unavailable to the main agent, during the documented signed-out recovery flow, or when you deliberately want to use an existing Chrome profile. A subagent that cannot expose the built-in browser should remain the planner or auditor while the main agent operates the visible built-in browser; that limitation is not a reason to switch browser profiles.
 
 ### OMP browser alternative
 
-Oh My Pi (OMP) can run the same workflow through its Browser Relay extension in a visible, signed-in Chrome profile, or through an explicitly selected headed browser with a loopback-only CDP endpoint. The relay is preferred because it reuses the tab and profile the user already chose. OMP must not use a headless browser, guess a profile, expose a CDP port beyond loopback, inspect browser-private data, or cross the checkout boundary.
+Oh My Pi (OMP) can run the same workflow through its Browser Relay extension in a visible, signed-in Chrome profile, or through an explicitly selected headed browser with a loopback-only CDP endpoint. Reuse the working channel and profile already chosen by the user; prefer the native relay when the alternatives are otherwise equivalent. OMP must not use a headless browser, guess a profile, expose a CDP port beyond loopback, inspect browser-private data, or cross the checkout boundary.
 
-See the [OMP browser setup guide](docs/omp-setup.md). It maps OMP page observations and Puppeteer-style element handling to the exact identity, availability, quantity, manifest, promotion, and restoration rules in `AGENTS.md`. One reversible Browser Relay smoke test is recorded there; loopback CDP remains live-test pending. The ChatGPT Desktop Terra/Medium benchmark does not establish equivalent model quality in OMP.
+See the [OMP browser setup guide](docs/omp-setup.md). It maps OMP page observations and Puppeteer-style element handling to the exact identity, availability, quantity, manifest, promotion, and restoration rules in `AGENTS.md`. One reversible Browser Relay smoke test is recorded there; CDP catalog work was exercised in the September 14 T3 Code session; CDP cart mutations remain unqualified. The ChatGPT Desktop Terra/Medium benchmark does not establish equivalent model quality in OMP.
 
 You do **not** need to understand the code or edit the grocery catalog yourself. Give the project to your agent and ask it to guide you.
 
@@ -157,9 +157,9 @@ Useful changes can be as simple as:
 - `add sparkling wine`
 - `skip chicken breast`
 
-If something on the list is not in your family catalog, the agent reports it instead of guessing what you might want. Confidently matched items can still be added; an unmatched item does not hold up the rest of the cart.
+If a phrase does not match directly, the agent checks related household words and every ranked product before reporting it missing. It can offer a specific alternative—such as sliced cheddar for shredded cheddar—with the difference stated clearly. Confident matches continue while you decide.
 
-The agent should interrupt you only for a real product/quantity ambiguity, a login challenge, browser access, or a safety blocker. Approved backups and normal default quantities need no extra question. If a requested brand is not catalogued, it stays untouched; the agent should not pause the whole cart to offer another brand.
+The agent should interrupt you only for a real product/quantity ambiguity, a login challenge, browser access, or a safety blocker. Approved backups and normal default quantities need no extra question. If a requested brand is not catalogued, a related option can be offered with that difference explicit; it is added only if you accept. The rest of the cart continues.
 
 ## How it stays consistent
 
@@ -171,6 +171,7 @@ Your family catalog remembers:
 - The exact products and pack sizes you normally buy.
 - Your usual quantities, including how a mix is shared.
 - Backup products you have already accepted.
+- Specific wording that restricts the choice: “red apples” uses Royal Gala and “cheddar slices” uses cheddar, while generic “apples” and “sliced cheese” keep their usual rankings.
 
 The agent also waits for the progressively loaded product page, checks when the exact saved SKU can be delivered, and confirms each product-page quantity change before moving on. It then reconciles the complete cart by exact item/SKU and quantity. Lazada can hide or split quantities inside promotion groups, so the agent checks the relevant promotion editor before treating a missing or partial-looking ordinary row as an error. If the match is unclear or no acceptable product is available soon enough, it leaves the decision to you.
 
@@ -188,9 +189,9 @@ Your catalog and grocery-list photos describe household preferences. Keep the pr
 ## If something gets stuck
 
 - **ChatGPT asks to access a website:** check the hostname, then allow Lazada/RedMart or the local `127.0.0.1` review page. For Lazada/RedMart, choose the persistent or **Always allow** option if offered so future grocery runs do not need the same approval. Use one-time access for any hostname you do not recognize or do not expect. You can manage allowed and blocked sites under **Settings > Browser**.
-- **Lazada asks you to sign in:** sign in manually in the visible built-in browser, then ask the agent to continue. Its login state is separate from Chrome.
+- **Lazada asks you to sign in:** the agent first checks for an already signed-in household browser through the connection hierarchy. If none is usable, complete sign-in in the selected visible browser when prompted. Its login state is separate from the agent account.
 - **A saved product is unavailable or its page will not load fully:** the agent must check the approved backup chain before handing that item back. If an earlier Add click is uncertain or a competing SKU is already in the cart, it first reconciles the cart to avoid duplicates. “Could not verify” is different from “out of stock.”
-- **An item is not recognised:** tell the agent which product you mean and ask it to add the family wording for next time. “Not catalogued” means no household match; failure to read a product page must not be reported as a missing catalog entry.
+- **An item is not recognised:** the agent should first search household aliases and all ranked titles, then offer concrete related options. You can accept one for this cart or ask for new-product discovery. Permanent catalog changes still use review. A failed page read is not a missing catalog entry.
 - **The cart count looks strange:** ask the agent to reconcile the complete expected list by exact product and quantity. The header is only a quick checksum, and promotion groups can hide or split ordinary rows; the agent should inspect the relevant promotion editor before changing anything.
 - **A verification challenge appears:** complete it yourself; the agent should not try to bypass it.
 - **A real Windows or macOS firewall alert appears:** do not disable the firewall or open a public port. The catalog review server is loopback-only. Stop and verify the alert identifies the expected ChatGPT or Node process before allowing anything.
