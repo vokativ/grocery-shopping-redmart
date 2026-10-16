@@ -68,7 +68,7 @@ After a timeout, obtain a fresh observation and exact state before one retry. Re
 
 Use the installed tool schema for callback arguments; a `tab.run`/page callback must not reach for outer-cell variables it did not receive. Keep runtime evidence separate from serialized DOM snapshots. For a form property, an element-scoped read such as `page.$eval("#catalog-review-approved-payload", el => el.value)` can recover state that a DOM snapshot omits. The review template also mirrors the approved JSON as textarea text content.
 
-After the human says the review is done, reuse that exact tab without reloading. An empty read means recovery is needed, not permission to click Approve yourself. Follow `AGENTS.md`'s approval recovery; report an unrecoverable payload without changing the catalog.
+After the human says the review is done, reuse that exact tab without reloading. An empty read means recovery is needed, not permission to click Approve yourself. Follow the approval recovery in the [developer guide's review page generation steps](developer-guide.md#review-page-generation); report an unrecoverable payload without changing the catalog.
 
 ## Sign-in and challenges
 

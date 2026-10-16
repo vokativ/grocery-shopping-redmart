@@ -71,6 +71,136 @@ Live RedMart behavior cannot be tested in CI because it depends on a household's
 
 Every `selection.candidates` array retains **all** approved products in ascending rank order, with exact catalog item/SKU IDs and canonical URLs. Optional `alias_product_ranks` maps a specific alias to its compatible ranks (for example `red apples: [2]`). For those aliases, `eligible_candidates` contains only compatible products in catalog rank order, and the proposal fields use its first product. Generic aliases and basket members retain their original preferences. This is an additive version-2 extension; consumers must honor `eligible_candidates` when present. Neither matching nor a dry run checks live availability. `node tools/dry-run.mjs --json "feta cheese"` exposes the complete result without human-table output; use it to initialize an agent manifest, not as proof of a filled cart.
 
+
+## Catalog maintenance
+
+Use this flow when adapting the repository for a new household (initial seeding) or adding products from a later RedMart order (incremental updates). Both paths use the same candidate JSON structure, reusable HTML review page, approval payload, canonical-product resolution, and catalog validation rules.
+
+### Choose the entry point
+
+- **Initial seeding:** review a useful batch of recent RedMart orders to establish the household catalog.
+- **Incremental update:** when the user asks to add products from the last/recent order, inspect only the order or small order range needed for that request. Compare candidates with `grocery-catalog.yaml` early so the review page focuses on genuinely new household items, new pack sizes, aliases that need adding, and possible title drift.
+
+Do not invent a separate update UI or bypass review just because the catalog already exists. A substantial incremental update uses the same approval boundary as initial seeding. For a single product that the user has already selected and left open, see [Adding individual items](#adding-individual-items).
+
+### Before catalog work
+
+1. Read `AGENTS.md` before using the browser and briefly restate whether this is initial seeding or an incremental update.
+2. For initial catalog seeding or substantial cart/catalog updating, keep a temporary scratch file while working.
+3. Use the scratch file to track page-reading progress, challenge prompts, stale state, title drift, and unresolved decisions.
+4. At the end of the process, summarize the useful outcome to the user and remove the scratch file. Do not make scratch files part of the user's normal workflow.
+5. For initial seeding or substantial catalog updates, use the reusable HTML review template as the approval boundary before editing `grocery-catalog.yaml`.
+6. Do not manually edit or reinvent `templates/redmart-catalog-review-template.html` during normal seeding or updating. Prepare candidate JSON in the shape shown by `examples/redmart-catalog-review-candidates.sample.json`, then render the temporary page with `tools/render-catalog-review.mjs`.
+7. Ask the user to review the page in the active controlled browser and click `Approve N products`.
+8. After approval, read the approved payload from the open page's `#catalog-review-approved-payload` field before editing `grocery-catalog.yaml`.
+9. Do not update `grocery-catalog.yaml` until the user has approved the HTML review page.
+10. After reading the payload, stop the temporary loopback review server, offer to close the review tab, and remove the temporary per-run review page unless the user asks to keep it.
+
+Approval is a **human-only** action. The agent must never click `Approve`, call its handler, construct a replacement “approved” payload, or reset/re-render a review after the user says they finished. “Done in the browser” means recover the user's choices, not approve the defaults on their behalf.
+
+### Discovery pass
+
+1. Start from the selected signed-in browser profile on the active desktop or connected host.
+2. Open the Lazada `My Orders` page: `https://my.lazada.sg/customer/order/index/`.
+3. Use only order cards whose visible shop or store name is `RedMart`.
+4. Click `Show All` on RedMart cards when present.
+5. Ignore Taobao and other Lazada seller orders unless the user explicitly asks to include them.
+6. Build draft catalog candidates from visible order-row data: product title, pack size or SKU label, quantity, and observed price.
+7. Ask the user to remove one-offs, choose which candidates belong in the household catalog, and clarify aliases or unclear product matches.
+
+For an incremental update from the last/recent order:
+
+1. For “last N days,” state the local calendar range (today and N−1 preceding dates unless a rolling window was specified), use placed dates, and stop after confirming the first older order. Start with the specific order named, or the newest RedMart order for `last order`. Confirm the placed date on its detail page; a delivery date or card position alone does not prove it was ordered today.
+2. Draft candidates only from that small scope; do not rescan the household's full history unless the user asks.
+3. Compare visible candidates with existing catalog entries before rendering the review page. Suppress exact existing item/SKU pairs unless they reveal title drift or useful alias/quantity changes that need review.
+4. Put new pack sizes under the existing household concept when appropriate, and surface genuinely new concepts as new-item candidates.
+5. Set `source.kind` to a descriptive value such as `redmart-order-update` and record only the minimum non-sensitive order context needed in temporary notes.
+6. Continue through the same HTML approval, detail/product resolution, insertion, validation, and cleanup steps below.
+
+Use the review notes to distinguish **new concept**, **additional ranked SKU**, **alias change**, and **preference change**. Keep existing ranks by default; one out-of-stock or incomplete page does not prove a permanent preference change. A rank promotion must be an explicit review proposal. Brand-to-generic mappings such as “Cif” to a RedMart cleanser also need explicit approval, not fuzzy matching. Suppress free gifts and unchanged rows by default. Group questions into this one review page instead of asking for each product in chat.
+
+The `My Orders` overview is the discovery page, not the final source of canonical product IDs. During testing, overview product links appeared as JavaScript/hash links rather than stable `https://www.lazada.sg/products/i<item_id>-s<sku_id>.html` URLs. Overview SKU titles and photos may not navigate to product pages. Do not treat overview rows as canonical product identity.
+
+Lazada overview pagination can update visible order cards while leaving embedded app state such as `window.__initData__`, detail/header anchors, or previously parsed order IDs stale. If visible page text and parsed state disagree, trust the visible page for candidate drafting only, record the mismatch in the scratch file, and switch to order-detail pages for canonical item IDs.
+
+For RedMart filtering, prefer visible page text over brittle CSS selectors. The most reliable signal is the visible shop or detail-page seller name `RedMart`. Detail-row data can also expose `bizCode: ali.global.lazada.trade.redmart`, which is a stronger RedMart signal than checking whether the overall page body contains the word `RedMart`. In inspected order-detail URLs, `shopGroupKey=ORDERLOGIC_<tradeOrderId>_99197_...` appeared on RedMart orders, while non-RedMart examples used other IDs and visible names such as `Living Crazy`, `Bike Terminal`, and `Taobao`; treat that URL token as a supporting hint, not a permanent rule.
+
+### Review page generation
+
+After drafting candidates, prepare candidate JSON using `examples/redmart-catalog-review-candidates.sample.json` as the structure reference. Include `review_schema_version`, `source`, and a `candidates` array.
+
+For each candidate, include a stable `candidate_id`, `title`, and any available `pack_size`, `observed_price_sgd`, `observed_quantity`, `usual_quantity`, `family_words`, `attention_tag`, and `notes`. Use `include: true` by default unless there is a clear reason to start an item as not included.
+
+Render the temporary review page with the provided tool:
+
+```bash
+node tools/render-catalog-review.mjs --input <candidate-json> --output redmart-catalog-review-<date>.html
+```
+
+The renderer uses `templates/redmart-catalog-review-template.html`. Do not hand-edit the reusable template or create a one-off review UI unless the user explicitly asks for a template change.
+
+Start the temporary loopback-only review server in a background/helper process:
+
+```bash
+node tools/serve-catalog-review.mjs --file redmart-catalog-review-<date>.html
+```
+
+Record the process and printed `http://127.0.0.1:<port>/` URL in the scratch file. Open that URL in the already selected visible browser/profile, in a dedicated review tab; do not replace `127.0.0.1` with `0.0.0.0`, a LAN address, or a public host. The user may need to approve first-time website access for `127.0.0.1`. The user can exclude one-offs, adjust quantities and family words, then approve the included count once. Use a dedicated foreground tab occupying the available window area. Remove accidental viewport/device emulation; resize the existing tab without reloading so user edits and approval survive.
+
+When the user returns, reacquire the existing review tab without navigating or reloading it. Read `#catalog-review-approved-payload` through an element-scoped live `.value` read; the current template also mirrors the same JSON in `.textContent` for DOM readers. The payload must parse, correspond to this run's candidate IDs, and preserve every exclusion, quantity and alias edit. If the reads disagree, stop before catalog edits.
+
+If the payload appears empty, inspect the visible approval panel, verify tab ownership, and try the other supported DOM/property read. Check only this run's review tabs for duplicates. A blank tool read does not negate the user's report. Do not click Approve yourself. If the user's payload cannot be recovered, explain that exact retrieval problem and ask them to return to the existing review tab; request a new review only if the previous choices are genuinely lost. Keep the server and scratch state until recovery or explicit cancellation; after a valid payload is captured, stop the server even if later product resolution fails.
+
+### Detail and product resolution pass
+
+1. For retained candidates, open RedMart order detail pages in new tabs, ideally from the order card's order title, order number, logo, or another visible detail-opening control.
+2. Verify each tab is an order detail page such as `https://my.lazada.sg/customer/order/view/?tradeOrderId=...`.
+3. Process SKU rows from the order detail page, not from the order overview.
+4. From each order detail page, click the SKU title or product photo to reach the product page when possible.
+5. If a detail-page SKU click fails but the detail page exposes `itemUrl`, `itemId`, and `skuId`, use those fields as a recorded fallback instead of generic product search.
+6. Open canonical product URLs to confirm current title and pack size before inserting catalog entries.
+   If only an item ID is exposed, the item-only page is a discovery step, not final SKU proof. Read its selected variant data, then open the resulting exact item/SKU canonical URL and verify the settled heading and pack. Do not choose the first entry of a multi-variant array or guess a SKU. Bound detail-click recovery using the browser recovery rules before falling back to page data.
+7. Offer to close agent-opened order and product tabs when catalog seeding or catalog updating is done.
+
+For HTML-reviewed catalog updates, treat the approved payload as the candidate source of truth. Do not re-add products the user marked as not included. Resolve canonical item IDs and SKU IDs only for approved included products, unless a skipped row is needed to detect a duplicate or title drift.
+
+### Gentle browser use and verification prompts
+
+This is legitimate user-assisted shopping from a logged-in household account, but still behave like a careful human browser session rather than a scraper.
+
+- Do not rapid-fire clicks, reloads, pagination actions, API calls, or product-page opens.
+- Use one overview tab plus one detail/product tab by default. Avoid opening many order or product tabs at once.
+- After pagination, navigation, or `Show All`, wait for visible page state to settle before the next action.
+- Process orders in small batches, for example 5-10 orders, then pause to summarize scratch notes and reassess.
+- Prefer normal visible UI navigation over direct API probing. Do not repeatedly POST to Lazada order APIs.
+- If page state is stale, record the issue and change strategy instead of retrying quickly.
+- If Lazada shows a slider, CAPTCHA, "unusual traffic", or similar verification modal, stop immediately and ask the user to clear it in the visible active browser. Do not bypass or automate the challenge.
+
+### Catalog insertion rules
+
+1. Compare `item_id` + `sku_id` before relying on title matching.
+2. If a retained candidate resolves to an item/SKU already in `grocery-catalog.yaml` under a different title, do not add a duplicate. Record the title drift in the temporary scratch file.
+3. If a product is the same household concept but a different pack size, add it as another ranked product under the existing item instead of creating a duplicate household item.
+4. If a product page is unavailable or the match is unclear, keep it out of the catalog or rank it as a fallback only after human review.
+5. Use a `household_baskets` entry when the household says one word but deliberately wants a mix of catalogued flavours. A basket has an ID, category, total default quantity, aliases, and members; it must have at least two members, each referencing an existing item, and baskets cannot nest.
+6. After editing the catalog, validate that `grocery-catalog.yaml` parses and check that newly added item/SKU pairs do not collide with existing entries with `npm run validate` or `node tools/validate-catalog.mjs`.
+
+### Catalog aliases and restrictions
+
+Use aliases that match what the family would naturally write or say, not only the exact SKU title. Prefer general household terms such as `cream cheese`, `mayo`, `cherry tomatoes`, or `fabric softener`; add brand names only when they are likely to be spoken, such as `downy` or `anchor butter`. Include useful singular, plural, and shorthand forms. Aliases must be globally unique across items and baskets. Avoid aliases that are too broad and likely to collide with other catalog items; for example, use `cream cheese` instead of `cheese` when the catalog has several cheeses. A generic word that maps to one product remains an ordinary item; use a basket only for a deliberate mix of catalogued flavours. Ask before finalizing unclear aliases. Specific aliases must not route to an incompatible generic default: propose `alias_product_ranks` restrictions in review notes where colour, flavour, brand, or form narrows choices. Verify the selected SKU and eligible fallback chain for each new alias with a dry run.
+
+Never place an order, choose delivery slots, confirm payment, save payment details, or go past cart/review steps while seeding the catalog.
+
+### Adding individual items
+
+To add a single new item from an open page:
+
+1. Search or add the preferred product manually once in RedMart/Lazada.
+2. Leave the product page or cart open in the active controlled browser.
+3. Scrape the title, item ID, SKU ID, canonical URL, pack size, current quantity, price reference, and aliases.
+4. Add a new item to `grocery-catalog.yaml`, add another ranked product under an existing item, or add a `household_baskets` entry that references existing items for a new mix.
+5. Validate the catalog via `npm run validate` (or `node tools/validate-catalog.mjs`).
+
 ## Session reliability review 2026-09-14
 
 This review uses the conversation and local repository evidence, not a new shopping benchmark. The user authorized instruction/code fixes and commit/push. The four previously HTML-approved catalog additions are included; generic product ranks remain unchanged.
