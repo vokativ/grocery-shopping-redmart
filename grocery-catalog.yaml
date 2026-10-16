@@ -166,7 +166,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i787612808-s2590912925.html"
         pack_size: "200 g"
         observed_price_sgd: 2.62
-    notes: "Default quantity is 2 from the 2026-07-07 cart."
+      - rank: 2
+        title: "Kee Song Fresh Chicken Breasts"
+        item_id: "301090787"
+        sku_id: "527090735"
+        canonical_url: "https://www.lazada.sg/products/i301090787-s527090735.html"
+        pack_size: "300 g"
+        observed_price_sgd: 5.80
+    notes: "Default quantity is 2 from the 2026-07-07 cart; Kee Song chicken breasts added as approved alternative from 2026-10-16 review."
 
   - id: papaya
     category: produce
@@ -182,7 +189,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301130721-s527192914.html"
         pack_size: "730 g"
         observed_price_sgd: 3.48
-    notes: "Maps generic 'papaya'."
+      - rank: 2
+        title: "Hong Kong Red Papaya 1.2KG"
+        item_id: "303422444"
+        sku_id: "536820204"
+        canonical_url: "https://www.lazada.sg/products/i303422444-s536820204.html"
+        pack_size: "1.2 kg"
+        observed_price_sgd: 4.95
+    notes: "Maps generic 'papaya'. Hong Kong Red Papaya added as approved fallback from 2026-10-16 review."
 
   - id: watermelon
     category: produce
@@ -361,6 +375,7 @@ items:
     aliases:
       - shredded mozzarella
       - shredded mozzarella cheese
+      - shredded cheese
       - mozzarella
       - mozzarella cheese
     preferred_products:
@@ -371,7 +386,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301170240-s527260609.html"
         pack_size: "225 g"
         observed_price_sgd: 5.24
-    notes: "Maps the 2026-07-03 whiteboard item 'shredded mozzarella cheese'."
+      - rank: 2
+        title: "Tradition Shredded Mozzarella Cheese - Frozen 1kg"
+        item_id: "303928154"
+        sku_id: "537950660"
+        canonical_url: "https://www.lazada.sg/products/i303928154-s537950660.html"
+        pack_size: "1 kg"
+        observed_price_sgd: 17.90
+    notes: "Maps the 2026-07-03 whiteboard item 'shredded mozzarella cheese'. 1kg pack added as rank 2 from 2026-10-16 review."
 
   - id: cheese_sticks
     category: chilled
@@ -469,20 +491,20 @@ items:
 
   - id: toilet_wipes
     category: household
-    default_quantity: 3
+    default_quantity: 2
     aliases:
       - toilet wipes
       - flushable wipes
       - wet toilet wipes
     preferred_products:
       - rank: 1
-        title: "RedMart Wet & Moist Flushable Toilet Tissue Paper 60 Sheets - Safe to Flush"
+        title: "RedMart Wet & Moist Flushable Toilet Tissue Paper Wet Wipes 60 Sheets - Safe to Flush"
         item_id: "304170218"
         sku_id: "538362363"
         canonical_url: "https://www.lazada.sg/products/i304170218-s538362363.html"
         pack_size: "60 Per Pack"
         observed_price_sgd: 3.70
-    notes: "Default quantity is 3 from the 2026-07-03 order."
+    notes: "Default quantity updated to 2 and title drift updated from 2026-10-16 review."
 
   - id: tissue_box
     category: household
@@ -576,7 +598,21 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2991175808-s20508685220.html"
         pack_size: "500 g"
         observed_price_sgd: 7.35
-    notes: "Generic kimchi prefers JIN spicy kimchi, then CJ cabbage kimchi, with the approved Coook cabbage kimchi as another fallback."
+      - rank: 4
+        title: "I'm Kimchi Korean Cabbage Kimchi Banchan"
+        item_id: "301072906"
+        sku_id: "527094684"
+        canonical_url: "https://www.lazada.sg/products/i301072906-s527094684.html"
+        pack_size: "500 g"
+        observed_price_sgd: 9.70
+      - rank: 5
+        title: "JIN White Kimchi Korean Banchan"
+        item_id: "2124749952"
+        sku_id: "12060187021"
+        canonical_url: "https://www.lazada.sg/products/i2124749952-s12060187021.html"
+        pack_size: "400 g"
+        observed_price_sgd: 8.90
+    notes: "Generic kimchi prefers JIN spicy kimchi, then CJ cabbage kimchi, with Coook and I'm Kimchi as cabbage fallbacks; JIN white kimchi is the last fallback (approved 2026-10-16 with the family word 'kimchi')."
 
   - id: lemon
     category: produce
@@ -604,12 +640,12 @@ items:
       - hass avocado
     preferred_products:
       - rank: 1
-        title: "Mexico/USA Hass Avocado 4 pcs (Airflown)"
+        title: "Mexico/USA Hass Avocado 3/4 pcs (Airflown)"
         item_id: "301100809"
         sku_id: "527084959"
         canonical_url: "https://www.lazada.sg/products/i301100809-s527084959.html"
         pack_size: "450 g"
-        observed_price_sgd: 8.95
+        observed_price_sgd: 10.95
       - rank: 2
         title: "RedMart Hass Avocado 3PCS Australia"
         item_id: "1933997102"
@@ -617,7 +653,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1933997102-s10339963745.html"
         pack_size: "500 g"
         observed_price_sgd: 9.95
-    notes: "The Mexico/USA 4-piece pack remains first; the approved RedMart Australia 3-piece pack from the 2026-09-09 order is the fallback."
+    notes: "The Mexico/USA Airflown pack (now titled 3/4 pcs) remains first; the approved RedMart Australia 3-piece pack from the 2026-09-09 order is the fallback."
 
   - id: apples
     category: produce
@@ -692,6 +728,7 @@ items:
       - orange
       - mandarin oranges
       - easy peel oranges
+      - mandarin
     preferred_products:
       - rank: 1
         title: "RedMart Easy Peel Mandarin Orange"
@@ -715,7 +752,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301134724-s527214748.html"
         pack_size: "200 g"
         observed_price_sgd: 4.33
-    notes: "Maps the 2026-07-03 whiteboard item 'cream cheese'."
+      - rank: 2
+        title: "Philadelphia Light Spreadable Cream Cheese 250g"
+        item_id: "301168071"
+        sku_id: "527252312"
+        canonical_url: "https://www.lazada.sg/products/i301168071-s527252312.html"
+        pack_size: "250 g"
+        observed_price_sgd: 7.80
+    notes: "Maps the 2026-07-03 whiteboard item 'cream cheese'. Philadelphia added as rank 2 from 2026-10-16 review."
 
   - id: cottage_cheese
     category: chilled
@@ -1167,7 +1211,14 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301076940-s527122147.html"
         pack_size: "220 g"
         observed_price_sgd: 6.45
-    notes: "Approved from RedMart order 168775244578810 on 2026-07-23."
+      - rank: 2
+        title: "Delphi Fresh Low Fat Hummus Dip Gluten and Dairy Free Vegan by Atasco"
+        item_id: "376230637"
+        sku_id: "881004221"
+        canonical_url: "https://www.lazada.sg/products/i376230637-s881004221.html"
+        pack_size: "170 g"
+        observed_price_sgd: 5.95
+    notes: "RedMart Deli hummus dip is rank 1; Delphi Fresh low fat hummus dip added as rank 2 from 2026-10-16 review."
 
   - id: farfalle_pasta
     category: pantry
@@ -1469,6 +1520,131 @@ items:
         pack_size: "320 g"
         observed_price_sgd: 9.00
     notes: "Added from the three user-selected product tabs on 2026-08-08; ranked by pack mass from largest to smallest."
+
+  - id: smoked_paprika
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - paprika
+      - smoked paprika
+    preferred_products:
+      - rank: 1
+        title: "Sainsbury's Smoked Paprika 44G"
+        item_id: "3460704895"
+        sku_id: "22950236937"
+        canonical_url: "https://www.lazada.sg/products/i3460704895-s22950236937.html"
+        pack_size: "44 g"
+        observed_price_sgd: 3.10
+    notes: "Maps whiteboard item 'Paprika'; approved from 2026-10-16 RedMart order."
+
+  - id: floor_wet_wipes
+    category: household
+    default_quantity: 1
+    aliases:
+      - floor wipes
+      - wet wipes floor
+      - wiper sheets
+    preferred_products:
+      - rank: 1
+        title: "RedMart Wiper Wet Sheets Floor wipes 3 X 15PCS - Lavender"
+        item_id: "2813938737"
+        sku_id: "19422601883"
+        canonical_url: "https://www.lazada.sg/products/i2813938737-s19422601883.html"
+        pack_size: "3 x 15 pcs"
+        observed_price_sgd: 9.20
+    notes: "Approved from 2026-10-16 catalog review."
+
+  - id: prosecco
+    category: beverages
+    default_quantity: 4
+    aliases:
+      - prosecco
+      - loose moose
+    preferred_products:
+      - rank: 1
+        title: "The Loose Moose Italian Prosecco DOC Sparkling Wine"
+        item_id: "304346621"
+        sku_id: "538562708"
+        canonical_url: "https://www.lazada.sg/products/i304346621-s538562708.html"
+        pack_size: "750 ml"
+        observed_price_sgd: 29.50
+    notes: "Approved from 2026-10-16 catalog review with default quantity 4."
+
+  - id: baby_wipes
+    category: household
+    default_quantity: 1
+    aliases:
+      - wet wipes
+    preferred_products:
+      - rank: 1
+        title: "RedMart Gentle Care Baby Wipes (24 X 80PCS) - Case"
+        item_id: "303092295"
+        sku_id: "536342985"
+        canonical_url: "https://www.lazada.sg/products/i303092295-s536342985.html"
+        pack_size: "24 x 80 pcs"
+        observed_price_sgd: 52.90
+    notes: "Approved from 2026-10-16 catalog review."
+
+  - id: bread
+    category: bakery
+    default_quantity: 1
+    aliases:
+      - bread
+    preferred_products:
+      - rank: 1
+        title: "RedMart Multigrain Bread Sliced Loaf"
+        item_id: "301104861"
+        sku_id: "527110376"
+        canonical_url: "https://www.lazada.sg/products/i301104861-s527110376.html"
+        pack_size: "320 g"
+        observed_price_sgd: 5.95
+    notes: "Approved from 2026-10-16 catalog review."
+
+  - id: babaganoush
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - babaganoush
+      - eggplant dip
+    preferred_products:
+      - rank: 1
+        title: "RedMart Deli Babaganoush Eggplant Dip 180G"
+        item_id: "301148899"
+        sku_id: "527246114"
+        canonical_url: "https://www.lazada.sg/products/i301148899-s527246114.html"
+        pack_size: "180 g"
+        observed_price_sgd: 5.95
+    notes: "Approved from 2026-10-16 catalog review."
+
+  - id: dark_chocolate
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - dark chocolate
+    preferred_products:
+      - rank: 1
+        title: "Sainsbury's Taste The Difference Dominican Republic 72-Percent Dark Chocolate"
+        item_id: "1902102159"
+        sku_id: "10164941506"
+        canonical_url: "https://www.lazada.sg/products/i1902102159-s10164941506.html"
+        pack_size: "100 g"
+        observed_price_sgd: 8.80
+    notes: "Approved from 2026-10-16 catalog review."
+
+  - id: quinoa
+    category: pantry
+    default_quantity: 2
+    aliases:
+      - quinoa
+    preferred_products:
+      - rank: 1
+        title: "RedMart Organic Tricolour Quinoa"
+        item_id: "2477407851"
+        sku_id: "14772392349"
+        canonical_url: "https://www.lazada.sg/products/i2477407851-s14772392349.html"
+        pack_size: "500 g"
+        observed_price_sgd: 8.15
+    notes: "Approved from 2026-10-16 catalog review with default quantity 2."
 
 # Household baskets map one spoken word to a deliberate mix of catalog items.
 # `default_quantity` is the TOTAL number of packs, spread across `members` in declared
