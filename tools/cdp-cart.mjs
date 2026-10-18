@@ -29,6 +29,8 @@ export const NOOP_COOLDOWN_MS = 60_000;
 const STEP_TIMEOUT_MS = 10_000;
 const SETTLE_MS = 900;
 const PACING_FILE = join(tmpdir(), "redmart-cdp-cart-pacing.json");
+const CHALLENGE_MESSAGE =
+  "Lazada security challenge (Baxia slider/CAPTCHA) is covering the page. Stop ALL browser work, bring this tab to the front, and ask the human to solve it in the browser. Do not click, close, or reload it yourself.";
 
 export class HelperError extends Error {
   constructor(status, message, details = {}) {
@@ -38,7 +40,7 @@ export class HelperError extends Error {
   }
 }
 
-const EXIT_CODES = { usage: 2, blocked: 3, "no-op": 3, uncertain: 3, identity: 4, "not-ready": 5, unavailable: 5 };
+const EXIT_CODES = { usage: 2, challenge: 3, blocked: 3, "no-op": 3, uncertain: 3, identity: 4, "not-ready": 5, unavailable: 5 };
 
 export function isLoopbackEndpoint(endpoint) {
   let url;
@@ -150,6 +152,11 @@ async function connect(endpoint, tabId) {
 
 // Runs inside the page. Everything is scoped to the RedMart main-product modules.
 function readProductInPage() {
+  const challenge = [...document.querySelectorAll(".baxia-dialog, iframe[src*='punish'], iframe[src*='captcha']")].some((element) => {
+    const style = getComputedStyle(element);
+    const rect = element.getBoundingClientRect();
+    return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+  });
   const ids = /\/products\/(?:[^/]*-)?i(\d+)-s(\d+)\.html/.exec(location.pathname);
   const main = document.querySelector("#module_redmart_add_to_cart");
   const delivery = document.querySelector("#module_redmart_delivery");
@@ -178,6 +185,7 @@ function readProductInPage() {
     main_text_unavailable: /out of stock|sold out|currently unavailable|discontinued/i.test(main?.innerText ?? ""),
     control,
     cart_badge_units: document.querySelector(".cart-num")?.innerText.trim() ?? null,
+    challenge,
     visibility: document.visibilityState,
     ready: document.readyState,
   };
@@ -199,7 +207,8 @@ function locateControlInPage(which) {
   const x = rect.x + rect.width / 2;
   const y = rect.y + rect.height / 2;
   const hit = document.elementFromPoint(x, y);
-  return { found: true, disabled: false, x, y, hits_control: Boolean(hit && (hit === element || element.contains(hit))) };
+  const covered_by_challenge = Boolean(hit?.closest?.(".baxia-dialog") || /punish|captcha/i.test(hit?.getAttribute?.("src") ?? ""));
+  return { found: true, disabled: false, x, y, hits_control: Boolean(hit && (hit === element || element.contains(hit))), covered_by_challenge };
 }
 
 function readCartInPage() {
@@ -208,8 +217,8 @@ function readCartInPage() {
     const ids = /\/products\/(?:[^/]*-)?i(\d+)-s(\d+)\.html/.exec(link.getAttribute("href") ?? "");
     if (!ids) continue;
     const key = `i${ids[1]}-s${ids[2]}`;
-    let row = link.parentElement;
-    while (row && row !== document.body && !row.querySelector("input")) row = row.parentElement;
+    let row = link.closest(".cart-item") || link.parentElement;
+    while (row && row !== document.body && !row.querySelector("input:not([type='checkbox'])")) row = row.parentElement;
     const input = row && row !== document.body ? row.querySelector("input:not([type='checkbox'])") : null;
     const quantity = input ? Number.parseInt(input.value, 10) : null;
     const title = link.innerText.trim() || link.getAttribute("title") || null;
@@ -242,6 +251,7 @@ const productReady = (state) =>
 function summarizeProduct(read) {
   const { state } = read;
   return {
+    ...(state.challenge ? { status: "challenge", message: CHALLENGE_MESSAGE } : {}),
     ...state,
     stable: read.stable,
     readiness: read.ready ? "ready" : "incomplete",
@@ -290,6 +300,7 @@ async function physicalClick(page, which, pacing) {
   if (point.disabled) throw new HelperError("unavailable", `Main-product ${which} control is disabled`);
   await sleep(250);
   const fresh = await page.evaluate(locateControlInPage, which);
+  if (fresh.covered_by_challenge) throw new HelperError("challenge", CHALLENGE_MESSAGE);
   if (!fresh.hits_control) throw new HelperError("not-ready", `Main-product ${which} control is covered or still moving; take a visual look`);
   await page.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: fresh.x, y: fresh.y });
   await sleep(80);
@@ -313,11 +324,12 @@ async function stepOnce(page, from, to, pacing) {
     await physicalClick(page, which, pacing);
     const deadline = Date.now() + STEP_TIMEOUT_MS;
     let state = await page.evaluate(readProductInPage);
-    while (quantityOf(state) !== to && Date.now() < deadline) {
+    while (quantityOf(state) !== to && !state.challenge && Date.now() < deadline) {
       await sleep(300);
       state = await page.evaluate(readProductInPage);
     }
     page.listeners.delete(onRequest);
+    if (state.challenge) throw new HelperError("challenge", CHALLENGE_MESSAGE, { from, to, cart_requests: requests });
     if (quantityOf(state) === to) {
       await sleep(SETTLE_MS);
       const reread = await page.evaluate(readProductInPage);
@@ -346,6 +358,7 @@ async function setQuantity(page, expect, target) {
   await foreground(page);
   const read = await settledRead(page, readProductInPage, productReady);
   const before = summarizeProduct(read);
+  if (before.challenge) throw new HelperError("challenge", CHALLENGE_MESSAGE, { product: before });
   if (before.item_id !== expect.item_id || before.sku_id !== expect.sku_id) {
     throw new HelperError("identity", `Page shows i${before.item_id}-s${before.sku_id}, expected i${expect.item_id}-s${expect.sku_id}`, { product: before });
   }
@@ -457,7 +470,9 @@ async function main(argv) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   try {
-    console.log(JSON.stringify(await main(process.argv.slice(2)), null, 2));
+    const result = await main(process.argv.slice(2));
+    console.log(JSON.stringify(result, null, 2));
+    if (result?.status === "challenge") process.exit(EXIT_CODES.challenge);
   } catch (error) {
     const status = error instanceof HelperError ? error.status : "error";
     console.log(JSON.stringify({ status, message: error.message, ...(error.details ?? {}) }, null, 2));
