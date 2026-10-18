@@ -65,8 +65,11 @@ Lazada runs client-side security scripts. Treat the site like a person would.
 - **Human pace.** At least ~2 seconds between cart-changing clicks; wait for the page to settle rather than racing it.
 - **Real clicks only.** Use the harness's native click or a physical mouse event on the exact visible control. Never mutate the cart with DOM `element.click()`, `dispatchEvent`, or `page.evaluate(() => …click())`. They can change local UI without persisting the server cart.
 - **Silent no-op rule.** If a click on a correct, enabled, visible control produces no change: reread, retry **once** with a fresh control. If it is still a no-op, **stop all cart changes**, wait about a minute, reload the page, and try **once** more. If that also fails, stop mutating and hand the remaining items to the human as “could not add, site did not respond”. Do not click the same control repeatedly or switch to another mechanism to force it.
+- **Look for a challenge before calling anything a no-op.** Lazada answers rapid add-to-cart calls with a Baxia security challenge: a full-page `.baxia-dialog` overlay holding a slider/CAPTCHA iframe whose URL contains `punish`. It covers the Add button, so further clicks land on the overlay and look like silent no-ops. In a background tab the user cannot see it. When it appears, stop **all** browser work, bring that tab to the front, and ask the human to solve it. Never click, close, or reload the challenge yourself.
+- **Do not reuse stale product tabs.** A product tab left over from an earlier run may still hold an unsolved challenge or outdated state. Navigate it to the canonical URL again (`goto`) before using it.
+- **Do not edit repository tools during a shopping run.** If a helper misreads the page, report the defect and continue with the safe reads you have; fixes happen in a separate maintenance task.
 - **Timeouts are unknown outcomes.** Reacquire the settled exact state before deciding anything; a timed-out action may have succeeded.
-- **Do not guess at bot detection.** Console errors from Lazada's security scripts appear on every page load and are not evidence. Only report a challenge or block when one is visible (slider, CAPTCHA, “unusual traffic” page) or a cart request visibly fails.
+- **Do not guess at bot detection from console noise.** Console errors from Lazada's security scripts appear on every page load and are not evidence. Report a challenge only from the page itself (the Baxia overlay above, a slider, CAPTCHA, or “unusual traffic” page) or a visibly failed cart request.
 
 ## Loopback CDP: Use The Helper
 
@@ -80,7 +83,7 @@ node tools/cdp-cart.mjs goto --tab <productTabId> <canonical_url>   # identity, 
 node tools/cdp-cart.mjs set-qty --tab <productTabId> --expect i<item>-s<sku> --target <n>
 ```
 
-Every command prints JSON. `goto`/`product` report `item_id`/`sku_id`, `heading`, `earliest_availability.within_two_days`, `control` (`add`, `stepper` with value, or `missing`), and `readiness`. `set-qty` exits `0` with `status: confirmed`, or nonzero with `status` `identity`, `not-ready`, `unavailable`, `uncertain`, `no-op`, or `blocked`; follow the matching row in the decision table. On `no-op` or `blocked`, obey its message; do not work around the helper. Use one reused product tab for navigation and keep the cart tab for audit and handoff. If the helper cannot read a page that is visibly fine, take a screenshot and report the gap rather than improvising mutations.
+Every command prints JSON. `goto`/`product` report `item_id`/`sku_id`, `heading`, `earliest_availability.within_two_days`, `control` (`add`, `stepper` with value, or `missing`), and `readiness`. Any command that sees the Baxia overlay returns `status: challenge` (exit 3): stop all browser work and hand the foreground tab to the human. `set-qty` exits `0` with `status: confirmed`, or nonzero with `status` `challenge`, `identity`, `not-ready`, `unavailable`, `uncertain`, `no-op`, or `blocked`; follow the matching row in the decision table. On `challenge`, `no-op` or `blocked`, obey its message; do not work around the helper. Use one reused product tab for navigation and keep the cart tab for audit and handoff. If the helper cannot read a page that is visibly fine, take a screenshot and report the gap rather than improvising mutations.
 
 ## Catalog Changes Contract
 
