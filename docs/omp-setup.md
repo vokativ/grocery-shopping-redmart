@@ -6,7 +6,7 @@ OMP changes only the browser control channel. It must still control a real, head
 
 ## Choose one browser surface
 
-Use the shared [browser discovery hierarchy](../AGENTS.md#browser-discovery-hierarchy--all-harnesses) and [connection matrix](browser-connections.md). Reuse a user-selected working connection first. Inventory existing sessions and already enabled loopback CDP/relay channels before concluding the browser is unavailable. The options below describe setup when a working session is not already selected.
+Use the shared [browser discovery hierarchy](../AGENTS.md#discovery-hierarchy) and [connection matrix](browser-connections.md). Reuse a user-selected working connection first. Inventory existing sessions and already enabled loopback CDP/relay channels before concluding the browser is unavailable. The options below describe setup when a working session is not already selected.
 
 ### OMP Browser Relay
 

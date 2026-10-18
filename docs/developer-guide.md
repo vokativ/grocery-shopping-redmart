@@ -4,7 +4,7 @@ This document contains the technical and open-source details intentionally kept 
 
 ## Project status
 
-RedMart/Lazada Singapore is the maintained reference workflow. ChatGPT Desktop's visible built-in browser has two historical supervised Terra/Medium cart runs with no observed judgment errors. That limited evidence does not cover catalog seeding, OMP, Claude Desktop, or every failure branch. OMP Browser Relay has a reversible three-product smoke test and the later household failure report below; visible Chrome loopback CDP was used for catalog work in T3 Code on September 14. CDP cart mutations remain unqualified. Model choice remains user-controlled, and alternative channels do not relax identity, visibility, approval, privacy, or checkout boundaries.
+RedMart/Lazada Singapore is the maintained reference workflow. ChatGPT Desktop's visible built-in browser has two historical supervised Terra/Medium cart runs with no observed judgment errors. That limited evidence does not cover catalog seeding, OMP, Claude Desktop, or every failure branch. OMP Browser Relay has a reversible three-product smoke test and the later household failure report below; visible Chrome loopback CDP was used for catalog work in T3 Code on September 14. CDP cart mutations remain unqualified; the 2026-10-18 review below added `tools/cdp-cart.mjs` for that path, but it has not yet completed a supervised live run. Model choice remains user-controlled, and alternative channels do not relax identity, visibility, approval, privacy, or checkout boundaries.
 
 The project is currently being hardened for a small tester cohort and will then move to best-effort maintenance. There is no response-time, retailer, browser, operating-system, or agent compatibility guarantee.
 
@@ -12,7 +12,7 @@ The project is currently being hardened for a small tester cohort and will then 
 
 Requirements:
 
-- Node.js 20 or newer.
+- Node.js 20 or newer (22+ for `tools/cdp-cart.mjs`, which uses the built-in WebSocket).
 - npm.
 - Git.
 
@@ -35,6 +35,8 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - `tools/catalog.mjs` — catalog loading, validation, exact aliases, alias-specific eligibility, local discovery hints, and basket expansion.
 - `docs/browser-connections.md` — shared connection hierarchy, compatibility matrix, and source references.
 - `tools/dry-run.mjs` — credential-free proposed-cart diagnostic.
+- `tools/cdp-cart.mjs` — paced, exact-SKU product-page and cart reader/stepper for a visible loopback-CDP Chrome session (Node 22+).
+- `docs/cart-procedures.md` — less common cart branches (subagents, cart-row fallback, promotion groups, test cleanup) split out of AGENTS.md.
 - `tools/validate-catalog.mjs` — catalog integrity checks.
 - `tools/render-catalog-review.mjs` — renderer for the shared catalog seeding and incremental-update approval page.
 - `tools/serve-catalog-review.mjs` — loopback-only server that makes the generated approval page available to the selected visible browser.
@@ -200,6 +202,22 @@ To add a single new item from an open page:
 3. Scrape the title, item ID, SKU ID, canonical URL, pack size, current quantity, price reference, and aliases.
 4. Add a new item to `grocery-catalog.yaml`, add another ranked product under an existing item, or add a `household_baskets` entry that references existing items for a new mix.
 5. Validate the catalog via `npm run validate` (or `node tools/validate-catalog.mjs`).
+
+## Session reliability review 2026-10-18
+
+Session analysis of a T3 Code run using the Antigravity harness with `gemini-3.8-flash-high`, driving the household Chrome over loopback CDP. This was the first cart fill through raw CDP; previous successful runs used ChatGPT Desktop's browser or the OMP relay. 12 of 14 matched products were added; the model then told the user that Lazada anti-automation throttling had blocked the last two.
+
+| Observed issue | Evidence | Change |
+|---|---|---|
+| Slow start (~2.5 min before browser work, ~12 min total) | The harness `Read` tool failed on README, AGENTS.md, and docs; `preview_open` failed; no CDP library was installed, so the model re-implemented a WebSocket CDP client in about 40 throwaway scripts. | `tools/cdp-cart.mjs` gives a tested CDP path. AGENTS.md tells agents to read files through the shell when a read tool fails. |
+| Proposed cart skipped; all 14 products added by one unattended batch script with fixed sleeps | 12 adds in about 80 seconds, single reads, and stock inferred from full-page text. | New **Browser Pace And Silent No-Ops** rule: one product at a time, ~2 s between cart clicks, no batch mutation scripts. The helper enforces the click gap. |
+| Tomato sauce skipped as “already at target” | A global `.next-number-picker` selector matched a mini-cart stepper. | The helper reads only `#module_redmart_add_to_cart` and `#module_redmart_delivery`. |
+| Beef/Prego Add clicks were silent no-ops, followed by 6–8 further clicks and a forbidden DOM `click()` | The control was enabled and hit-tested, but no cart request was sent. A later read-only probe found the product tab `visibilityState: hidden`, i.e. not the foreground tab. | Foreground-tab requirement for clicks; the helper calls `Page.bringToFront` and refuses to click unless the page is visible. The no-op rule allows one retry, a 60 s pause, one more attempt, then hand-back; the helper persists this across invocations. |
+| “Anti-automation throttling” reported as fact | The cited `epssw.js` errors were logged at page load, before the clicks, and appear on normal loads. No challenge was visible. The header count of 19 that looked like a mismatch was units (4 baseline + 15 added). | Do not report bot detection without a visible challenge or failed request. The helper reports `cart_requests` per click for diagnosis. |
+
+Whether Lazada rate-limited the burst or the hidden tab swallowed the input is not established. The first 12 adds used the same mechanism and succeeded, which argues against a site-wide change. AGENTS.md was also shortened: the core flow, decision table, and quantity workflow stay in AGENTS.md; subagent coordination, cart-row fallback, promotion-editor detail, pack-size nuance, and test cleanup moved to `docs/cart-procedures.md`.
+
+Verification for this change: unit tests for loopback/ID/availability/pacing logic pass; `tabs` and `product` were exercised read-only against the live household tab and returned the correct IDs, availability, and main control. `set-qty` and `cart` have **not** been run live; the stepper's up/down handler selectors (`[class*='handler-up']`/`[class*='handler-down']`) are inferred from the Fusion number-picker markup and fail safe (`not-ready`) if absent.
 
 ## Session reliability review 2026-09-14
 

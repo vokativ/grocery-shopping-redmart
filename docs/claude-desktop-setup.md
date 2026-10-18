@@ -13,7 +13,7 @@ The rest of this document captures what is known, what is assumed, and what need
 testing, so that the first person doing a live Claude Cowork trial has a structured
 starting point rather than starting from scratch.
 
-All models use the same **Everyday Execution Contract**, ranked-candidate decision table, and human-only approval boundary in `AGENTS.md`. This proposal translates tool capabilities, not safety rules. No model may stop after an unavailable first SKU while a safe approved backup remains, or approve a catalog review on the human's behalf.
+All models use the same **Everyday Flow**, ranked-candidate decision table, and human-only approval boundary in `AGENTS.md`. This proposal translates tool capabilities, not safety rules. No model may stop after an unavailable first SKU while a safe approved backup remains, or approve a catalog review on the human's behalf.
 
 ## What Claude Desktop offers
 
