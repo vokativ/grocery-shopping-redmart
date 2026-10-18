@@ -1,6 +1,6 @@
 # Browser connections for household shopping
 
-Follow the discovery hierarchy in [AGENTS.md](../AGENTS.md#browser-discovery-hierarchy--all-harnesses). This guide describes connection options, not a guarantee that every client/version/browser combination has passed a RedMart test. Inspect installed tools before choosing a route; never invent a plugin name or API signature.
+Follow the discovery hierarchy in [AGENTS.md](../AGENTS.md#discovery-hierarchy). This guide describes connection options, not a guarantee that every client/version/browser combination has passed a RedMart test. Inspect installed tools before choosing a route; never invent a plugin name or API signature.
 
 ## Selection order
 
@@ -89,6 +89,6 @@ A read-only Linux probe in this conversation found an active agent-owned Chrome 
 
 On the same host, Google Chrome 153.0.8010.36 was launched as Nemanja in a visible disposable profile with no debugging switches. It registered with AT-SPI but initially exposed only seven top-level objects. Relaunching that disposable instance with `--force-renderer-accessibility=complete` exposed 227 objects, including named browser controls and a local test page's heading, button, status text, and input value. An AT-SPI `press` action changed the page and the new labels were read back. That Chrome input did not expose the AT-SPI EditableText interface: AT-SPI focus plus permitted X11 keyboard input changed the value, which AT-SPI then verified. The test browser, server, profile, log, and screenshot were closed or removed afterward; the normal Chrome profiles were not used or changed. These observations are historical evidence, not hardcoded discovery results for another host or run.
 
-The September 14, 2026 conversation demonstrated visible Chrome loopback-CDP order inspection, full-tab review, and recovery of human approval in T3 Code. It did not qualify CDP cart mutations, Firefox/Safari automation, all MCP clients, or all models. The historical [OMP smoke test](omp-setup.md#validation-status) covers its recorded relay workflow only.
+The September 14, 2026 conversation demonstrated visible Chrome loopback-CDP order inspection, full-tab review, and recovery of human approval in T3 Code. It did not qualify CDP cart mutations, Firefox/Safari automation, all MCP clients, or all models. For cart work over loopback CDP without harness browser tools, use `tools/cdp-cart.mjs` instead of hand-written CDP scripts; see the [2026-10-18 review](developer-guide.md#session-reliability-review-2026-10-18) for why. The historical [OMP smoke test](omp-setup.md#validation-status) covers its recorded relay workflow only.
 
 Connection references were consulted during the September 14 instruction review. Runtime tool instructions take precedence when they differ; update this guide as capabilities change.

@@ -166,8 +166,8 @@ lesson)
     `6 x 200 ml`, "Pack Size" field says only `200 ml`) — expected: treated as
     metadata drift, not an identity mismatch, per AGENTS.md's explicit guidance.
 
-**D. Promotion-group reconciliation** (AGENTS.md "Manifest Cart Verification And
-Promotions")
+**D. Promotion-group reconciliation** (AGENTS.md "Cart Audit" and
+docs/cart-procedures.md)
 11. Scenario: an expected SKU has no ordinary cart row, but a promotion group
     exists containing a plausible partial quantity — expected: model inspects the
     promotion `EDIT` control before concluding mismatch, and does not "correct" a
