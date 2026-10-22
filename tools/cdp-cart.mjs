@@ -17,7 +17,7 @@ Commands (all print JSON):
   product --tab <id>                     Two settled reads of the current product page.
   set-qty --tab <id> --expect i<item>-s<sku> --target <n>
                                          Move the main product control to <n>, one unit at a time.
-  cart --tab <id>                        Two settled read-only reads of ordinary cart rows.
+  cart --tab <id>                        Reload the cart, then two settled read-only reads of ordinary cart rows.
   pacing                                 Show the cross-run pacing/no-op state.
   reset-pacing                           Clear a hand-back block (only after the human has checked the page).
 
@@ -29,6 +29,7 @@ export const NOOP_COOLDOWN_MS = 60_000;
 const STEP_TIMEOUT_MS = 10_000;
 const SETTLE_MS = 900;
 const PACING_FILE = join(tmpdir(), "redmart-cdp-cart-pacing.json");
+const CART_URL = "https://cart.lazada.sg/cart";
 const CHALLENGE_MESSAGE =
   "Lazada security challenge (Baxia slider/CAPTCHA) is covering the page. Stop ALL browser work, bring this tab to the front, and ask the human to solve it in the browser. Do not click, close, or reload it yourself.";
 
@@ -211,19 +212,17 @@ function locateControlInPage(which) {
   return { found: true, disabled: false, x, y, hits_control: Boolean(hit && (hit === element || element.contains(hit))), covered_by_challenge };
 }
 
+// Only `.cart-item` rows: the cart page also renders "Just for you" product links below the cart.
 function readCartInPage() {
   const rows = new Map();
-  for (const link of document.querySelectorAll("a[href*='/products/']")) {
-    const ids = /\/products\/(?:[^/]*-)?i(\d+)-s(\d+)\.html/.exec(link.getAttribute("href") ?? "");
+  for (const row of document.querySelectorAll(".cart-item")) {
+    const link = row.querySelector("a.automation-link-from-title-to-prod[href*='/products/']") ?? row.querySelector("a[href*='/products/']");
+    const ids = /\/products\/(?:[^/]*-)?i(\d+)-s(\d+)\.html/.exec(link?.getAttribute("href") ?? "");
     if (!ids) continue;
-    const key = `i${ids[1]}-s${ids[2]}`;
-    let row = link.closest(".cart-item") || link.parentElement;
-    while (row && row !== document.body && !row.querySelector("input:not([type='checkbox'])")) row = row.parentElement;
-    const input = row && row !== document.body ? row.querySelector("input:not([type='checkbox'])") : null;
+    const input = row.querySelector(".next-number-picker input");
     const quantity = input ? Number.parseInt(input.value, 10) : null;
     const title = link.innerText.trim() || link.getAttribute("title") || null;
-    const existing = rows.get(key);
-    if (!existing || (!existing.title && title)) rows.set(key, { item_id: ids[1], sku_id: ids[2], title, quantity });
+    rows.set(`i${ids[1]}-s${ids[2]}`, { item_id: ids[1], sku_id: ids[2], title, quantity });
   }
   return {
     url: location.href,
@@ -267,6 +266,24 @@ async function foreground(page) {
     await sleep(200);
   }
   throw new HelperError("blocked", "Tab is not visible after bringToFront. Make the browser window visible, then retry.");
+}
+
+// Navigates and waits for the new document's load event, so the following read cannot see the previous DOM.
+async function navigate(page, url) {
+  let onLoad;
+  let timer;
+  const loaded = new Promise((resolve) => {
+    onLoad = (message) => message.method === "Page.loadEventFired" && resolve(true);
+    page.listeners.add(onLoad);
+    timer = setTimeout(() => resolve(false), 20_000);
+  });
+  try {
+    await page.send("Page.navigate", { url });
+    if (!(await loaded)) throw new HelperError("not-ready", `Page did not finish loading: ${url}`);
+  } finally {
+    clearTimeout(timer);
+    page.listeners.delete(onLoad);
+  }
 }
 
 async function loadPacing() {
@@ -416,7 +433,7 @@ async function main(argv) {
       try {
         await page.send("Page.enable");
         await foreground(page);
-        await page.send("Page.navigate", { url });
+        await navigate(page, url);
         const wanted = parseProductIds(url);
         const arrived = (state) => state.item_id === wanted.item_id && state.sku_id === wanted.sku_id && productReady(state);
         return summarizeProduct(await settledRead(page, readProductInPage, arrived, 20_000));
@@ -447,7 +464,9 @@ async function main(argv) {
     case "cart": {
       const page = await connect(args.endpoint, args.tab);
       try {
+        await page.send("Page.enable");
         await foreground(page);
+        await navigate(page, CART_URL);
         const read = await settledRead(page, readCartInPage, (state) => state.rows.length > 0, 8000);
         return {
           ...read.state,
