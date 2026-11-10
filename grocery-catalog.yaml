@@ -258,27 +258,34 @@ items:
       - passata
     preferred_products:
       - rank: 1
+        title: "Supervalu Tomato Passata"
+        item_id: "2679171713"
+        sku_id: "17543999547"
+        canonical_url: "https://www.lazada.sg/products/i2679171713-s17543999547.html"
+        pack_size: "500 g"
+        observed_price_sgd: 2.72
+      - rank: 2
         title: "Sainsbury's Passata"
         item_id: "303954354"
         sku_id: "538044347"
         canonical_url: "https://www.lazada.sg/products/i303954354-s538044347.html"
         pack_size: "500 g"
         observed_price_sgd: 2.50
-      - rank: 2
+      - rank: 3
         title: "Prego Tomato Pasta Sauce Traditional 350g Jar"
         item_id: "305138179"
         sku_id: "541230322"
         canonical_url: "https://www.lazada.sg/products/i305138179-s541230322.html"
         pack_size: "350 g"
         observed_price_sgd: 3.60
-      - rank: 3
+      - rank: 4
         title: "Supervalu Signature Tastes Rustic Passata Tomato Puree"
         item_id: "2679250236"
         sku_id: "17544118041"
         canonical_url: "https://www.lazada.sg/products/i2679250236-s17544118041.html"
         pack_size: "690 g"
         observed_price_sgd: 4.23
-    notes: "Sainsbury's Passata approved as rank 1 from 2026-11-10 review; Prego and Supervalu preserved as fallbacks."
+    notes: "Supervalu Tomato Passata approved as rank 1 per household preference; Sainsbury's Passata, Prego, and Supervalu Rustic Passata preserved as fallbacks."
 
   - id: ground_beef
     category: chilled
@@ -1312,8 +1319,8 @@ items:
       - ribbon pasta
       - pasta
       - farfalle
+      - farfalle pasta
       - bow tie pasta
-      - curly pasta
     preferred_products:
       - rank: 1
         title: "Sainsbury's Farfalle Pasta 500G"
@@ -1322,7 +1329,43 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2980397599-s20460798700.html"
         pack_size: "500 g"
         observed_price_sgd: 4.20
-    notes: "The review explicitly retained the family wording 'ribbon pasta' for the ordered farfalle."
+    notes: "Sainsbury's Farfalle retained per household preference; farfalle shape is preferred by family."
+
+  - id: penne_pasta
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - penne
+      - penne pasta
+      - wholewheat penne
+    preferred_products:
+      - rank: 1
+        title: "Supervalu Wholewheat Penne Pasta"
+        item_id: "2679295013"
+        sku_id: "17543955796"
+        canonical_url: "https://www.lazada.sg/products/i2679295013-s17543955796.html"
+        pack_size: "500 g"
+        observed_price_sgd: 2.97
+    notes: "Added 2026-11-10 per household preference for wholewheat penne pasta."
+
+  - id: fusilli_pasta
+    category: pantry
+    default_quantity: 1
+    aliases:
+      - fusilli
+      - fusilli pasta
+      - curly pasta
+      - spiral pasta
+      - wholewheat fusilli
+    preferred_products:
+      - rank: 1
+        title: "Supervalu Wholewheat Fusilli Pasta"
+        item_id: "2679222571"
+        sku_id: "17543981707"
+        canonical_url: "https://www.lazada.sg/products/i2679222571-s17543981707.html"
+        pack_size: "500 g"
+        observed_price_sgd: 3.40
+    notes: "Added 2026-11-10 per household preference for wholewheat fusilli / curly pasta."
 
   - id: pork_belly
     category: chilled
