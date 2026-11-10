@@ -1181,12 +1181,28 @@ items:
         observed_price_sgd: 2.95
     notes: "Approved from recent orders; normally ordered at quantity 2."
 
-  - id: bacon_bits
+  - id: bacon
     category: chilled
     default_quantity: 1
     aliases:
       - bacon
+      - streaky bacon
+    preferred_products:
+      - rank: 1
+        title: "RedMart Streaky Bacon"
+        item_id: "303774238"
+        sku_id: "537474478"
+        canonical_url: "https://www.lazada.sg/products/i303774238-s537474478.html"
+        pack_size: "220 g"
+        observed_price_sgd: 5.80
+    notes: "Added 2026-11-10 to distinguish bacon from bacon bits per household preference."
+
+  - id: bacon_bits
+    category: chilled
+    default_quantity: 1
+    aliases:
       - bacon bits
+      - danish bacon bits
     preferred_products:
       - rank: 1
         title: "RedMart Danish Bacon Bits"
@@ -1196,7 +1212,6 @@ items:
         pack_size: "190 g"
         observed_price_sgd: 5.00
     notes: "Approved from RedMart order REDACTED-ORDER-ID on 2026-07-23."
-
   - id: hummus
     category: chilled
     default_quantity: 1
@@ -1497,6 +1512,11 @@ items:
       - boneless milkfish
       - bangus
       - marinated bangus
+      - milk fish
+      - marinated milk fish
+      - boneless milk fish
+      - milk fish (boneless)
+      - milk fish boneless
     preferred_products:
       - rank: 1
         title: "Sarangani Bay Boneless Milkfish Marinated - Frozen"
