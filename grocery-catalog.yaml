@@ -1338,6 +1338,8 @@ items:
       - penne
       - penne pasta
       - wholewheat penne
+      - straight pasta
+      - cylinder pasta
     preferred_products:
       - rank: 1
         title: "Supervalu Wholewheat Penne Pasta"
