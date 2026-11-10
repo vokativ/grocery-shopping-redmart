@@ -255,22 +255,30 @@ items:
       - tomato sauce
       - pasta sauce
       - tomato puree
+      - passata
     preferred_products:
       - rank: 1
+        title: "Sainsbury's Passata"
+        item_id: "303954354"
+        sku_id: "538044347"
+        canonical_url: "https://www.lazada.sg/products/i303954354-s538044347.html"
+        pack_size: "500 g"
+        observed_price_sgd: 2.50
+      - rank: 2
         title: "Prego Tomato Pasta Sauce Traditional 350g Jar"
         item_id: "305138179"
         sku_id: "541230322"
         canonical_url: "https://www.lazada.sg/products/i305138179-s541230322.html"
         pack_size: "350 g"
         observed_price_sgd: 3.60
-      - rank: 2
+      - rank: 3
         title: "Supervalu Signature Tastes Rustic Passata Tomato Puree"
         item_id: "2679250236"
         sku_id: "17544118041"
         canonical_url: "https://www.lazada.sg/products/i2679250236-s17544118041.html"
         pack_size: "690 g"
         observed_price_sgd: 4.23
-    notes: "Maps the 2026-07-03 whiteboard item 'tomato sauce'; order included both pasta sauce and passata."
+    notes: "Sainsbury's Passata approved as rank 1 from 2026-11-10 review; Prego and Supervalu preserved as fallbacks."
 
   - id: ground_beef
     category: chilled
@@ -378,22 +386,45 @@ items:
       - shredded cheese
       - mozzarella
       - mozzarella cheese
+      - grated mozzarella
+      - pizza cheese
     preferred_products:
       - rank: 1
+        title: "RedMart Shredded Mozzarella Cheese"
+        item_id: "303406936"
+        sku_id: "536776915"
+        canonical_url: "https://www.lazada.sg/products/i303406936-s536776915.html"
+        pack_size: "170 g"
+        observed_price_sgd: 4.40
+      - rank: 2
         title: "Tradition Shredded Mozzarella Cheese"
         item_id: "301170240"
         sku_id: "527260609"
         canonical_url: "https://www.lazada.sg/products/i301170240-s527260609.html"
         pack_size: "225 g"
         observed_price_sgd: 5.24
-      - rank: 2
+      - rank: 3
+        title: "RedMart Shredded Mozzarella And Cheddar Cheese"
+        item_id: "303432256"
+        sku_id: "536800573"
+        canonical_url: "https://www.lazada.sg/products/i303432256-s536800573.html"
+        pack_size: "170 g"
+        observed_price_sgd: 4.40
+      - rank: 4
+        title: "Sainsbury's Grated Mozzarella Cheese"
+        item_id: "304206677"
+        sku_id: "538390843"
+        canonical_url: "https://www.lazada.sg/products/i304206677-s538390843.html"
+        pack_size: "250 g"
+        observed_price_sgd: 7.95
+      - rank: 5
         title: "Tradition Shredded Mozzarella Cheese - Frozen 1kg"
         item_id: "303928154"
         sku_id: "537950660"
         canonical_url: "https://www.lazada.sg/products/i303928154-s537950660.html"
         pack_size: "1 kg"
         observed_price_sgd: 17.90
-    notes: "Maps the 2026-07-03 whiteboard item 'shredded mozzarella cheese'. 1kg pack added as rank 2 from 2026-10-16 review."
+    notes: "RedMart shredded mozzarella approved as rank 1 from 2026-11-10 review; Tradition, RedMart blend, Sainsbury's grated, and Tradition 1kg preserved as fallbacks."
 
   - id: cheese_sticks
     category: chilled
@@ -514,22 +545,30 @@ items:
       - tissue boxes
       - facial tissue
       - box tissue
+      - tissue
     preferred_products:
       - rank: 1
+        title: "RedMart Silky Soft and White 2Ply Facial Tissue Paper - 5 Boxes"
+        item_id: "301082942"
+        sku_id: "527114258"
+        canonical_url: "https://www.lazada.sg/products/i301082942-s527114258.html"
+        pack_size: "5 Boxes"
+        observed_price_sgd: 5.05
+      - rank: 2
         title: "Premier Classic 2-Ply Facial Tissue - 5 Boxes [Design may Vary]"
         item_id: "1105492861"
         sku_id: "4268640922"
         canonical_url: "https://www.lazada.sg/products/i1105492861-s4268640922.html"
         pack_size: "200 Per Pack"
         observed_price_sgd: 7.10
-      - rank: 2
+      - rank: 3
         title: "Vinda Classic 2-Ply Facial Tissue Box - 5 Box"
         item_id: "3345577093"
         sku_id: "22380105291"
         canonical_url: "https://www.lazada.sg/products/i3345577093-s22380105291.html"
         pack_size: "90 Per Pack"
         observed_price_sgd: 4.60
-    notes: "The 2026-07-03 order included both Premier and Vinda tissue boxes."
+    notes: "RedMart 2-ply 5 boxes approved as rank 1 from 2026-11-10 review; Premier and Vinda preserved as fallbacks."
 
   - id: kitchen_towel
     category: household
@@ -694,13 +733,20 @@ items:
       - packham pears
     preferred_products:
       - rank: 1
+        title: "RedMart Packham Pear"
+        item_id: "303632649"
+        sku_id: "537332032"
+        canonical_url: "https://www.lazada.sg/products/i303632649-s537332032.html"
+        pack_size: "600 g"
+        observed_price_sgd: 4.00
+      - rank: 2
         title: "Australia Packham Pears"
         item_id: "301073000"
         sku_id: "527094935"
         canonical_url: "https://www.lazada.sg/products/i301073000-s527094935.html"
         pack_size: "1 kg"
         observed_price_sgd: 4.95
-    notes: "Maps the 2026-07-03 whiteboard item 'pears'."
+    notes: "RedMart Packham Pear 600g approved as rank 1 from 2026-11-10 review; Australia Packham Pears 1kg preserved as rank 2 fallback."
 
   - id: kiwi
     category: produce
@@ -803,19 +849,27 @@ items:
 
   - id: fresh_milk
     category: chilled
-    default_quantity: 1
+    default_quantity: 2
     aliases:
       - fresh milk
       - milk
+      - full cream milk
     preferred_products:
       - rank: 1
+        title: "RedMart UHT Full Cream Milk"
+        item_id: "303304089"
+        sku_id: "536620243"
+        canonical_url: "https://www.lazada.sg/products/i303304089-s536620243.html"
+        pack_size: "1 L"
+        observed_price_sgd: 2.05
+      - rank: 2
         title: "Farmhouse Fresh Milk 946ML"
         item_id: "301076934"
         sku_id: "527122109"
         canonical_url: "https://www.lazada.sg/products/i301076934-s527122109.html"
         pack_size: "946 ml"
         observed_price_sgd: 3.73
-    notes: "Maps the 2026-07-03 whiteboard item 'fresh milk'."
+    notes: "RedMart UHT Full Cream Milk approved as rank 1 from 2026-11-10 review; Farmhouse fresh milk preserved as rank 2 fallback."
 
   - id: low_fat_milk
     category: chilled
@@ -838,22 +892,31 @@ items:
     aliases:
       - lettuce
       - butterhead lettuce
+      - baby romaine
+      - salad
     preferred_products:
       - rank: 1
+        title: "RedMart Baby Romaine Lettuce Salad"
+        item_id: "2149788919"
+        sku_id: "12237639509"
+        canonical_url: "https://www.lazada.sg/products/i2149788919-s12237639509.html"
+        pack_size: "300 g"
+        observed_price_sgd: 1.95
+      - rank: 2
         title: "Uncle Jack's Butterhead Lettuce"
         item_id: "2367366756"
         sku_id: "13842110206"
         canonical_url: "https://www.lazada.sg/products/i2367366756-s13842110206.html"
         pack_size: "200 g"
         observed_price_sgd: 2.25
-      - rank: 2
+      - rank: 3
         title: "Butterhead Lettuce"
         item_id: "301074936"
         sku_id: "527080881"
         canonical_url: "https://www.lazada.sg/products/i301074936-s527080881.html"
         pack_size: "200 g"
         observed_price_sgd: 3.00
-    notes: "Default quantity updated to 1 from the approved 2026-08-10 order; the newly approved Butterhead product is ranked second."
+    notes: "RedMart Baby Romaine 300g approved as rank 1 from 2026-11-10 review; Uncle Jack's and Butterhead preserved as fallbacks."
 
   - id: onions
     category: produce
@@ -886,13 +949,20 @@ items:
         pack_size: "150 g"
         observed_price_sgd: 7.40
       - rank: 2
+        title: "Sainsbury's Greek Feta Cheese"
+        item_id: "304208554"
+        sku_id: "538406503"
+        canonical_url: "https://www.lazada.sg/products/i304208554-s538406503.html"
+        pack_size: "200 g"
+        observed_price_sgd: 9.60
+      - rank: 3
         title: "Supervalu Greek Feta Cheese 200G"
         item_id: "2443619723"
         sku_id: "14475877469"
         canonical_url: "https://www.lazada.sg/products/i2443619723-s14475877469.html"
         pack_size: "200 g"
         observed_price_sgd: 8.02
-    notes: "Default quantity is 2. The approved 2026-09-09 order promoted Kolios after the Supervalu product page could not confirm a stable cart quantity."
+    notes: "Default quantity is 2. Sainsbury's Greek Feta added as rank 2 fallback from 2026-11-10 review; Kolios retained as rank 1."
 
   - id: cucumber
     category: produce
@@ -1259,15 +1329,23 @@ items:
     default_quantity: 1
     aliases:
       - pork belly
+      - sliced pork belly
     preferred_products:
       - rank: 1
+        title: "RedMart Pork Belly Sukiyaki Sliced Meat - Frozen"
+        item_id: "1465666773"
+        sku_id: "6803678353"
+        canonical_url: "https://www.lazada.sg/products/i1465666773-s6803678353.html"
+        pack_size: "300 g"
+        observed_price_sgd: 6.50
+      - rank: 2
         title: "Ksp Australia Fresh Pork Belly"
         item_id: "584736184"
         sku_id: "1680318217"
         canonical_url: "https://www.lazada.sg/products/i584736184-s1680318217.html"
         pack_size: "300 g"
         observed_price_sgd: 9.61
-    notes: "Approved from RedMart order REDACTED-ORDER-ID on 2026-07-23."
+    notes: "RedMart Pork Belly Sukiyaki 300g approved as rank 1 from 2026-11-10 review; Ksp Australia fresh pork belly preserved as rank 2 fallback."
 
   - id: sweet_corn
     category: produce
@@ -1495,13 +1573,20 @@ items:
       - cornichons
     preferred_products:
       - rank: 1
+        title: "Sainsbury's Cornichons 340G"
+        item_id: "3460760756"
+        sku_id: "22950211750"
+        canonical_url: "https://www.lazada.sg/products/i3460760756-s22950211750.html"
+        pack_size: "340 g"
+        observed_price_sgd: 4.90
+      - rank: 2
         title: "Monoprix Extra Fine Cornichons Gherkins Pickles 185G"
         item_id: "603356148"
         sku_id: "1758618646"
         canonical_url: "https://www.lazada.sg/products/i603356148-s1758618646.html"
         pack_size: "185 g"
         observed_price_sgd: 4.14
-    notes: "Approved from RedMart order REDACTED-ORDER-ID placed on 2026-08-10."
+    notes: "Sainsbury's Cornichons 340g approved as rank 1 from 2026-11-10 review; Monoprix cornichons preserved as rank 2 fallback."
 
   - id: milkfish
     category: frozen
