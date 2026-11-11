@@ -1796,6 +1796,81 @@ items:
         observed_price_sgd: 8.15
     notes: "Approved from 2026-10-16 catalog review with default quantity 2."
 
+  - id: salmon
+    category: frozen
+    default_quantity: 1
+    aliases:
+      - salmon
+    preferred_products:
+      - rank: 1
+        title: "RedMart Premium Salmon Fish Fillet 450G x 2Packs - Frozen"
+        item_id: "2745574268"
+        sku_id: "18617396655"
+        canonical_url: "https://www.lazada.sg/products/i2745574268-s18617396655.html"
+        pack_size: "900 g (2 x 450 g)"
+        observed_price_sgd: 25.71
+    notes: "Approved from 2026-11-11 order-history review (RedMart orders placed 2026-11-09..2026-11-11); canonical page verified 2026-11-11 (h1 + item/sku)."
+
+  - id: broccoli
+    category: produce
+    default_quantity: 1
+    aliases:
+      - broccoli
+    preferred_products:
+      - rank: 1
+        title: "RedMart Broccoli Australia"
+        item_id: "301088922"
+        sku_id: "527120201"
+        canonical_url: "https://www.lazada.sg/products/i301088922-s527120201.html"
+        pack_size: "280 g"
+        observed_price_sgd: 3.36
+    notes: "Approved from 2026-11-11 order-history review; canonical page verified 2026-11-11 (h1 + item/sku, pack 280 g)."
+
+  - id: asparagus
+    category: produce
+    default_quantity: 1
+    aliases:
+      - asparagus
+    preferred_products:
+      - rank: 1
+        title: "Fine Asparagus"
+        item_id: "304974672"
+        sku_id: "541102087"
+        canonical_url: "https://www.lazada.sg/products/i304974672-s541102087.html"
+        pack_size: "100 g"
+        observed_price_sgd: 2.65
+    notes: "Approved from 2026-11-11 order-history review (bought qty 3 on 11 Nov); canonical page verified 2026-11-11 (h1 + item/sku, pack 100 g)."
+
+  - id: disinfectant_spray
+    category: household
+    default_quantity: 1
+    aliases:
+      - disinfectant spray
+    preferred_products:
+      - rank: 1
+        title: "Dettol Disinfectant Spray Crisp Breeze 450ML"
+        item_id: "301154269"
+        sku_id: "527184810"
+        canonical_url: "https://www.lazada.sg/products/i301154269-s527184810.html"
+        pack_size: "450 ml"
+        observed_price_sgd: 9.04
+    notes: "Approved from 2026-11-11 order-history review; canonical page verified 2026-11-11. Separate item from disinfectant_wipes (Clorox wipes) — aliases stay distinct."
+
+  - id: baby_spinach
+    category: produce
+    default_quantity: 1
+    aliases:
+      - baby spinach
+    preferred_products:
+      - rank: 1
+        title: "RedMart Baby Spinach Salad Australia (Washed And Ready To Eat)"
+        item_id: "1988693563"
+        sku_id: "10772039078"
+        canonical_url: "https://www.lazada.sg/products/i1988693563-s10772039078.html"
+        pack_size: "100 g"
+        observed_price_sgd: 3.77
+    notes: "Approved from 2026-11-11 order-history review; canonical page verified 2026-11-11. 'salad' alias stays with lettuce — this item uses baby spinach only."
+
 # Household baskets map one spoken word to a deliberate mix of catalog items.
 # `default_quantity` is the TOTAL number of packs, spread across `members` in declared
 # order (earliest members absorb an odd remainder). Flavour-specific aliases on the
