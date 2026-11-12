@@ -1,0 +1,27 @@
+# Leak-scan rules for this repository, extending gitleaks' built-in rules.
+#
+# Run from the repo root:
+#   gitleaks detect --no-git .   # working tree only
+#   gitleaks detect              # full commit history
+#
+# The two custom rules below exist because this repo has leaked, and later
+# purged, two families of personal data:
+#   - Lazada/RedMart order IDs (15 digits, account-linked; catalog item and
+#     SKU IDs are at most 11 digits, so catalog data is not flagged)
+#   - personal mailbox addresses (the household Lazada login must never
+#     enter the repository; .env.example uses example.com, which is safe)
+
+[extend]
+path = "default"
+
+[[rules]]
+id = "lazada-order-id"
+description = "Lazada/RedMart order ID (15 digits)"
+regex = '''\b[0-9]{15}\b'''
+keywords = [""]
+
+[[rules]]
+id = "personal-mailbox"
+description = "Personal email address"
+regex = '''(?i)\b[a-z0-9._%+-]+@(gmail|hotmail|outlook|yahoo|icloud)\.com\b'''
+keywords = ["gmail", "hotmail", "outlook", "yahoo", "icloud"]

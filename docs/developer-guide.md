@@ -311,7 +311,6 @@ Begin with a retailer-specific adapter or documented workflow. Extract shared ab
 
 - [Tester guide and questionnaire](tester-guide.md)
 - [Demo recording script](demo-script.md)
-- [LinkedIn build-story draft](linkedin-draft.md)
 - [Applied-AI case study](case-study.md)
 - [Model and harness benchmark plan](model-benchmark-plan.md) — tested Terra routine-cart recommendation, open validation boundaries, and model-selection guidance
 - [Terra Medium cart-fill benchmark notes](model-benchmark-results-2026-08-14.md) — two supervised ChatGPT Desktop sessions, 2/2 verified carts and zero observed judgment errors
