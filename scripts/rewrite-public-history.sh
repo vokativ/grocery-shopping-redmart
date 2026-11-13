@@ -26,6 +26,7 @@
 set -euo pipefail
 
 REMOTE="${1:-git@github.com:vokativ/grocery-shopping-redmart.git}"
+OUTDIR="${2:-$(mktemp -d "${TMPDIR:-/tmp}/redmart-rewrite-out-XXXXXX")}"
 NOREPLY_DEFAULT="32364362+vokativ@users.noreply.github.com"
 SCRATCH_FILES=(
   redmart-order-reading-scratch.md
@@ -38,32 +39,37 @@ command -v git >/dev/null || { echo "git not found" >&2; exit 1; }
 command -v git-filter-repo >/dev/null || { echo "git-filter-repo not found; see https://github.com/newren/git-filter-repo" >&2; exit 1; }
 
 say "This rewrites history in a FRESH CLONE of: $REMOTE"
-read -rp "Personal email address to purge from history: " OLD_EMAIL
-read -rp "Replacement noreply email [$NOREPLY_DEFAULT]: " NEW_EMAIL
+if [ -z "${OLD_EMAIL:-}" ]; then
+  read -rp "Personal email address to purge from history: " OLD_EMAIL
+fi
+if [ -z "${NEW_EMAIL:-}" ]; then
+  read -rp "Replacement noreply email [$NOREPLY_DEFAULT]: " NEW_EMAIL
+fi
 NEW_EMAIL="${NEW_EMAIL:-$NOREPLY_DEFAULT}"
+[ -n "$OLD_EMAIL" ] || { echo "old email is required" >&2; exit 1; }
 [ "$OLD_EMAIL" != "$NEW_EMAIL" ] || { echo "old and new email must differ" >&2; exit 1; }
 
-WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/redmart-rewrite-XXXXXX")"
-trap 'rm -rf "$WORKDIR"' EXIT
-
+SECRETS_DIR="$(mktemp -d "${TMPDIR:-/tmp}/redmart-rewrite-rules-XXXXXX")"
+trap 'rm -rf "$SECRETS_DIR"' EXIT
 # Mailmap and replace-text live outside the clone so the rewritten repo never
 # contains the personal email or the order IDs ever again.
-printf 'vokativ <%s> <%s>\n' "$NEW_EMAIL" "$OLD_EMAIL" > "$WORKDIR/mailmap"
-printf 'regex:\\b[0-9]{15}\\b==>REDACTED-ORDER-ID\n' > "$WORKDIR/replace.txt"
+printf 'vokativ <%s> <%s>\n' "$NEW_EMAIL" "$OLD_EMAIL" > "$SECRETS_DIR/mailmap"
+printf 'regex:\\b[0-9]{15}\\b==>REDACTED-ORDER-ID\n' > "$SECRETS_DIR/replace.txt"
 
-say "Cloning $REMOTE into $WORKDIR/repo"
-git clone "$REMOTE" "$WORKDIR/repo"
-cd "$WORKDIR/repo"
-
+mkdir -p "$OUTDIR"
+say "Cloning $REMOTE into $OUTDIR/repo"
+git clone "$REMOTE" "$OUTDIR/repo"
+cd "$OUTDIR/repo"
 say "Rewriting history (identity, order IDs, scratch files)"
 INVERT_ARGS=()
 for f in "${SCRATCH_FILES[@]}"; do INVERT_ARGS+=(--path "$f"); done
 git filter-repo \
-  --mailmap "$WORKDIR/mailmap" \
-  --replace-text "$WORKDIR/replace.txt" \
-  --replace-message "$WORKDIR/replace.txt" \
+  --mailmap "$SECRETS_DIR/mailmap" \
+  --replace-text "$SECRETS_DIR/replace.txt" \
+  --replace-message "$SECRETS_DIR/replace.txt" \
   --invert-paths "${INVERT_ARGS[@]}"
 
+git remote add origin "$REMOTE" 2>/dev/null || git remote set-url origin "$REMOTE"
 say "Verifying: no personal email in any author/committer field"
 if git log --all --format='%an %ae %cn %ce' | grep -Fq "$OLD_EMAIL"; then
   echo "FAIL: personal email still present" >&2; exit 1
@@ -86,12 +92,10 @@ else
   say "gitleaks not installed; skipping the final scan"
 fi
 
-say "Rewrite complete and verified: $WORKDIR/repo"
-echo "Temp cleanup is automatic on exit; to keep the clone, copy it now:"
-echo "  cp -a $WORKDIR/repo ~/rewrite-output"
-echo
+say "Rewrite complete and verified: $OUTDIR/repo"
 echo "Next (manual, destructive) — see docs/history-rewrite-runbook.md:"
 echo "  1. Export anything worth keeping from the GitHub repo (issues, PRs, releases)."
-echo "  2. gh repo delete vokativ/grocery-shopping-redmart --yes"
-echo "  3. gh repo create vokativ/grocery-shopping-redmart --public"
-echo "  4. Push the rewritten clone: git push -u origin main --tags"
+echo "  2. gh auth refresh -h github.com -s delete_repo   # if gh lacks delete_repo scope"
+echo "  3. gh repo delete vokativ/grocery-shopping-redmart --yes"
+echo "  4. gh repo create vokativ/grocery-shopping-redmart --public"
+echo "  5. cd $OUTDIR/repo && git push -u origin main --tags"

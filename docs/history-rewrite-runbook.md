@@ -49,21 +49,26 @@ any repository file. Verification failures abort with a nonzero exit.
    - `git log --all --diff-filter=A --name-only --format=` — no scratch files
    - `gitleaks detect` — clean
 4. **Export from GitHub** anything worth keeping (issues, PR text, releases,
-   wiki). PR #1's merged diff is already reflected in main; its conversation
-   may be worth saving as text.
+   wiki, description, homepage URL, topics). PR #1's merged diff is already
+   reflected in main; its conversation may be worth saving as text.
 5. **Delete and recreate the GitHub repo.** A force-push does **not** purge
    GitHub: old SHAs stay reachable through cached views and pull-request refs
    until GitHub garbage-collects them, which may be never. Deleting the repo
-   removes them:
+   removes them (note: existing public forks detach rather than disappear):
    ```bash
+   gh auth refresh -h github.com -s delete_repo
    gh repo delete vokativ/grocery-shopping-redmart --yes
-   gh repo create vokativ/grocery-shopping-redmart --public
+   gh repo create vokativ/grocery-shopping-redmart --public \
+     --description "..." --homepage "..."
    ```
-6. **Push the rewritten history:**
+6. **Push the rewritten history** from the output directory printed by the
+   script (and re-apply topics if needed):
    ```bash
    git push -u origin main --tags
    ```
 7. **Re-check CI** and run `gitleaks detect` once more from the pushed clone.
+   After verifying, replace your local working clone with a fresh clone from
+   the recreated repo (and copy your untracked `.env` over with `chmod 600 .env`).
 
 ## Prevention after the rewrite
 
