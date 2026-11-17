@@ -265,6 +265,7 @@ mappings:
     status: mapped
     fairprice:
       - role: house_brand
+        matches_redmart_rank: 2
         article_id: "13190663"
         barcode: "8888030304204"
         slug: pasar-fresh-eggs-large-10-per-pack-13190663
@@ -286,6 +287,7 @@ mappings:
         requirement_conflict: false
         notes: "Pasar Large eggs, 10 per pack (SAP: 10S 600G, ~60g each = same egg size as RedMart 15x60g and rank 2 'Large'). Origin Singapore (Chew's Agriculture) so also fits rank 2 'Fresh Local'. No 15-count Pasar pack exists; 1.5 packs = 15 eggs. Verified live 2026-11-17."
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "13104178"
         barcode: "8888436010686"
         slug: seng-choon-large-eggs-10s-630g-13104178
@@ -590,6 +592,7 @@ mappings:
         requirement_conflict: true
         notes: "FairPrice Honey Baked Ham 200g (Singapore, pork): honey baked ham matches rank 2 by name, but live ingredient list contains Nitrite Salt (E250) so it VIOLATES 'no added nitrate/nitrite'. Not chicken. Listed only for completeness. (Added by verifier.)"
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "90192433"
         barcode: "8881300649173"
         slug: jill-s-sausages-honey-baked-ham-nitrite-free-200-g-90192433
@@ -657,6 +660,7 @@ mappings:
         requirement_conflict: false
         notes: "FarmFresh Chicken Breast Boneless 200g (Malaysia): same brand/pack as RedMart rank 1 but MARKETPLACE listing (article 90*, third-party seller); no FairPrice-fulfilled FarmFresh exists. No Pasar/FairPrice chicken breast exists (house-brand filter returned none). promo Buy 1 @ $3.64 ($0.11 off) till 2026-11-22."
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "13097675"
         barcode: "8888442102504"
         slug: kee-song-fresh-chicken-boneless-breast-300g-13097675
@@ -1060,6 +1064,7 @@ mappings:
         requirement_conflict: false
         notes: "Cirio Passata (sieved tomato), 700g (+40% vs rank 1 500g, outside +-30% band but only other non-marketplace plain passata). packs_per_redmart_pack 0.714 is vs rank 1 (500g); vs rank 4 Supervalu Rustic Passata 690g the ratio is 0.986, so this is the near-size match for rank 4. Promo: buy 2 for $7.90."
       - role: same_product
+        matches_redmart_rank: 3
         article_id: "13093587"
         barcode: "9556191071639"
         slug: prego-pasta-sauce-traditional-tomato-350g-13093587
@@ -1701,6 +1706,7 @@ mappings:
         requirement_conflict: false
         notes: Emborg Shredded Mozzarella 200g (Malaysia); closest size, in stock.
       - role: same_brand
+        matches_redmart_rank: 2
         article_id: "13206312"
         barcode: "8888565651385"
         slug: tradition-shredded-mozzarella-red-cheddar-225g-13206312
@@ -2101,6 +2107,7 @@ mappings:
         requirement_conflict: false
         notes: FairPrice Dishwashing Liquid refill pack, lemon (not marked antibacterial).
       - role: same_product
+        matches_redmart_rank: 2
         article_id: "10921874"
         barcode: "8888300463105"
         slug: mama-lemon-dishwashing-liquid-refill-lemon-600ml-10921874
@@ -2729,6 +2736,7 @@ mappings:
         requirement_conflict: false
         notes: Jin Kimchi - Spicy 400g (Singapore); same brand/variant/size, no JIN-branded Banchan label difference.
       - role: same_brand
+        matches_redmart_rank: 2
         article_id: "12561382"
         barcode: "8801007164311"
         slug: cj-bibigo-sliced-kimchi-pack-500g-12561382
@@ -2756,6 +2764,7 @@ mappings:
         requirement_conflict: false
         notes: "CJ Bibigo Korean Sliced Kimchi 500g (South Korea): same brand/size as RedMart rank 2 CJ Sliced Cabbage Kimchi 500g (tube pack not stated on FairPrice); packs 0.8 relative to rank-1 400g. Promo Buy 2 for $10.50 (till 2026-11-19)."
       - role: same_product
+        matches_redmart_rank: 4
         article_id: "13186858"
         barcode: "8886471700425"
         slug: i-m-kimchi-korean-cabbage-kimchi-500g-13186858
@@ -2783,6 +2792,7 @@ mappings:
         requirement_conflict: false
         notes: "I'm Kimchi Korean Cabbage Kimchi 500g (South Korea): same brand/variant/size as RedMart rank 4 (I'm Kimchi Korean Cabbage Kimchi Banchan 500g); packs 0.8 relative to rank-1 JIN 400g."
       - role: equivalent
+        matches_redmart_rank: 5
         article_id: "90209695"
         barcode: "1111111615454"
         slug: jin-white-kimchi---500g
@@ -2862,6 +2872,7 @@ mappings:
     status: partial
     fairprice:
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "90104649"
         barcode: "8881300452568"
         slug: freshco-australia-hass-avocado-3-pieces-600-g-90104649
@@ -3221,6 +3232,7 @@ mappings:
     status: partial
     fairprice:
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "13261310"
         barcode: "9300650371934"
         slug: philadelphia-cream-cheese-block-all-natural-250g-13261310
@@ -3394,6 +3406,7 @@ mappings:
         requirement_conflict: false
         notes: FairPrice UHT Milk - Full Cream 1L (NZ); direct counterpart to RedMart UHT Full Cream 1L.
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "458564"
         barcode: "8888200602857"
         slug: farmhouse-milk-fresh-1l-458564
@@ -3642,6 +3655,7 @@ mappings:
         requirement_conflict: false
         notes: Pasar Mini Romaine 300g - house-brand counterpart of RedMart Baby Romaine 300g, same weight.
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "13255381"
         barcode: "8886316200448"
         slug: thygrace-butterhead-lettuce-300g-13255381
@@ -3663,6 +3677,7 @@ mappings:
         requirement_conflict: false
         notes: Thygrace Butterhead Lettuce 300g - covers RedMart ranks 2/3 (butterhead 200g; ratio 0.667 per 200g).
       - role: equivalent
+        matches_redmart_rank: 2
         article_id: "90187030"
         barcode: "8885003323026"
         slug: yuan-zhen-yuan-butterhead-lettuce-200-g-90187030
@@ -5322,6 +5337,7 @@ mappings:
         requirement_conflict: false
         notes: Only non-marketplace classic hummus found; 200g vs 220g (-9%). No FairPrice house-brand hummus found. Live stock only 4 units (stockScale inStock).
       - role: same_product
+        matches_redmart_rank: 2
         article_id: "90007213"
         barcode: "5018811000961"
         slug: delphi-fresh-low-fat-hummus-dip-gluten-and-dairy-free-vegan-90007213
@@ -5643,6 +5659,7 @@ mappings:
         requirement_conflict: false
         notes: Frozen sukiyaki-sliced pork belly 300g (storage FZP), same spec as RedMart rank 1 (RedMart $6.50). Porkee (Country Foods Pte Ltd) is not in the FPG house-brand list, so house_brand=false, although its barcode prefix 8888030 is the same as FairPrice-labelled items. Live origin varies ('Netherlands'; description says origin may change with stock). Live stock 311.
       - role: house_brand
+        matches_redmart_rank: 2
         article_id: "13280674"
         barcode: "8888030209943"
         slug: pasar-fresh-pork-belly-300g-13280674
@@ -5809,14 +5826,14 @@ mappings:
     redmart_reference:
       rank: 1
       title: 100 Plus Hydration Bars Ice Cream - Frozen
-      pack_size: 75 ml
+      pack_size: 4 x 75 ml (catalog says 75 ml; live SKU property 'Items Per Each' = 4, checked 2026-11-17)
       observed_price_sgd: 4.95
       item_id: "1060284099"
       sku_id: "4001518146"
       quantity:
-        value: 75
+        value: 300
         unit: ml
-    household_requirement: "Brand-specific: 100PLUS frozen hydration bar; RedMart item is a single 75ml bar."
+    household_requirement: "Brand-specific: 100PLUS frozen hydration bar; RedMart SKU is a 4-bar multipack (4 x 75 ml)."
     status: mapped
     fairprice:
       - role: same_product
@@ -5833,7 +5850,7 @@ mappings:
         quantity:
           value: 300
           unit: ml
-        packs_per_redmart_pack: 0.25
+        packs_per_redmart_pack: 1
         mrp_sgd: 5.85
         promo:
           type: BXATP
@@ -5845,8 +5862,8 @@ mappings:
         stock_scale: inStock
         match_quality: exact
         requirement_conflict: false
-        notes: "Same product (100 Plus Hydration Bar Original); FairPrice sells a 4-pack: SAP name '4S 75ML' = 4 x 75ml = 300ml, so 0.25 packs per RedMart single bar. Promo Buy 1 @ $4.95 (valid to 2027-01-01)."
-    notes: "Searched: 100 plus hydration bar, 100plus ice cream. Only 4-bar pack exists; no single-bar listing found. RedMart single bar $4.95 vs FairPrice 4-pack $5.85/$4.95 promo => per-bar price much lower on FairPrice."
+        notes: "Same product (100 Plus Hydration Bar Original 4 x 75 ml, SAP name '4S 75ML'). RedMart SKU is also a 4-bar pack (live SKU property 'Items Per Each' = 4, 2026-11-17), so 1 pack per RedMart pack. Promo Buy 1 @ $4.95 (valid to 2027-01-01)."
+    notes: "Searched: 100 plus hydration bar, 100plus ice cream. Only the 4-bar pack exists on FairPrice. Earlier ratio 0.25 assumed a single RedMart bar; corrected 2026-11-17."
   - catalog_item_id: remedy_sodaly_guava
     concept: Remedy Sodaly Guava
     redmart_ranks:
@@ -5906,6 +5923,7 @@ mappings:
         requirement_conflict: false
         notes: "Rank 1: Mission Mini Wraps Wholemeal, 8 per pack, 300g (SAP name). Same brand, variant and pack."
       - role: same_product
+        matches_redmart_rank: 2
         article_id: "13256285"
         barcode: "9555615900319"
         slug: mission-mini-wraps-pumpkin-300g-13256285
@@ -5927,6 +5945,7 @@ mappings:
         requirement_conflict: false
         notes: "Rank 2: Mission Mini Wraps Pumpkin 300g."
       - role: same_product
+        matches_redmart_rank: 3
         article_id: "13195541"
         barcode: "9555615900203"
         slug: mission-mini-wraps-original-8-per-pack-13195541
@@ -6204,6 +6223,7 @@ mappings:
         requirement_conflict: false
         notes: Magiclean Floor Cleaner - Aromatic Lavender 3L; identical.
       - role: house_brand
+        matches_redmart_rank: 2
         article_id: "13214893"
         barcode: "8888030307991"
         slug: fairprice-multi-purpose-cleaner-lavender-2l-13214893
@@ -6459,6 +6479,7 @@ mappings:
         requirement_conflict: false
         notes: "MARKETPLACE only. Rank 1: Sarangani Bay Boneless Milkfish Marinated 440g."
       - role: same_product
+        matches_redmart_rank: 2
         article_id: "90136963"
         barcode: "4804888286220"
         slug: sarangani-bay-baby-milkfish-marinated-400-g-90136963
@@ -6480,6 +6501,7 @@ mappings:
         requirement_conflict: false
         notes: "MARKETPLACE only. Rank 2: Sarangani Bay Baby Milkfish Marinated 400g (packs_per_redmart_pack is relative to rank 1 440g; vs rank 2 it is 1.0)."
       - role: same_product
+        matches_redmart_rank: 3
         article_id: "90136962"
         barcode: "8885015470572"
         slug: sarangani-bay-boneless-milkfish-unseasoned-320-g-90136962

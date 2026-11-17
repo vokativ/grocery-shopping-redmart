@@ -78,6 +78,12 @@ Top level: `mapping_version: 1`, `status: experimental`, `store{name, store_id, 
 | `requirement_conflict` | bool | Violates `household_requirement` (wrong brand, flavour, variety, processed vs natural). 25 true |
 | `notes` | string | Evidence, size/origin remarks, ratio vs other ranks, stale-slug warnings |
 
+Per-candidate optional field, not in the §2 table above:
+
+| Field | Type | Meaning |
+|---|---|---|
+| `matches_redmart_rank` | int | Set when a `same_product` / `same_brand` role was assigned relative to a RedMart rank **other than** `redmart_reference.rank` (e.g. the candidate is the same product as rank 2 while the reference is rank 1). The comparison only honours such a role when that rank is the one being priced; otherwise the candidate is treated by its other attributes. Present on 22 of 236 candidates (roles on those: 8 `same_product`, 2 `same_brand`, 3 `house_brand`, 9 `equivalent`) |
+
 Ratio check: `packs_per_redmart_pack` × FairPrice price = cost of one RedMart-equivalent pack. This assumes you can buy fractional FairPrice packs (see §4).
 
 ## 3. Coverage summary
@@ -138,6 +144,8 @@ Size or specification not comparable:
 | zucchini | Thygrace 2 per pack, weight unknown (ratio null), closest non-marketplace |
 
 ## 4. First naive comparison (indicative, NOT a result)
+
+> **Superseded by [price-comparison-2026-11-17.md](price-comparison-2026-11-17.md)**: live prices on both sides, reproducible script [experiments/fairprice/compare.mjs](../../experiments/fairprice/compare.mjs). The table below is kept as history only.
 
 Produced once by an ad-hoc integration script (not committed) from this mapping at default catalog quantities. Rule used:
 
@@ -269,7 +277,7 @@ Per-item table (`FairPrice cheapest equiv` is S$ per RedMart pack, role and `art
 
 | Row | Issue | Effect |
 |---|---|---|
-| `100plus_frozen` | RedMart catalog `pack_size` says `75 ml` at S$4.95, but the RedMart page lists it under "Multipacks". FairPrice 13186860 sells 4 × 75 ml (300 ml) at mrp S$5.85, promo S$4.95. `packs_per_redmart_pack` 0.25 is probably wrong: [INFERENCE] the RedMart SKU is likely also a 4-pack. **Verify before use.** | The S$1.24 FairPrice cell is an artefact. If both are 4-packs the row is S$4.95 vs S$4.95 and the FairPrice total becomes about S$557.93 vs RedMart S$553.31 |
+| `100plus_frozen` | **RESOLVED (2026-11-17).** RedMart SKU property "Items Per Each" = 4, live RedMart price S$5.85. The RedMart item is therefore also a 4 × 75 ml pack, same as FairPrice 13186860. Mapping corrected to `packs_per_redmart_pack` 1 and reference quantity 300 ml (was 0.25 against a 75 ml reference). Catalog `pack_size` `75 ml` in grocery-catalog.yaml is **still wrong** and needs the normal catalog approval flow | The S$1.24 FairPrice cell in §4 was an artefact of the old ratio; the corrected comparison is in [price-comparison-2026-11-17.md](price-comparison-2026-11-17.md) |
 | `sliced_cheese` cheddar pick | The S$4.57 winner is Harvest Fields 13275930; natural vs processed is not stated on the listing (RedMart "100% Natural Cheese") | Unconfirmed, not flagged as conflict. Arla Cheddar 13077310 (natural by ingredients) is the verified option, S$7.50 promo |
 | President slices 13046007 / 13046008 | Processed cheese (about 5% cheddar/Emmental); `requirement_conflict: true`, excluded from the comparison | Would look cheapest per gram if included |
 | Chobani "Kids" (13266556, 13266555) | FairPrice title is "Chobani Greek Yogurt - Strawberry/Vanilla (No Sugar Added)", the word "Kids" is not printed. Marked exact on image evidence (100 g squeeze pouch, same S$2.95 price, no barcode cross-check against RedMart) | Reasonable but not confirmed by an identifier |
@@ -285,11 +293,11 @@ Per-item table (`FairPrice cheapest equiv` is S$ per RedMart pack, role and `art
 
 ## 6. How to refresh and use for a future comparison
 
-Do not reuse the stored prices; they are a 2026-11-17 snapshot.
+Do not reuse the stored prices; they are a 2026-11-17 snapshot. The reproducible comparison is [experiments/fairprice/compare.mjs](../../experiments/fairprice/compare.mjs): pure computation (no network) over a RedMart price JSON, a FairPrice price JSON, the catalog and this mapping (`node experiments/fairprice/compare.mjs --redmart <json> --fairprice <json> [--json <out>] [--markdown <out>]`). The 2026-11-17 inputs and outputs (`redmart-prices.json`, `fairprice-prices.json`, `comparison.json`, `comparison.md`) are in [experiments/fairprice/snapshots/2026-11-17/](../../experiments/fairprice/snapshots/2026-11-17/). For a new comparison, collect fresh price JSONs (steps 1–3 below) into a new dated snapshot folder and feed them to the script.
 
 1. **Re-resolve FairPrice per `article_id`** (site-structure §7): `GET $API/product/v2?q=<article_id>&pageType=search&orderType=DELIVERY&storeId=165&page=1`. The `q=` lookup returns exactly that product (and sometimes an unrelated marketplace row; select by `clientItemId`). Read current `slug` (rebuild `url`), `storeSpecificData[0].mrp`, `offers[]` (`type`, `price`, `rule`, `validTill`; ignore `BMIN`/`BMINXGFG`), `stockScale`, `DisplayUnit`. `final_price` and `has_stock` are unreliable. `storeId` from `serviceable-area` (do not store the postal code).
 2. **Re-check promos by date**: `validFrom <= now <= validTill`. 36 of the 114 recorded promos ended on or before 2026-11-19. Decide multi-buy policy up front (single-unit price only, or include Buy N / Any N when the basket will use N).
 3. **Fetch live RedMart prices** from each catalog item's `canonical_url` (`https://www.lazada.sg/products/i<item_id>-s<sku_id>.html`, identity = item + sku pair). The catalog's `observed_price_sgd` is a reference, not live.
-4. **Per-item policy** (decide before computing): `same_product` first, else `house_brand`, else `equivalent`; skip `requirement_conflict`, skip `marketplace` (seller-set price/stock, extra delivery), skip `oos`; treat `approximate` as review-only; use the ratio for the RedMart rank actually bought. Decide whether partial packs are allowed (§4) or round up to whole FairPrice packs. Resolve §5 questions (`100plus_frozen` first).
+4. **Per-item policy** (decide before computing): `same_product` first, else `house_brand`, else `equivalent`; skip `requirement_conflict`, skip `marketplace` (seller-set price/stock, extra delivery), skip `oos`; treat `approximate` as review-only; use the ratio for the RedMart rank actually bought (candidates with `matches_redmart_rank` only count when that rank is the one priced). Decide whether partial packs are allowed (§4) or round up to whole FairPrice packs. Resolve open §5 questions first.
 5. **Basket totals include fees**: FairPrice delivery fee tiers and S$3.99 picking fee (waived for Digital Club ≥ S$59), RedMart delivery/vouchers. Compare baskets, not unit rows.
 6. **Out of scope:** the mapping is not consumed by any tool and does not change AGENTS.md shopping rules. FairPrice cart automation is not approved; checkout hard boundary in site-structure §6 still applies.
