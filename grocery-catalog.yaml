@@ -988,6 +988,24 @@ items:
         observed_price_sgd: 1.80
     notes: "Default quantity is 3 from the 2026-07-03 order."
 
+  - id: zucchini
+    category: produce
+    default_quantity: 1
+    aliases:
+      - zucchini
+      - zucchinis
+      - courgette
+      - courgettes
+    preferred_products:
+      - rank: 1
+        title: "RedMart Green Zucchini Courgettes"
+        item_id: "327266027"
+        sku_id: "692090585"
+        canonical_url: "https://www.lazada.sg/products/i327266027-s692090585.html"
+        pack_size: "750 g"
+        observed_price_sgd: 3.35
+    notes: "Approved from the 2026-11-17 review of the RedMart order placed on 2026-11-16."
+
   - id: spring_onion_kimchi
     category: chilled
     default_quantity: 1
