@@ -43,6 +43,7 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - `templates/redmart-catalog-review-template.html` — reusable local approval UI.
 - `tests/` — behavioral catalog, CLI, renderer and loopback-server tests; source-text assertions are not evidence that an agent follows instructions.
 - `.github/workflows/ci.yml` — credential-free CI.
+- `docs/fairprice/` and `experiments/fairprice/catalog-mapping.yaml` — experimental NTUC FairPrice research (site structure, private labels, catalog-to-FairPrice substitute mapping) for a future price comparison; not used by any shopping tool.
 
 ## Validation rules
 
