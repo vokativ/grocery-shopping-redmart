@@ -9,6 +9,8 @@ Status: **experimental research for a future RedMart vs FairPrice price comparis
 | Live relay session | OMP relay driving the user's signed-in Chrome on `www.fairprice.com.sg`: PDP, cart, checkout (read-only), network responses | observed 2026-11-17 |
 | Reversible mutation tests | Add / plus / minus / delete on two baseline rows and one test row; baseline restored, verified after reload and two settled reads | observed 2026-11-17 |
 | Unauthenticated `curl` | Product pages, `website-api.omni.fairprice.com.sg/api`, ~1 req/s, no cookies | observed 2026-11-17 |
+| Live add / no-add tests | Typed quantity, double click, stock cap, typed 0, marketplace add, alcohol add, bulk quantity; all restored to baseline and verified after reload | observed 2026-11-17 (afternoon) |
+| Static JS bundle read | Public Next.js bundles (build `ad741b40…`): cart provider, stepper, popups; **code-level only, not observed behaviour**; rules marked "(code)" below | read 2026-11-17 |
 
 Limits: one short session, one household store. Checkout was only read; nothing on it was clicked. Absence of a problem here is not proof of absence (see §8 on bot challenges). API paths are what the site's own JS calls; they are undocumented and may change (`buildId` changes on deploys).
 
@@ -77,22 +79,53 @@ Next.js pages-router page `/productDetails`; `__NEXT_DATA__.query.slug` = slug; 
 | In cart | `[data-testid=counter-wrapper]`: minus `svg[data-testid=SvgRemoveFromCart]`, `input[aria-label=quantity][name=quantity][type=number][min=0]` (**value = current cart quantity**), plus `svg[data-testid=SvgAddToCart]`. Click targets are the svg's parent `DIV` (no button role, unlabeled) |
 | Out of stock | No add/stepper; text "Out of stock online" + "Find similar" button. Carousel cards show "Out of stock" |
 
-- Promo badges on the PDP: "Offer" badge, offer buttons ("Spend $70, get $7 off — Ends in …", "Buy 3, get 5% off Till …", "Any 2 for $17.95"). The **shelf price shown is the mrp**; the bundle/promo price is applied in the cart.
-- **No per-product delivery date.** RedMart's `Product Availability` date chips (AGENTS.md **Product Choice And Availability**, "too-late" rule) have no PDP equivalent. Availability signals instead: API `storeSpecificData[0].stock` / `stockScale` (`inStock`, `low`, `oos`), the PDP out-of-stock state, and the cart's per-seller "Earliest slot" (cart-level, not per product). A "within two days" rule cannot be evaluated per product; it can only be read per seller at the cart.
+- Promo badges on the PDP: "Offer" badge, offer buttons ("Spend $70, get $7 off — Ends in …", "Buy 3, get 5% off Till …", "Any 2 for $17.95"). For **single-unit `BXATP` promos the PDP shows the promo price with the strike-through mrp** (observed 2026-11-17: Merlot $18.50 vs $30.00, "Save $11.50"; canola $6.25 vs $9.50). Bundle and basket promos (`BXATP` N>1, `BANYATP`, `BMIN`) are **not** reflected in the shelf price and apply in the cart.
+- **No per-product delivery date.** RedMart's `Product Availability` date chips (AGENTS.md **Product Choice And Availability**, "too-late" rule) have no PDP equivalent. Availability signals instead: API `storeSpecificData[0].stock` (use `stock > 0`; `stockScale` and `has_stock` are unreliable, see §7), the PDP out-of-stock state, and the cart's per-seller "Earliest slot" (cart-level, not per product). A "within two days" rule cannot be evaluated per product; it can only be read per seller at the cart **after the add**, and some adds push it later (§4a).
 
 ## 4. Confirming add / change / remove
 
 | Action | Where | Network | Confirmation |
 |---|---|---|---|
-| PDP Add / plus / minus | PDP main control | `POST $API/cart` → 200; `data.cart.changes[{id, product.clientItemId, oldQ, newQ}]` + `data.cart.items[]` (`id` internal, `q` **string**) | Stepper value changed within ~0.5 s; `changes[0]` oldQ→newQ matches |
+| PDP Add / plus / minus | PDP main control | `POST $API/cart` → 200; `data.cart.changes[{id, product.clientItemId, oldQ, newQ}]` + `data.cart.items[]` (`id` internal, `q` **string**) | Stepper value changed after the 500 ms client debounce (§4a); `changes[0]` oldQ→newQ matches the target |
 | Cart-row plus / minus | `/cart` row | `POST $API/checkout` (not `/api/cart`); response `data` = `cart, slot, payment, sellersTimeSlots, couponDiscounts, corpBillings, errors`; `data.cart.items` carries new `q` | Row stepper value; header counts |
 | Cart-row delete | `/cart` row | same cart mutation path | Row disappears **immediately, no confirmation dialog** |
 
 Unit checksums (both count **units**, not rows): header `[data-testid=cart-button]` text `<units> Cart`, and cart heading `Shopping cart <N> items`. Observed together: baseline 4, eggs add → 5, cart-row plus → 6, delete → 4. Same role as the RedMart "header count is a unit checksum only" rule; neither proves contents.
 
-Procedure that held up (observed 2026-11-17): click once, condition-wait for the expected stepper value (not a fixed sleep), then reread once more; reload at the end and take two settled row reads.
+Procedure that held up (observed 2026-11-17): click once, condition-wait for the expected stepper value (not a fixed sleep), then reread once more; reload at the end and take two settled row reads. About 25 cart mutations over ~20 min at ≥2 s pacing met no bot challenge.
 
 **Silent no-op observed.** First cart-row plus click did nothing because the click coordinates were measured **during a smooth scroll** (sticky header and scroll shifted the control). Re-measuring after the scroll settled and hit-testing with `document.elementFromPoint(x, y)` (confirm the hit target is inside the intended row's `counter-wrapper`) made the next click succeed. This is a coordinate/hit-test cause, **not** a stock or challenge signal. It maps onto the AGENTS.md **silent no-op rule**: reread, retry once with a fresh control; if still no change, stop all cart changes, wait, reload, retry once, else hand over. Do not click the same control repeatedly. Use real clicks, not DOM `click()`.
+
+## 4a. When an add does and does not happen
+
+"Observed" = live test 2026-11-17 (user's signed-in Chrome, reversible). "(code)" = read from the public JS bundles, not exercised live. Compare the **target quantity** you asked for with `changes[].newQ` / row `q` after every add; the toast and the stepper are not proof (see rows 1, 5, 17).
+
+Wire shape (code): every add/update/remove re-sends the **whole cart** as `POST $API/cart` (or `POST $API/checkout` when the page is `/cart` or `/checkout`, same body plus `cardId`, `couponCodes[]`, `orderAmount`). Items are `{id, isChecked, q: "<count as string>", t, reason: "InStock", …}`; **removal is `q: "0"`** in the same POST (no PUT/DELETE). The server answers with the full cart; `cart.items[].q` is server truth and overwrites the local count. Only the response to the **last** POST is applied. Guests keep the cart in `localStorage["cart"]`; on login it is merged (`cart.isCartMerge: true`). Any non-2xx is a silent rollback to the last good server cart.
+
+| # | Case | What you see | What the server says | Agent rule |
+|---|---|---|---|---|
+| 1 | Typed quantity, no commit | Input shows the new value (pizza 2→3 via `fill`) | **No request sent**, cart unchanged (observed). Only Enter (or blur, code) fires `POST` with `changes {oldQ:2,newQ:3}` | `fill` alone is a silent no-op that looks applied. After typing, press Enter, then wait for the stepper/`changes` |
+| 2 | Rapid clicks on one product | Stepper moves per click | Clicks ~150 ms apart gave **one** `POST` `{oldQ:2,newQ:4}` (observed). Code: 500 ms trailing debounce sums deltas into one add | Click once per change, then condition-wait. To undo several, wait ≥2 s between clicks (each became its own request) |
+| 3 | Add A then B within 500 ms | (not tested live) | Code: `currentCount` and the timer are **shared across products**; A's timer is cancelled and B receives `+2` | **Wait > 500 ms between different products; use ≥2 s pacing** |
+| 4 | `+1` then `-1` within 500 ms | (not tested live) | Code: `currentCount` becomes 0 and `remove(…, 0)` sets the count to **0** (item removed if it was in the cart) | Never pair opposite clicks inside 500 ms; confirm quantity afterwards |
+| 5 | Quantity above stock (stock 3, typed 10 + Enter) | Modal **"We have revised your order to the maximum quantity allowed." [Okay, got it]** blocks the page; plus becomes `svg[data-testid=StyledDisabledAddCart]` instead of `SvgAddToCart` (observed) | `changes {oldQ:1,newQ:3}`; the requested 10 is not echoed (observed) | Dismiss the modal, take `newQ` as the granted quantity, record the cap. Disabled plus = at cap, do not click |
+| 6 | First add of an item not yet in cart | (code) the client applies **no** stock cap to the first add (`count: delta`), only the message | Server caps afterwards | Still check `newQ`; do not assume the client prevented an over-stock first add |
+| 7 | Typed `0` + Enter | Main control returns to "Add to cart" (observed) | `changes {oldQ:3,newQ:0}` | Typed zero = removal |
+| 8 | Out of stock | PDP: no add/stepper, "Out of stock online" + "Find similar"; cards: "Out of stock" (observed) | `stock` 0 | Treat as unavailable; no control to click |
+| 9 | API `stockScale: "inStock"` with `stock: 0` | PDP shows out of stock online (verified 2026-11-17 for `13297030` and `13286189`) | API stock 0 | `stockScale` alone is not an in-stock signal; **require `stock > 0`** |
+| 10 | `storeSpecificData[0].status != "ENABLED"` | (code) no Add; banner "Unavailable for delivery to <pincode>" + "Buy this in-store or find similar items for delivery." | (code) | Treat as not deliverable; do not test by clicking |
+| 11 | Marketplace item (`90…` id, `MKP`) | Added normally `0→1`, no warning; cart still "1 delivery: FairPrice", no separate seller block (observed, dragon fruit) | **Earliest slot of the whole delivery moved Tomorrow → Fri 20 Nov, 8am-10am**; back to Tomorrow after deleting the row (observed). No client `isMKP` gate (code) | Re-read "Earliest slot" after the add; if later than the slot rule allows, delete the row and mark the item too-late/unavailable |
+| 12 | Bulk quantity ≥ `storeBulkOrderThreshold` (canola, threshold 30, typed 31) | Accepted `1→31`, **no warning** on PDP or cart; cart "35 items", free delivery, basket promo "Spend $70, get $7 off" applied (observed) | **Earliest slot silently moved Tomorrow → Sun 22 Nov, 8am-10am**; restored after delete (observed). Code: a bulk popup "We will need more time to get the following product(s) to you." (Cancel / Continue) may appear when the store is not the default store; Cancel resets the count | Keep quantities below the bulk threshold, or re-read the slot after the add. Cancel the popup if it appears |
+| 13 | Alcohol (Merlot, afternoon) | No gate; toast "1 product added to cart — View cart" only (observed) | Added | No add-time alcohol handling. Code: only an age-consent disclaimer on `/cart` and an "age-restricted items" popup on `/checkout` block checkout. Liquor hours (10.30pm-7am) are **not in the client** (server-side, untested) |
+| 14 | Server reduces or drops an item | (code) popup "Changes to your cart / Some items are unavailable", rows `oldQ -> newQ` with "Only N left" or "Out of stock", button **"Update Cart"** (Cancel/Back to cart only on `/checkout` or store switch) | `changes[]`, `unavailableItems[]`; popup hidden for reasons `NotApplicable`, `PreOrder`, `MaxPurchasableQuantityReached`, which then only appear as a lower `q` | Dismiss with "Update Cart"; item reasons seen in code: `OutOfStock`, `NotApplicable`, `PreOrder`, `MaxPurchasableQuantityReached`; all rows were `InStock` live |
+| 15 | `wantQuantity` in the response | Looks like a "requested" field | **Not the requested quantity**: it held the previous quantity (after 1→3 cap `"1"`; after 2→4 `"3"`) (observed) | Do not use. Detect caps by comparing the target to `changes[].newQ` / row `q` |
+| 16 | Non-2xx response | Stepper reverts, no message | (code) silent rollback to the last good server cart | Reread; treat as no-op under the silent no-op rule (§4) |
+| 17 | Toast "N product(s) added to cart" | Appears (also on alcohol and capped adds) | (code) computed from **client intent**, debounced 1000 ms, not server result; "Cart updated" appears when the cap message fired | Never confirm an add from the toast |
+| 18 | Carousel stepper for the same SKU | "Spend $75, get $8 off" carousel showed its **own live stepper** for the main SKU (Merlot, value 1) (observed) | Same cart row | Never use carousel controls; scope to the main control (§3) |
+| 19 | Popup open | (code) cart changes are not synced while a drop-off / bulk / unavailable popup is open | — | Dismiss modals (incl. the cap modal) before the next add |
+| 20 | No address (guest) | (code) Add opens the postal-code popup | `syncCart` does nothing without an address | Not applicable to the signed-in household session |
+
+Slot rule consequence: FairPrice has no per-product delivery date, so the cart's per-seller **"Earliest slot"** is the only lateness signal. Re-read it after every add; a slot later than the two-day rule is FairPrice's equivalent of RedMart's "too-late".
 
 ## 5. Cart page `/cart`
 
@@ -143,8 +176,8 @@ Source of truth: search by article id, `GET $API/product/v2?q=<articleId>&pageTy
 | `BANYATP` | "Any N for $X" across a variant group (`rule.entity.variants[]` internal ids; mix-and-match flavours) | Conditional group price; flag |
 | `BMIN`, `BMINXGFG` | Basket/category spend thresholds ("Spend $25, get $5 off", free gift); `price` null | **Ignore for unit price** |
 
-- `final_price` (search only) is **unreliable**: usually equals mrp even with a promo, and was 0 for some items depending on the query. `has_stock` is unreliable (true with `stock:0`). Use `mrp` + `offers[]`, and `stock > 0` / `stockScale != "oos"`.
-- Promo prices apply in the cart; the PDP shows mrp. Verify offer groups in the cart rows (`offer-link-<id>`, "Save $x") before trusting a bundle price. Check `validFrom <= now <= validTill`.
+- `final_price` (search only) is **unreliable**: usually equals mrp even with a promo, and was 0 for some items depending on the query. `has_stock` is unreliable (true with `stock:0`). `stockScale` is also unreliable: `inStock` with `stock: 0` still renders "Out of stock online" on the PDP (verified for `13297030`, `13286189`, 2026-11-17). Use `mrp` + `offers[]`, and **`stock > 0`**.
+- Single-unit `BXATP` promos show on the PDP as promo price with strike-through mrp; bundle/basket promos apply in the cart. Verify offer groups in the cart rows (`offer-link-<id>`, "Save $x") before trusting a bundle price. Check `validFrom <= now <= validTill`.
 - `storeId`: from `serviceable-area?pincode=<delivery postal code>` (do not store the postal code in outputs). The household resolves to **165**; omitting `storeId` also yields 165; unknown ids return `count:0`. Tested 165 vs 45 (observed 2026-11-17): **mrp, discount and offers identical; `stock` and ranking differ**. [INFERENCE] store-specific pricing may exist for some items; none seen.
 - Pack size is free text `metaData.DisplayUnit` with inconsistent units/case (`300g`, `500 G`, `1 KG`, `1000 G`, `4 S`, `30 per pack`, `24 x 200ml (CTN)`, `5 x 125ml`). Normalise to g/kg/ml/L, `N x size`, count before computing per-100g/ml. `metaData["SAP Product Name"]` sometimes holds true weights (`30S X 1.65KG` where display says `30 per pack`) — fallback only. Produce, meat and fish are fixed-size packs at fixed prices.
 - `soldByWeight` was 0 on all 260 sampled products; `hasVariants` 0, `variants[]` empty (flavour groups are separate products tied by shared promo ids). Sold-by-weight **not observed**; [INFERENCE] may exist for counter items, so flag `soldByWeight == 1` as unsupported rather than guess.
@@ -158,8 +191,8 @@ Source of truth: search by article id, `GET $API/product/v2?q=<articleId>&pageTy
 | URL validity | Canonical product URL | Exact slug only; wrong slug = HTTP 200 soft 404; numeric-slug exception |
 | Page title | `h1` semantic heading | No `h1`; styled span + `brandDetails` anchor |
 | Main control scope | `#module_redmart_add_to_cart` | Ancestor of `main [data-testid=brandDetails]`, excluding carousel/`compact-product`/`productCollection` |
-| Out-of-stock | Corroborated unavailability, then next rank | "Out of stock online" + "Find similar"; API `stockScale oos` |
-| Availability / delivery | Per-product `Product Availability` date chips; two-day rule | None per product; per-seller "Earliest slot" in cart, slot grid only at checkout |
+| Out-of-stock | Corroborated unavailability, then next rank | "Out of stock online" + "Find similar"; require API `stock > 0` (`stockScale inStock` with stock 0 is still out of stock) |
+| Availability / delivery | Per-product `Product Availability` date chips; two-day rule ("too-late") | None per product. FairPrice's "too-late" equivalent is the cart's per-seller "Earliest slot", re-read after each add (marketplace items and bulk quantities silently push it, §4a); slot grid only at checkout |
 | Add confirmation | Stepper value + cart row | Stepper value + `POST /api/cart` `changes` oldQ/newQ; cart-page edits via `POST /api/checkout` |
 | Cart row identity | Product link item/SKU pair | `cartProduct[id=<internal id>]`; link slug ends with article id; `GET /api/cart` gives `clientItemId` |
 | Unit checksum | Header count | Header `<units> Cart`, `Shopping cart N items` |
@@ -172,10 +205,12 @@ Source of truth: search by article id, `GET $API/product/v2?q=<articleId>&pageTy
 
 ## 9. Open questions and untested
 
+- Liquor-hours enforcement (10.30pm-7am): not in the client JS; only an afternoon alcohol add was tested.
 - Seller-level bin (`cart-seller-bin-icon`) and `empty-cart-button` effects, confirmation behaviour, undo — not tested (and dangerous).
 - Checkout continue flows (address, slot, payment, place order) — deliberately not exercised; behaviour of Apple/Google Pay buttons unknown.
 - Promo bundles in the cart beyond what was observed (whether partial `Any 2` groups, mixed flavours or `BMIN` thresholds reprice rows as expected); `appliedOffers` semantics unverified.
 - Sold-by-weight items and variants; loose-item pricing at checkout.
-- Marketplace cart behaviour (extra delivery, per-seller fee) not exercised.
-- Long-session bot detection or rate limits: unknown; pace like RedMart (one product at a time, ~2 s between cart clicks) until evidence says otherwise.
+- Marketplace sellers that do get their own delivery block (the one MKP item tested stayed in the FairPrice delivery); per-seller fees.
+- Whether the bulk popup (code) ever appears for the household store; observed bulk add was accepted silently with a later slot. Live values of the remote-config flags (OOS_REDUCED_QUANTITY, DEPRECATE_PRODUCT_BULK_ORDER_THRESHOLD, FE_BCRS, alcohol disclaimer) are not in the bundle.
+- Long-session bot detection or rate limits: none seen in ~25 mutations over ~20 min at ≥2 s pacing; keep one product at a time, ≥2 s between cart clicks.
 - Slug-rename frequency (slug is generated from name + DisplayUnit; no rename observed).
