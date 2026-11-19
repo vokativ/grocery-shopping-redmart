@@ -91,10 +91,13 @@ Catalog modifications (initial seeding, order-history updates, or single additio
 
 1. **Human-only approval:** substantial changes use `templates/redmart-catalog-review-template.html`, rendered by `tools/render-catalog-review.mjs` and served on loopback by `tools/serve-catalog-review.mjs`. Never click `Approve`, invoke its handler, or synthesize an approved payload. Read `#catalog-review-approved-payload` only after the human approves in the browser.
 2. **Exact identity:** resolve every candidate to an `item_id`/`sku_id` pair by opening `https://www.lazada.sg/products/i<item_id>-s<sku_id>.html` and verifying the settled title, pack size, and variant. Never insert from overview cards, JavaScript links, or item-only pages. Check for duplicates and record title drift.
-3. **Aliases:** natural household terms, globally unique. Use `alias_product_ranks` to restrict specific aliases (e.g. `red apples: [2]`). `household_baskets` are for intentional multi-item mixes (2+ distinct existing members, no nesting).
+3. **Aliases:** natural household terms, globally unique. Use `alias_product_ranks` to restrict specific aliases (e.g. `cheddar slices: [2]` under sliced cheese). `household_baskets` are for intentional multi-item mixes (2+ distinct existing members, no nesting).
 4. **Validate:** `npm run validate` must pass; check new aliases with `node tools/dry-run.mjs --json "<alias>"`.
 5. **Single item left open in the browser:** scrape title, IDs, canonical URL, pack size, and price; insert it; validate.
-6. **Boundaries:** never order, pick delivery slots, or pay during catalog work. Alcohol can be catalogued normally.
+6. **Price refresh:** RedMart only by default. Run `node tools/fetch-redmart-prices.mjs --out <snapshot.json>` then `node tools/track-prices.mjs --redmart <snapshot.json>`. It updates `observed_price_sgd`/`observed_price_date` and appends `price-history.csv`; no review page is needed, it never touches the cart, and it stops on a Baxia/punish challenge (hand it to the human). Report notable price rises. Refresh FairPrice prices or run the FairPrice comparison only when the user explicitly asks for it. See [Price tracking](docs/developer-guide.md#price-tracking).
+7. **Boundaries:** never order, pick delivery slots, or pay during catalog work. Alcohol can be catalogued normally.
+
+FairPrice rules in `docs/fairprice/cart-rules.md` are **INACTIVE**; never use them unless the user explicitly reactivates FairPrice.
 
 ## Cart Request Interpretation
 
@@ -118,7 +121,7 @@ An alias match is a lookup, not proof that the SKU satisfies the request. Preser
 
 Evaluate each ordinary item and each basket member independently. Only request-compatible ranked backups are pre-approved, with their recorded pack sizes. Keep the requested quantity unless the list specified a weight/count incompatible with a fallback; ask only about that.
 
-Before selecting a SKU, compare the whole candidate chain with the cart baseline. If one compatible candidate is already in the cart, use it. An incompatible baseline row (green apples for “red apples”) does not fulfill the request; preserve it. If several candidates are present, or replacing one would require removal, preserve them and resolve the ambiguity.
+Before selecting a SKU, compare the whole candidate chain with the cart baseline. If one compatible candidate is already in the cart, use it. An incompatible baseline row (a different flavour, form, or variety than the one requested) does not fulfill the request; preserve it. If several candidates are present, or replacing one would require removal, preserve them and resolve the ambiguity.
 
 Open the first eligible canonical URL. Get two settled reads of exact identity (item/SKU from the final URL plus a matching semantic heading), the page-level `Product Availability` dates, and the exact main add/quantity control. If signals are missing, allow one more gentle wait and read (use a screenshot if extraction is incomplete), then apply the table. Do not poll indefinitely.
 

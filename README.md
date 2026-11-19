@@ -171,9 +171,13 @@ Your family catalog remembers:
 - The exact products and pack sizes you normally buy.
 - Your usual quantities, including how a mix is shared.
 - Backup products you have already accepted.
-- Specific wording that restricts the choice: “red apples” uses Royal Gala and “cheddar slices” uses cheddar, while generic “apples” and “sliced cheese” keep their usual rankings.
+- Specific wording that restricts the choice: “cheddar slices” uses cheddar and “edam slices” uses Edam, while generic “sliced cheese” keeps its usual ranking.
 
 The agent also waits for the progressively loaded product page, checks when the exact saved SKU can be delivered, and confirms each product-page quantity change before moving on. It then reconciles the complete cart by exact item/SKU and quantity. Lazada can hide or split quantities inside promotion groups, so the agent checks the relevant promotion editor before treating a missing or partial-looking ordinary row as an error. If the match is unclear or no acceptable product is available soon enough, it leaves the decision to you.
+
+## 💸 Keeping prices current
+
+RedMart prices drift. Ask the agent to “refresh the prices” now and then. It looks up each saved product on its public page at a gentle pace, updates the price and the date it was last checked in your catalog, and adds a line for every product to `price-history.csv`, a plain spreadsheet-style file you can open in Excel or Numbers. Over time that file shows how your usual groceries move in cost, and the agent can point out anything that has risen noticeably. A refresh never touches your cart, and it stops and tells you if Lazada shows a verification check. It only checks RedMart; ask explicitly if you also want the FairPrice comparison.
 
 ## 🔒 You remain in control
 
