@@ -79,7 +79,7 @@ function parseCsv(text) {
 
 const STORES = new Set(["redmart", "fairprice"]);
 
-function isCalendarDate(text) {
+export function isCalendarDate(text) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return false;
   const parsed = new Date(`${text}T00:00:00Z`);
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().startsWith(text);

@@ -340,7 +340,9 @@ test("track-prices reports malformed invocations", async () => {
     assert.match(error.stderr, /--redmart is required/);
     return true;
   });
-  await assert.rejects(run(process.execPath, ["tools/track-prices.mjs", "--redmart", "x.json", "--date", "19/11"], { cwd }), /--date must be YYYY-MM-DD/);
+  await assert.rejects(run(process.execPath, ["tools/track-prices.mjs", "--redmart", "x.json", "--date", "19/11"], { cwd }), /--date must be a real YYYY-MM-DD calendar date/);
+  // Impossible calendar dates would be written but later rejected by readPriceHistory.
+  await assert.rejects(run(process.execPath, ["tools/track-prices.mjs", "--redmart", "x.json", "--date", "2026-11-31"], { cwd }), /--date must be a real YYYY-MM-DD calendar date/);
 });
 
 test("an older snapshot records history but never moves the catalog backwards", async () => {

@@ -156,8 +156,10 @@ function priceRedmart(item, snapshot) {
   const skipped = [];
   if (!isNum(item.default_quantity) || item.default_quantity <= 0) fail(`Catalog item ${item.id} has no numeric default_quantity`);
   for (const product of products) {
-    const row = snapshot.byRank.get(`${item.id}#${product.rank}`)
-      ?? snapshot.bySku.get(`${item.id}#${product.item_id}#${product.sku_id}`);
+    // Exact item/SKU identity first; a rank-keyed row only counts when it is the same SKU (ranks can be reordered).
+    const rankRow = snapshot.byRank.get(`${item.id}#${product.rank}`);
+    const row = snapshot.bySku.get(`${item.id}#${product.item_id}#${product.sku_id}`)
+      ?? (rankRow && String(rankRow.item_id) === String(product.item_id) && String(rankRow.sku_id) === String(product.sku_id) ? rankRow : undefined);
     let reason = null;
     if (!row) reason = "missing_snapshot_row";
     else if (row.status !== "ok") reason = `status_${row.status}`;
@@ -248,6 +250,8 @@ function evaluateCandidate(candidate, snapshot, quantity, validationMs, rankUsed
   if (candidate.requirement_conflict !== false) exclusions.push("requirement_conflict");
   if (!GOOD_MATCH.has(candidate.match_quality)) exclusions.push(`match_${candidate.match_quality ?? "unknown"}`);
   if (!isNum(candidate.packs_per_redmart_pack) || candidate.packs_per_redmart_pack <= 0) exclusions.push("no_pack_ratio");
+  // packs_per_redmart_pack is relative to the mapping's reference product; it is wrong for any other priced rank.
+  else if (rankUsed != null && referenceRank != null && rankUsed !== referenceRank) exclusions.push("ratio_for_other_rank");
   if (live) {
     if (live.stock_scale === "oos" || (isNum(live.stock) && live.stock <= 0)) exclusions.push("out_of_stock");
     if (norm(live.display_unit) !== norm(candidate.pack_size)) exclusions.push("pack_changed");

@@ -4,7 +4,7 @@
 import { readFile, rename, rm, writeFile } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { Scalar, parseDocument } from "yaml";
-import { mergePriceHistory, readPriceHistory, writePriceHistory } from "./price-history.mjs";
+import { isCalendarDate, mergePriceHistory, readPriceHistory, writePriceHistory } from "./price-history.mjs";
 
 const USAGE = `Usage: node tools/track-prices.mjs --redmart <snapshot.json> [--catalog grocery-catalog.yaml]
          [--history price-history.csv] [--date YYYY-MM-DD] [--dry-run]`;
@@ -26,7 +26,7 @@ function parseArgs(argv) {
     } else throw new Error(`Unknown argument: ${flag}`);
   }
   if (!args.redmart) throw new Error("--redmart is required");
-  if (args.date !== null && !/^\d{4}-\d{2}-\d{2}$/.test(args.date)) throw new Error("--date must be YYYY-MM-DD");
+  if (args.date !== null && !isCalendarDate(args.date)) throw new Error("--date must be a real YYYY-MM-DD calendar date");
   return args;
 }
 
