@@ -6,7 +6,7 @@ store:
   notes:
     - Use canonical_url for shopping runs.
     - Ignore long tracking and search parameters such as spm, priceCompare, search, request_id, and observed referrers.
-    - observed_price_sgd is a reference from 2026-07-07, not a buying rule.
+    - observed_price_sgd is the latest observed price on observed_price_date (refreshed by tools/track-prices.mjs; history in price-history.csv), not a buying rule.
     - Prefer products available for delivery today or tomorrow. Two days from now is acceptable. More than two days from now needs human review.
 
 items:
@@ -351,8 +351,8 @@ items:
     alias_product_ranks:
       cheddar slices: [2]
       edam slices: [1]
-      emmental cheese: [3, 4]
-      emmental slices: [3, 4]
+      emmental cheese: [4]
+      emmental slices: [4]
     preferred_products:
       - rank: 1
         title: "RedMart Sliced Edam Cheese (100% Natural Cheese)"
@@ -368,13 +368,6 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3089551336-s21053142027.html"
         pack_size: "125 g"
         observed_price_sgd: 4.50
-      - rank: 3
-        title: "Paysan Breton Emmental Sliced Cheese"
-        item_id: "303280218"
-        sku_id: "536586295"
-        canonical_url: "https://www.lazada.sg/products/i303280218-s536586295.html"
-        pack_size: "160 g"
-        observed_price_sgd: 6.10
       - rank: 4
         title: "Tradition Sliced Emmental Cheese"
         item_id: "1043946934"
@@ -382,7 +375,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1043946934-s3897182810.html"
         pack_size: "125 g"
         observed_price_sgd: 5.04
-    notes: "Generic sliced cheese uses Edam first, cheddar second, then the two approved Emmental alternatives from the 2026-07-21 order."
+    notes: "Generic sliced cheese uses Edam first, cheddar second, then Tradition Emmental, now the only Emmental option. Ranks are kept at 1, 2 and 4 after Paysan Breton Emmental Sliced Cheese (rank 3) was removed on 2026-11-19 as no longer sold."
 
   - id: shredded_mozzarella
     category: chilled
@@ -709,11 +702,9 @@ items:
       - apple
       - green apples
       - granny smith apples
-      - red apples
     alias_product_ranks:
       green apples: [1]
       granny smith apples: [1]
-      red apples: [2]
     preferred_products:
       - rank: 1
         title: "Granny Smith Green Apples"
@@ -722,14 +713,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301072998-s527094932.html"
         pack_size: "1 kg"
         observed_price_sgd: 4.95
-      - rank: 2
-        title: "RedMart Organic Royal Gala Apples"
-        item_id: "721442990"
-        sku_id: "2285408425"
-        canonical_url: "https://www.lazada.sg/products/i721442990-s2285408425.html"
-        pack_size: "500 g"
-        observed_price_sgd: 5.85
-    notes: "Generic apples prefer Granny Smith, then Organic Royal Gala. Explicit red apples use Royal Gala only; explicit green/Granny Smith apples use Granny Smith only."
+    notes: "Generic apples use Granny Smith; explicit green/Granny Smith apples use Granny Smith only. RedMart Organic Royal Gala Apples (the only red option) removed 2026-11-19 as no longer sold, so an explicit red apples request is unmatched and left to the Local Recommendation Pass."
 
   - id: pears
     category: produce
@@ -1451,9 +1435,9 @@ items:
         item_id: "1060284099"
         sku_id: "4001518146"
         canonical_url: "https://www.lazada.sg/products/i1060284099-s4001518146.html"
-        pack_size: "75 ml"
+        pack_size: "4 x 75 ml"
         observed_price_sgd: 4.95
-    notes: "Kept distinct from the catalogued 100PLUS canned isotonic drink."
+    notes: "Kept distinct from the catalogued 100PLUS canned isotonic drink. The RedMart SKU is a 4-bar multipack (live SKU property 'Items Per Each' = 4; checked 2026-11-17)."
 
   - id: remedy_sodaly_guava
     category: beverages
@@ -1499,22 +1483,6 @@ items:
         pack_size: "300 g"
         observed_price_sgd: 5.45
     notes: "Approved as one mini-wrap concept; Wholemeal ranks first because its observed quantity was 3, followed by Pumpkin at 2 and Original at 1."
-
-  - id: apricots
-    category: produce
-    default_quantity: 1
-    aliases:
-      - apricot
-      - apricots
-    preferred_products:
-      - rank: 1
-        title: "Turkey Sugar Apricot"
-        item_id: "736500715"
-        sku_id: "2366926481"
-        canonical_url: "https://www.lazada.sg/products/i736500715-s2366926481.html"
-        pack_size: "350 g"
-        observed_price_sgd: 7.95
-    notes: "Approved from a past RedMart order on 2026-07-21."
 
   - id: sweet_potatoes
     category: produce

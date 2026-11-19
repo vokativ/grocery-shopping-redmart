@@ -21,7 +21,7 @@ For instruction regression checks, use an authorized session or a synthetic fixt
 
 - Integrated browser unavailable, existing household CDP/relay available: the agent should discover/reuse it and retain prior permission.
 - Shredded cheddar requested: find rank-2 sliced cheddar and disclose the form difference; after acceptance, do not choose Edam or ask again.
-- Red apples requested: select Royal Gala when catalogued; in a fixture with only green apples, offer that related option or new-product discovery without adding green apples automatically.
+- Red apples requested: no red apple SKU is catalogued (Royal Gala removed 2026-11-19 as no longer sold); offer green apples as a related option or new-product discovery without adding green apples automatically.
 - Review tab resized after edits: preserve quantities, exclusions, aliases, and human approval without reload.
 
 Report these as observed behavior, not as guaranteed by passing local tests.
