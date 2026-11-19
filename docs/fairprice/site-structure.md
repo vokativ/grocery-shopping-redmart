@@ -2,6 +2,8 @@
 
 Status: **experimental research for a future RedMart vs FairPrice price comparison.** Nothing here changes the RedMart workflow in [AGENTS.md](../../AGENTS.md). No FairPrice cart procedure is approved; this page records what was observed so a later procedure can be designed on facts.
 
+See also: [cart-rules.md](cart-rules.md) (inactive design for a FairPrice cart procedure, built on this page) and [experiments/fairprice/backup-catalog.yaml](../../experiments/fairprice/backup-catalog.yaml) (generated FairPrice substitutes per catalog item).
+
 ## 1. Scope and evidence
 
 | Source | What | Date |

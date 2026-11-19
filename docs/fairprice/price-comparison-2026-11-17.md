@@ -146,6 +146,8 @@ Net −5.01; without these four lines like_for_like normalized would be about +S
 
 Also noted: the earlier indicative run's figures are superseded by this document, not corrected by it (different item set and methodology).
 
+**Follow-up (2026-11-19).** The table above is the 2026-11-17 state and its numbers are unchanged. Since then: finding 1 is done (`100plus_frozen` `pack_size` is now `4 x 75 ml` in the catalog); finding 2 is done (the three discontinued SKUs were removed with user approval: `sliced_cheese` rank 3, `apples` rank 2, and the `apricots` item, so the catalog has 93 items); and observed prices are now tracked in [price-history.csv](../../price-history.csv) (`tools/fetch-redmart-prices.mjs`, `tools/track-prices.mjs`; catalog products carry `observed_price_date`), which addresses finding 3. Because the catalog changed, re-running the §2 command against today's catalog will not reproduce the published figures; the files in `snapshots/2026-11-17/` are the record. The household also decided not to use FairPrice for carts, so this comparison is reference only; a generated FairPrice backup catalog lives in [experiments/fairprice/backup-catalog.yaml](../../experiments/fairprice/backup-catalog.yaml) (see [cart-rules.md](cart-rules.md), inactive).
+
 ## 6. Reproduce / refresh
 
 How the 2026-11-17 snapshots were collected (no cart actions, no browser):

@@ -2,6 +2,8 @@
 
 Status: **experimental research for a future RedMart vs FairPrice price comparison.** Nothing here changes the RedMart workflow in [AGENTS.md](../../AGENTS.md). Companion to [site-structure.md](site-structure.md) (identity, price fields, API base `$API` = `https://website-api.omni.fairprice.com.sg/api`).
 
+See also: [cart-rules.md](cart-rules.md) (inactive) and [experiments/fairprice/backup-catalog.yaml](../../experiments/fairprice/backup-catalog.yaml) (generated FairPrice substitutes per catalog item, including house-brand picks).
+
 ## 1. Summary
 
 | Fact | Value | Source / date |
