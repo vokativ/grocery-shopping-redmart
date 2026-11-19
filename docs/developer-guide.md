@@ -43,7 +43,12 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - `templates/redmart-catalog-review-template.html` — reusable local approval UI.
 - `tests/` — behavioral catalog, CLI, renderer and loopback-server tests; source-text assertions are not evidence that an agent follows instructions.
 - `.github/workflows/ci.yml` — credential-free CI.
-- `docs/fairprice/`, `experiments/fairprice/catalog-mapping.yaml`, `experiments/fairprice/compare.mjs` and `experiments/fairprice/snapshots/` — experimental NTUC FairPrice research (site structure, private labels, catalog-to-FairPrice substitute mapping, dated price snapshots and the comparison script); not used by any shopping tool.
+- `tools/fetch-redmart-prices.mjs` — read-only, paced static fetch of every preferred product's price into a snapshot JSON; stops after two consecutive Baxia challenges.
+- `tools/track-prices.mjs` — applies a RedMart snapshot to `observed_price_sgd`/`observed_price_date` and appends `price-history.csv`.
+- `tools/price-history.mjs` — read/merge/write module for `price-history.csv`.
+- `price-history.csv` — dated RedMart (and FairPrice reference) price observations; see [Price tracking](#price-tracking).
+- `docs/fairprice/` — experimental NTUC FairPrice research (site structure, private labels, catalog mapping, price comparison). `cart-rules.md` holds **inactive** rules: the household does not use FairPrice for carts.
+- `experiments/fairprice/` — `catalog-mapping.yaml`, `fetch-prices.mjs` (price snapshot), `build-backup-catalog.mjs` (generates the reference `backup-catalog.yaml` of ranked FairPrice substitutes and its price-history rows), `compare.mjs` (RedMart vs FairPrice comparison) and dated `snapshots/`; not used by any shopping tool.
 
 ## Validation rules
 
@@ -72,7 +77,7 @@ Live RedMart behavior cannot be tested in CI because it depends on a household's
 
 `matchList` returns one result for every non-empty input line. Each result has a `selections[]` array of its concrete product selections, and basket matches also include a `basket_id`. Ordinary items no longer expose flat `product`/`pack_size`/`canonical_url` fields on the result itself — read `selections[0]` instead. That deliberate shape change is why `catalog_version` moved from `1` to `2`. The dry run prints the matched-input ratio and the resulting cart-row count separately, so expansion is visible before browser work.
 
-Every `selection.candidates` array retains **all** approved products in ascending rank order, with exact catalog item/SKU IDs and canonical URLs. Optional `alias_product_ranks` maps a specific alias to its compatible ranks (for example `red apples: [2]`). For those aliases, `eligible_candidates` contains only compatible products in catalog rank order, and the proposal fields use its first product. Generic aliases and basket members retain their original preferences. This is an additive version-2 extension; consumers must honor `eligible_candidates` when present. Neither matching nor a dry run checks live availability. `node tools/dry-run.mjs --json "feta cheese"` exposes the complete result without human-table output; use it to initialize an agent manifest, not as proof of a filled cart.
+Every `selection.candidates` array retains **all** approved products in ascending rank order, with exact catalog item/SKU IDs and canonical URLs. Optional `alias_product_ranks` maps a specific alias to its compatible ranks (for example `cheddar slices: [2]` under sliced cheese). For those aliases, `eligible_candidates` contains only compatible products in catalog rank order, and the proposal fields use its first product. Generic aliases and basket members retain their original preferences. This is an additive version-2 extension; consumers must honor `eligible_candidates` when present. Neither matching nor a dry run checks live availability. `node tools/dry-run.mjs --json "feta cheese"` exposes the complete result without human-table output; use it to initialize an agent manifest, not as proof of a filled cart.
 
 
 ## Catalog maintenance
@@ -204,6 +209,50 @@ To add a single new item from an open page:
 4. Add a new item to `grocery-catalog.yaml`, add another ranked product under an existing item, or add a `household_baskets` entry that references existing items for a new mix.
 5. Validate the catalog via `npm run validate` (or `node tools/validate-catalog.mjs`).
 
+## Price tracking
+
+Observed prices are refreshed by a read-only static page fetch followed by a catalog and history update. The household asked for this as routine maintenance: it needs no catalog review page, never touches the cart or the logged-in session, and is separate from the [Catalog Changes Contract](../AGENTS.md#catalog-changes-contract) approval flow for adding or removing products.
+
+```bash
+node tools/fetch-redmart-prices.mjs --out /tmp/redmart-prices.json     # ~3–5 s per product
+node tools/track-prices.mjs --redmart /tmp/redmart-prices.json --dry-run   # preview changes
+node tools/track-prices.mjs --redmart /tmp/redmart-prices.json             # write catalog + history
+npm run validate
+```
+
+- **Fetch.** `tools/fetch-redmart-prices.mjs` requests each preferred product's canonical page once, with 3–5 s jittered spacing (`--delay-min`/`--delay-max`), and writes a bare JSON array snapshot. Each row has a `status` of `ok`, `identity_mismatch`, `unavailable`, `challenge`, or `error`; only `ok` rows carry a trusted `price_sgd`. After **2 consecutive Baxia/punish challenges** it stops; do not retry, work around, or reduce the spacing. Wait and ask the human, or try again later.
+- **Track.** `tools/track-prices.mjs` updates `observed_price_sgd` in `grocery-catalog.yaml` only when the observed price changed, and sets `observed_price_date` on every observed product. It appends rows to `price-history.csv` and prints each change plus the full-catalog value before and after. `--date` overrides the snapshot's Asia/Singapore date; `--dry-run` writes nothing.
+- **`observed_price_date`.** A quoted `YYYY-MM-DD` string after `observed_price_sgd`; it is the last date the price was **checked**, not the date it last changed. `validate-catalog` does not check it. `tools/track-prices.mjs` owns writing it; do not edit it by hand.
+- **Rises.** The tracker only records. When the report shows notable rises, tell the household which products moved and by how much; do not change ranks, aliases, or quantities because of price. A rank change is a preference change and goes through catalog review.
+
+### `price-history.csv`
+
+UTF-8 RFC 4180 CSV at the repository root. Header: `date,store,catalog_item_id,rank,product_id,title,pack_size,price_sgd,source`.
+
+| Column | Meaning |
+|---|---|
+| `date` | `YYYY-MM-DD`, Asia/Singapore date of the observation |
+| `store` | `redmart` or `fairprice` |
+| `catalog_item_id` | `grocery-catalog.yaml` item id |
+| `rank` | RedMart `preferred_products` rank, or the FairPrice backup-catalog rank |
+| `product_id` | RedMart `i<item_id>-s<sku_id>`; FairPrice `fp-<article_id>` |
+| `title`, `pack_size` | As observed (live title when available) |
+| `price_sgd` | Selling price of one pack, two decimals; FairPrice is the single-unit price including a single-unit promo |
+| `source` | Short token such as `catalog-baseline`, `redmart-static-page`, `fairprice-api`, `fairprice-api-promo` |
+
+Rows are sorted by date, store, item id, then rank, with one row per (date, store, product_id). Re-running the same date **replaces** that date's rows for that store, so the update is idempotent. `tools/price-history.mjs` (`readPriceHistory`, `mergePriceHistory`, `writePriceHistory`, `formatPrice`, `PRICE_HISTORY_COLUMNS`) is the only code that reads and writes the file. The seed covers git-dated catalog baselines from 2026-07-07 through 2026-11-11 plus the 2026-11-17 and 2026-11-19 snapshots.
+
+### FairPrice backup rows
+
+The household decided **not** to use FairPrice for carts; `docs/fairprice/cart-rules.md` is inactive and no shopping tool reads FairPrice data. `experiments/fairprice/backup-catalog.yaml` is a generated reference of ranked FairPrice substitutes per catalog item. FairPrice rows enter `price-history.csv` only as a by-product of regenerating it:
+
+```bash
+node experiments/fairprice/fetch-prices.mjs --out experiments/fairprice/snapshots/<date>/fairprice-prices.json
+node experiments/fairprice/build-backup-catalog.mjs --fairprice experiments/fairprice/snapshots/<date>/fairprice-prices.json --history price-history.csv
+```
+
+`build-backup-catalog.mjs` merges the `fairprice` rows through the same idempotent per-date replacement. `experiments/fairprice/compare.mjs` compares a RedMart snapshot with a FairPrice snapshot.
+
 ## Session reliability review 2026-10-18
 
 Session analysis of a T3 Code run using the Antigravity harness with `gemini-3.8-flash-high`, driving the household Chrome over loopback CDP. This was the first cart fill through raw CDP; previous successful runs used ChatGPT Desktop's browser or the OMP relay. 12 of 14 matched products were added; the model then told the user that Lazada anti-automation throttling had blocked the last two.
@@ -232,14 +281,14 @@ This review uses the conversation and local repository evidence, not a new shopp
 |---|---|
 | Missing integrated view was treated as a missing browser, despite an existing Chrome session | One discovery hierarchy: integrated view, existing sessions, authorized CDP/relay, supported computer use. Recover prior selection/permission before asking. |
 | Cheddar at rank 2 was missed when the list said shredded cheddar | Local suggestions inspect aliases and every product title; disclose sliced/shredded mismatch and obtain acceptance only for that difference. |
-| Adding “red apples” as a generic alias still selected green apples | Alias-specific rank restrictions select Royal Gala; corresponding cheese aliases select their named variety. Generic ranks and full chains remain intact. |
+| Adding “red apples” as a generic alias still selected green apples | Alias-specific rank restrictions select the compatible variety (at the time, Royal Gala for “red apples”; that SKU and restriction were removed 2026-11-19); the cheese aliases still select their named variety. Generic ranks and full chains remain intact. |
 | Literal unmatched handling stopped useful recommendations | Lexical hints are returned separately from selections. Agents also search alternate local wording and distinguish equivalence from substitution. |
 | Review appeared in a narrow viewport | Foreground full-tab review, remove accidental emulation, and resize without reloading or losing edits. |
 | Repeated browser-specific rules contradicted fallback behavior | Consolidated discovery/sign-in rules and a source-linked connection matrix replace obsolete branches rather than leaving commented-out instructions. |
 
 Unmatched JSON results may include `suggestions`, each with `requires_confirmation: true`, matching text, default quantity, and the complete ranked chain. This is bounded lexical overlap, not semantic matching: it can miss synonyms or find irrelevant neighbours. Suggestions never populate `selections`, change quantities, update aliases, or authorize substitutions. The agent still checks the user's original constraints. Invalid/unrepresentable quantities produce no suggestions.
 
-Local regression tests cover pre-update red apples (green suggestion only), current red apples (Royal Gala only), rank-2 cheddar discovery, hand-soap wording, specific cheese restrictions, preserved generic/basket behavior, malformed restrictions, and text/JSON output. No live cart mutation is needed for these instruction and matching fixes; browser compatibility remains subject to the evidence in [the connection guide](browser-connections.md).
+Local regression tests cover the pre-update behavior for a restricted alias (a generic suggestion only), the restricted alias after the update, rank-2 cheddar discovery, hand-soap wording, specific cheese restrictions, preserved generic/basket behavior, malformed restrictions, and text/JSON output. (The “red apples” restriction used in these tests was later removed with its Royal Gala SKU on 2026-11-19; “red apples” is now unmatched and the Local Recommendation Pass suggests green apples. The mechanism is unchanged and still used, for example by `cheddar slices`.) No live cart mutation is needed for these instruction and matching fixes; browser compatibility remains subject to the evidence in [the connection guide](browser-connections.md).
 
 ## Session reliability review 2026-09-09
 
