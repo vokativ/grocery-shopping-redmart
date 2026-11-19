@@ -1016,14 +1016,7 @@ items:
         pack_size: "200 g"
         observed_price_sgd: 9.60
         observed_price_date: "2026-11-19"
-      - rank: 3
-        title: "Supervalu Greek Feta Cheese 200G"
-        item_id: "2443619723"
-        sku_id: "14475877469"
-        canonical_url: "https://www.lazada.sg/products/i2443619723-s14475877469.html"
-        pack_size: "200 g"
-        observed_price_sgd: 8.02
-    notes: "Default quantity is 2. Sainsbury's Greek Feta added as rank 2 fallback from 2026-11-10 review; Kolios retained as rank 1."
+    notes: "Default quantity is 2. Sainsbury's Greek Feta added as rank 2 fallback from 2026-11-10 review; Kolios retained as rank 1. Supervalu Greek Feta (former rank 3) removed 2026-11-19: product page no longer available."
 
   - id: cucumber
     category: produce
