@@ -25,6 +25,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304020688-s538156357.html"
         pack_size: "110 g"
         observed_price_sgd: 4.55
+        observed_price_date: "2026-11-19"
     notes: "Rebuilt from the approved 2026-07-23 order review; the former black rice crackers product was explicitly excluded."
 
   - id: big_garbage_bags
@@ -43,7 +44,8 @@ items:
         sku_id: "536598345"
         canonical_url: "https://www.lazada.sg/products/i303292174-s536598345.html"
         pack_size: "15 Per Pack"
-        observed_price_sgd: 2.44
+        observed_price_sgd: 3.05
+        observed_price_date: "2026-11-19"
     notes: "Default quantity is 2 from the 2026-07-07 cart."
 
   - id: persil_powder
@@ -65,6 +67,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304106042-s538220611.html"
         pack_size: "4.5 kg"
         observed_price_sgd: 15.29
+        observed_price_date: "2026-11-19"
     notes: "Use this for whiteboard text like 'persil powder'."
 
   - id: eggs
@@ -81,7 +84,8 @@ items:
         sku_id: "527120220"
         canonical_url: "https://www.lazada.sg/products/i301088929-s527120220.html"
         pack_size: "15 x 60 g"
-        observed_price_sgd: 4.65
+        observed_price_sgd: 5.10
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "RedMart Fresh Local Eggs (Large) 15X60G"
         item_id: "3229271520"
@@ -89,6 +93,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3229271520-s21867677118.html"
         pack_size: "15 x 60 g"
         observed_price_sgd: 5.67
+        observed_price_date: "2026-11-19"
     notes: "The long-running RedMart 15 Eggs SKU remains first; the fresh local large-eggs SKU from the 2026-07-23 order is the approved fallback."
 
   - id: capsicum
@@ -108,6 +113,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i327262071-s692076794.html"
         pack_size: "450 g"
         observed_price_sgd: 4.35
+        observed_price_date: "2026-11-19"
     notes: "Three-color capsicum pack. The 2026-07-03 Palermo capsicum order item now resolves to an unavailable product page."
 
   - id: tortilla_chips
@@ -125,6 +131,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303248836-s536550938.html"
         pack_size: "170 g"
         observed_price_sgd: 4.17
+        observed_price_date: "2026-11-19"
     notes: "Pack size confirmed during the 2026-07-07 cart-fill test run."
 
   - id: ham
@@ -142,6 +149,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i318264428-s611366135.html"
         pack_size: "150 g"
         observed_price_sgd: 4.40
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "RedMart Honey Baked Ham (No added Nitrate And Nitrite)"
         item_id: "2804375009"
@@ -149,6 +157,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2804375009-s19369866895.html"
         pack_size: "150 g"
         observed_price_sgd: 6.00
+        observed_price_date: "2026-11-19"
     notes: "Smoked chicken ham remains first; the honey baked ham from the 2026-09-14 order is the approved fallback."
 
   - id: chicken_breast
@@ -165,7 +174,8 @@ items:
         sku_id: "2590912925"
         canonical_url: "https://www.lazada.sg/products/i787612808-s2590912925.html"
         pack_size: "200 g"
-        observed_price_sgd: 2.62
+        observed_price_sgd: 3.75
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Kee Song Fresh Chicken Breasts"
         item_id: "301090787"
@@ -173,6 +183,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301090787-s527090735.html"
         pack_size: "300 g"
         observed_price_sgd: 5.80
+        observed_price_date: "2026-11-19"
     notes: "Default quantity is 2 from the 2026-07-07 cart; Kee Song chicken breasts added as approved alternative from 2026-10-16 review."
 
   - id: papaya
@@ -189,13 +200,15 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301130721-s527192914.html"
         pack_size: "730 g"
         observed_price_sgd: 3.48
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Hong Kong Red Papaya 1.2KG"
         item_id: "303422444"
         sku_id: "536820204"
         canonical_url: "https://www.lazada.sg/products/i303422444-s536820204.html"
         pack_size: "1.2 kg"
-        observed_price_sgd: 4.95
+        observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
     notes: "Maps generic 'papaya'. Hong Kong Red Papaya added as approved fallback from 2026-10-16 review."
 
   - id: watermelon
@@ -213,6 +226,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301118012-s527094969.html"
         pack_size: "1.8 kg"
         observed_price_sgd: 6.95
+        observed_price_date: "2026-11-19"
     notes: "Maps generic 'watermelon'."
 
   - id: coconut_oil
@@ -228,7 +242,8 @@ items:
         sku_id: "536444588"
         canonical_url: "https://www.lazada.sg/products/i303180934-s536444588.html"
         pack_size: "1 L"
-        observed_price_sgd: 9.65
+        observed_price_sgd: 9.95
+        observed_price_date: "2026-11-19"
     notes: "Added to today's cart as cooking oil."
 
   - id: olive_oil
@@ -245,7 +260,8 @@ items:
         sku_id: "527266381"
         canonical_url: "https://www.lazada.sg/products/i301196092-s527266381.html"
         pack_size: "1 L"
-        observed_price_sgd: 18.81
+        observed_price_sgd: 20.90
+        observed_price_date: "2026-11-19"
     notes: "Added to today's cart as an extra item."
 
   - id: tomato_sauce
@@ -264,6 +280,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2679171713-s17543999547.html"
         pack_size: "500 g"
         observed_price_sgd: 2.72
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Sainsbury's Passata"
         item_id: "303954354"
@@ -271,6 +288,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303954354-s538044347.html"
         pack_size: "500 g"
         observed_price_sgd: 2.50
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "Prego Tomato Pasta Sauce Traditional 350g Jar"
         item_id: "305138179"
@@ -278,6 +296,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i305138179-s541230322.html"
         pack_size: "350 g"
         observed_price_sgd: 3.60
+        observed_price_date: "2026-11-19"
       - rank: 4
         title: "Supervalu Signature Tastes Rustic Passata Tomato Puree"
         item_id: "2679250236"
@@ -285,6 +304,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2679250236-s17544118041.html"
         pack_size: "690 g"
         observed_price_sgd: 4.23
+        observed_price_date: "2026-11-19"
     notes: "Supervalu Tomato Passata approved as rank 1 per household preference; Sainsbury's Passata, Prego, and Supervalu Rustic Passata preserved as fallbacks."
 
   - id: ground_beef
@@ -302,6 +322,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301098923-s527128205.html"
         pack_size: "300 g"
         observed_price_sgd: 9.10
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'ground beef'."
 
   - id: ground_pork
@@ -319,6 +340,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304074281-s538202297.html"
         pack_size: "500 g"
         observed_price_sgd: 6.95
+        observed_price_date: "2026-11-19"
     notes: "Visible-title drift confirmed on the existing item/SKU from the approved 2026-07-23 order; maps ground or minced pork."
 
   - id: ground_chicken
@@ -336,6 +358,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3464540910-s22966857377.html"
         pack_size: "500 g"
         observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'chicken' in the ground meat line."
 
   - id: sliced_cheese
@@ -361,6 +384,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3089420229-s21052862487.html"
         pack_size: "125 g"
         observed_price_sgd: 4.50
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "RedMart Australian Sliced Cheddar Cheese (100% Natural Cheese)"
         item_id: "3089551336"
@@ -368,6 +392,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3089551336-s21053142027.html"
         pack_size: "125 g"
         observed_price_sgd: 4.50
+        observed_price_date: "2026-11-19"
       - rank: 4
         title: "Tradition Sliced Emmental Cheese"
         item_id: "1043946934"
@@ -375,6 +400,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1043946934-s3897182810.html"
         pack_size: "125 g"
         observed_price_sgd: 5.04
+        observed_price_date: "2026-11-19"
     notes: "Generic sliced cheese uses Edam first, cheddar second, then Tradition Emmental, now the only Emmental option. Ranks are kept at 1, 2 and 4 after Paysan Breton Emmental Sliced Cheese (rank 3) was removed on 2026-11-19 as no longer sold."
 
   - id: shredded_mozzarella
@@ -396,13 +422,15 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303406936-s536776915.html"
         pack_size: "170 g"
         observed_price_sgd: 4.40
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Tradition Shredded Mozzarella Cheese"
         item_id: "301170240"
         sku_id: "527260609"
         canonical_url: "https://www.lazada.sg/products/i301170240-s527260609.html"
         pack_size: "225 g"
-        observed_price_sgd: 5.24
+        observed_price_sgd: 5.75
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "RedMart Shredded Mozzarella And Cheddar Cheese"
         item_id: "303432256"
@@ -410,6 +438,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303432256-s536800573.html"
         pack_size: "170 g"
         observed_price_sgd: 4.40
+        observed_price_date: "2026-11-19"
       - rank: 4
         title: "Sainsbury's Grated Mozzarella Cheese"
         item_id: "304206677"
@@ -417,6 +446,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304206677-s538390843.html"
         pack_size: "250 g"
         observed_price_sgd: 7.95
+        observed_price_date: "2026-11-19"
       - rank: 5
         title: "Tradition Shredded Mozzarella Cheese - Frozen 1kg"
         item_id: "303928154"
@@ -424,6 +454,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303928154-s537950660.html"
         pack_size: "1 kg"
         observed_price_sgd: 17.90
+        observed_price_date: "2026-11-19"
     notes: "RedMart shredded mozzarella approved as rank 1 from 2026-11-10 review; Tradition, RedMart blend, Sainsbury's grated, and Tradition 1kg preserved as fallbacks."
 
   - id: cheese_sticks
@@ -441,6 +472,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301156968-s527256419.html"
         pack_size: "108 g"
         observed_price_sgd: 7.85
+        observed_price_date: "2026-11-19"
     notes: "Default quantity is 2 from the 2026-07-03 order."
 
   - id: apple_juice
@@ -457,6 +489,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2895095689-s20067927281.html"
         pack_size: "1 L"
         observed_price_sgd: 4.50
+        observed_price_date: "2026-11-19"
     notes: "Big fridge apple juice from the 2026-07-03 whiteboard."
 
   - id: apple_juice_boxes
@@ -477,6 +510,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303950799-s538088354.html"
         pack_size: "6 x 200 ml"
         observed_price_sgd: 5.29
+        observed_price_date: "2026-11-19"
     notes: "Small boxed apple juice packs; default quantity is 2 from the 2026-07-03 order."
 
   - id: dishwashing_liquid
@@ -495,6 +529,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301192074-s527276152.html"
         pack_size: "750 ml"
         observed_price_sgd: 1.90
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Mama Lemon Natural Lemon Fragrance Dishwashing Liquid Refill Pack -600ML"
         item_id: "301090877"
@@ -502,6 +537,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301090877-s527132021.html"
         pack_size: "600 ml"
         observed_price_sgd: 1.65
+        observed_price_date: "2026-11-19"
     notes: "RedMart lemon dishwashing liquid remains first; the approved Mama Lemon refill is the ranked fallback."
 
   - id: handwash
@@ -518,6 +554,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301168260-s527252610.html"
         pack_size: "250 ml"
         observed_price_sgd: 3.15
+        observed_price_date: "2026-11-19"
     notes: "Approved from the 2026-09-14 RedMart order with the reviewed default quantity of 2."
 
   - id: toilet_wipes
@@ -535,6 +572,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304170218-s538362363.html"
         pack_size: "60 Per Pack"
         observed_price_sgd: 3.70
+        observed_price_date: "2026-11-19"
     notes: "Default quantity updated to 2 and title drift updated from 2026-10-16 review."
 
   - id: tissue_box
@@ -554,6 +592,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301082942-s527114258.html"
         pack_size: "5 Boxes"
         observed_price_sgd: 5.05
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Premier Classic 2-Ply Facial Tissue - 5 Boxes [Design may Vary]"
         item_id: "1105492861"
@@ -561,6 +600,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1105492861-s4268640922.html"
         pack_size: "200 Per Pack"
         observed_price_sgd: 7.10
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "Vinda Classic 2-Ply Facial Tissue Box - 5 Box"
         item_id: "3345577093"
@@ -568,6 +608,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3345577093-s22380105291.html"
         pack_size: "90 Per Pack"
         observed_price_sgd: 4.60
+        observed_price_date: "2026-11-19"
     notes: "RedMart 2-ply 5 boxes approved as rank 1 from 2026-11-10 review; Premier and Vinda preserved as fallbacks."
 
   - id: kitchen_towel
@@ -586,6 +627,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301082945-s527114260.html"
         pack_size: "6 x 60 Per Pack"
         observed_price_sgd: 4.55
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'kitchen towel'."
 
   - id: toilet_tissue
@@ -603,6 +645,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301096855-s527104735.html"
         pack_size: "10 x 200 Per Pack"
         observed_price_sgd: 5.60
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'toilet tissue'."
 
   - id: kimchi
@@ -622,7 +665,8 @@ items:
         sku_id: "12060189079"
         canonical_url: "https://www.lazada.sg/products/i2124781720-s12060189079.html"
         pack_size: "400 g"
-        observed_price_sgd: 6.90
+        observed_price_sgd: 8.60
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "CJ Sliced Cabbage Kimchi Korean Banchan 500g (Tube)"
         item_id: "1167012126"
@@ -630,13 +674,15 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1167012126-s4607296865.html"
         pack_size: "500 g"
         observed_price_sgd: 8.90
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "Coook Sliced Mat Cabbage Kimchi Korean Banchan 500G"
         item_id: "2991175808"
         sku_id: "20508685220"
         canonical_url: "https://www.lazada.sg/products/i2991175808-s20508685220.html"
         pack_size: "500 g"
-        observed_price_sgd: 7.35
+        observed_price_sgd: 7.40
+        observed_price_date: "2026-11-19"
       - rank: 4
         title: "I'm Kimchi Korean Cabbage Kimchi Banchan"
         item_id: "301072906"
@@ -644,6 +690,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301072906-s527094684.html"
         pack_size: "500 g"
         observed_price_sgd: 9.70
+        observed_price_date: "2026-11-19"
       - rank: 5
         title: "JIN White Kimchi Korean Banchan"
         item_id: "2124749952"
@@ -651,6 +698,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2124749952-s12060187021.html"
         pack_size: "400 g"
         observed_price_sgd: 8.90
+        observed_price_date: "2026-11-19"
     notes: "Generic kimchi prefers JIN spicy kimchi, then CJ cabbage kimchi, with Coook and I'm Kimchi as cabbage fallbacks; JIN white kimchi is the last fallback (approved 2026-10-16 with the family word 'kimchi')."
 
   - id: lemon
@@ -668,6 +716,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1548788612-s7249264792.html"
         pack_size: "650 g"
         observed_price_sgd: 5.15
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'lemon'."
 
   - id: avocado
@@ -685,13 +734,15 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301100809-s527084959.html"
         pack_size: "450 g"
         observed_price_sgd: 10.95
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "RedMart Hass Avocado 3PCS Australia"
         item_id: "1933997102"
         sku_id: "10339963745"
         canonical_url: "https://www.lazada.sg/products/i1933997102-s10339963745.html"
         pack_size: "500 g"
-        observed_price_sgd: 9.95
+        observed_price_sgd: 13.90
+        observed_price_date: "2026-11-19"
     notes: "The Mexico/USA Airflown pack (now titled 3/4 pcs) remains first; the approved RedMart Australia 3-piece pack from the 2026-09-09 order is the fallback."
 
   - id: apples
@@ -713,6 +764,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301072998-s527094932.html"
         pack_size: "1 kg"
         observed_price_sgd: 4.95
+        observed_price_date: "2026-11-19"
     notes: "Generic apples use Granny Smith; explicit green/Granny Smith apples use Granny Smith only. RedMart Organic Royal Gala Apples (the only red option) removed 2026-11-19 as no longer sold, so an explicit red apples request is unmatched and left to the Local Recommendation Pass."
 
   - id: pears
@@ -730,6 +782,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303632649-s537332032.html"
         pack_size: "600 g"
         observed_price_sgd: 4.00
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Australia Packham Pears"
         item_id: "301073000"
@@ -737,6 +790,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301073000-s527094935.html"
         pack_size: "1 kg"
         observed_price_sgd: 4.95
+        observed_price_date: "2026-11-19"
     notes: "RedMart Packham Pear 600g approved as rank 1 from 2026-11-10 review; Australia Packham Pears 1kg preserved as rank 2 fallback."
 
   - id: kiwi
@@ -755,6 +809,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301108865-s527088978.html"
         pack_size: "440 g"
         observed_price_sgd: 5.04
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'kiwi'."
 
   - id: oranges
@@ -773,7 +828,8 @@ items:
         sku_id: "4461922707"
         canonical_url: "https://www.lazada.sg/products/i1142960678-s4461922707.html"
         pack_size: "500 g"
-        observed_price_sgd: 4.50
+        observed_price_sgd: 4.95
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'oranges'."
 
   - id: cream_cheese
@@ -789,6 +845,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301134724-s527214748.html"
         pack_size: "200 g"
         observed_price_sgd: 4.33
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Philadelphia Light Spreadable Cream Cheese 250g"
         item_id: "301168071"
@@ -796,6 +853,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301168071-s527252312.html"
         pack_size: "250 g"
         observed_price_sgd: 7.80
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'cream cheese'. Philadelphia added as rank 2 from 2026-10-16 review."
 
   - id: cottage_cheese
@@ -811,6 +869,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301150670-s527232247.html"
         pack_size: "200 g"
         observed_price_sgd: 6.60
+        observed_price_date: "2026-11-19"
     notes: "Approved as a distinct household concept from the 2026-09-14 RedMart order."
 
   - id: pepsi_black
@@ -829,6 +888,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303940576-s538054013.html"
         pack_size: "24 x 320 ml"
         observed_price_sgd: 17.82
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Pepsi Zero Sugar Cola Soda (4 x 320ML)"
         item_id: "303966008"
@@ -836,6 +896,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303966008-s538036500.html"
         pack_size: "4 x 320 ml"
         observed_price_sgd: 3.80
+        observed_price_date: "2026-11-19"
     notes: "Maps the 2026-07-03 whiteboard item 'Pepsi black'. Rank 2 was resolved from the 2026-07-10 order-detail pass."
 
   - id: fresh_milk
@@ -853,6 +914,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303304089-s536620243.html"
         pack_size: "1 L"
         observed_price_sgd: 2.05
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Farmhouse Fresh Milk 946ML"
         item_id: "301076934"
@@ -860,6 +922,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301076934-s527122109.html"
         pack_size: "946 ml"
         observed_price_sgd: 3.73
+        observed_price_date: "2026-11-19"
     notes: "RedMart UHT Full Cream Milk approved as rank 1 from 2026-11-10 review; Farmhouse fresh milk preserved as rank 2 fallback."
 
   - id: low_fat_milk
@@ -874,7 +937,8 @@ items:
         sku_id: "527112326"
         canonical_url: "https://www.lazada.sg/products/i301084922-s527112326.html"
         pack_size: "946 ml"
-        observed_price_sgd: 3.40
+        observed_price_sgd: 3.73
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order placed on 2026-08-10."
 
   - id: lettuce
@@ -893,6 +957,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2149788919-s12237639509.html"
         pack_size: "300 g"
         observed_price_sgd: 1.95
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Uncle Jack's Butterhead Lettuce"
         item_id: "2367366756"
@@ -900,6 +965,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2367366756-s13842110206.html"
         pack_size: "200 g"
         observed_price_sgd: 2.25
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "Butterhead Lettuce"
         item_id: "301074936"
@@ -907,6 +973,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301074936-s527080881.html"
         pack_size: "200 g"
         observed_price_sgd: 3.00
+        observed_price_date: "2026-11-19"
     notes: "RedMart Baby Romaine 300g approved as rank 1 from 2026-11-10 review; Uncle Jack's and Butterhead preserved as fallbacks."
 
   - id: onions
@@ -921,7 +988,8 @@ items:
         sku_id: "1352684044"
         canonical_url: "https://www.lazada.sg/products/i491826153-s1352684044.html"
         pack_size: "1 kg"
-        observed_price_sgd: 3.39
+        observed_price_sgd: 3.50
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order placed on 2026-08-10."
 
   - id: feta_cheese
@@ -939,6 +1007,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2634307789-s16772993862.html"
         pack_size: "150 g"
         observed_price_sgd: 7.40
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Sainsbury's Greek Feta Cheese"
         item_id: "304208554"
@@ -946,6 +1015,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304208554-s538406503.html"
         pack_size: "200 g"
         observed_price_sgd: 9.60
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "Supervalu Greek Feta Cheese 200G"
         item_id: "2443619723"
@@ -970,6 +1040,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i327250341-s692072902.html"
         pack_size: "400 g"
         observed_price_sgd: 1.80
+        observed_price_date: "2026-11-19"
     notes: "Default quantity is 3 from the 2026-07-03 order."
 
   - id: zucchini
@@ -988,6 +1059,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i327266027-s692090585.html"
         pack_size: "750 g"
         observed_price_sgd: 3.35
+        observed_price_date: "2026-11-19"
     notes: "Approved from the 2026-11-17 review of the RedMart order placed on 2026-11-16."
 
   - id: spring_onion_kimchi
@@ -1004,7 +1076,8 @@ items:
         sku_id: "12060083764"
         canonical_url: "https://www.lazada.sg/products/i2124778809-s12060083764.html"
         pack_size: "345 g"
-        observed_price_sgd: 8.20
+        observed_price_sgd: 8.90
+        observed_price_date: "2026-11-19"
     notes: "Optional known cart item from 2026-07-07; not on the whiteboard list."
 
   - id: cherry_tomatoes
@@ -1023,6 +1096,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i327264049-s692104083.html"
         pack_size: "250 g"
         observed_price_sgd: 1.85
+        observed_price_date: "2026-11-19"
     notes: "Resolved from a past RedMart order detail during the 2026-07-10 catalog seeding pass."
 
   - id: mayonnaise
@@ -1039,7 +1113,8 @@ items:
         sku_id: "17544099221"
         canonical_url: "https://www.lazada.sg/products/i2679295018-s17544099221.html"
         pack_size: "425 ml"
-        observed_price_sgd: 5.06
+        observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
     notes: "Resolved from a past RedMart order detail during the 2026-07-10 catalog seeding pass."
 
   - id: remedy_sodaly_yuzu
@@ -1057,7 +1132,8 @@ items:
         sku_id: "21649460937"
         canonical_url: "https://www.lazada.sg/products/i3182702274-s21649460937.html"
         pack_size: "4 x 250 ml"
-        observed_price_sgd: 9.40
+        observed_price_sgd: 11.20
+        observed_price_date: "2026-11-19"
     notes: "Default quantity follows the repeated order-detail quantity seen in a past order."
 
   - id: dragonfruit
@@ -1075,6 +1151,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301118003-s527094938.html"
         pack_size: "2 per pack"
         observed_price_sgd: 3.15
+        observed_price_date: "2026-11-19"
     notes: "Resolved from a past RedMart order detail during the 2026-07-10 catalog seeding pass."
 
   - id: fabric_softener
@@ -1092,7 +1169,8 @@ items:
         sku_id: "12960073965"
         canonical_url: "https://www.lazada.sg/products/i2250924577-s12960073965.html"
         pack_size: "3.5 L"
-        observed_price_sgd: 14.58
+        observed_price_sgd: 18.23
+        observed_price_date: "2026-11-19"
     notes: "Resolved from a past RedMart order detail during the 2026-07-10 catalog seeding pass."
 
   - id: butter
@@ -1110,6 +1188,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301076866-s527078857.html"
         pack_size: "227 g"
         observed_price_sgd: 5.70
+        observed_price_date: "2026-11-19"
     notes: "Resolved from a past RedMart order detail during the 2026-07-10 catalog seeding pass."
 
   - id: 100plus_zero_sugar_isotonic
@@ -1127,7 +1206,8 @@ items:
         sku_id: "537408441"
         canonical_url: "https://www.lazada.sg/products/i303720249-s537408441.html"
         pack_size: "24 x 325 ml"
-        observed_price_sgd: 13.90
+        observed_price_sgd: 16.80
+        observed_price_date: "2026-11-19"
     notes: "Approved from the newest RedMart order on 2026-07-13."
 
   - id: yoghurt
@@ -1145,7 +1225,8 @@ items:
         sku_id: "527098872"
         canonical_url: "https://www.lazada.sg/products/i301102820-s527098872.html"
         pack_size: "1 kg"
-        observed_price_sgd: 10.34
+        observed_price_sgd: 11.70
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order on 2026-07-23."
 
   - id: carrots
@@ -1162,6 +1243,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303998239-s538088935.html"
         pack_size: "500 g"
         observed_price_sgd: 0.95
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order on 2026-07-23."
 
   - id: potatoes
@@ -1178,6 +1260,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301110861-s527092874.html"
         pack_size: "1 kg"
         observed_price_sgd: 1.65
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order on 2026-07-23."
 
   - id: rice_paper
@@ -1195,6 +1278,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304192463-s538360847.html"
         pack_size: "100 g"
         observed_price_sgd: 1.56
+        observed_price_date: "2026-11-19"
     notes: "Maps the approved newest-order wording 'spring rolls wrap'; kept separate from Mission mini wraps."
 
   - id: dry_wipes
@@ -1210,6 +1294,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2813838672-s19422513998.html"
         pack_size: "3 x 20 pcs"
         observed_price_sgd: 7.55
+        observed_price_date: "2026-11-19"
     notes: "Uses only the approved narrow alias 'dry wipes' to avoid collisions with toilet and disinfectant wipes."
 
   - id: blueberries
@@ -1226,6 +1311,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301082887-s527114118.html"
         pack_size: "125 g"
         observed_price_sgd: 2.95
+        observed_price_date: "2026-11-19"
     notes: "Approved after appearing in both the 2026-07-21 and 2026-07-23 order range."
 
   - id: strawberry_pouch_yoghurt
@@ -1242,6 +1328,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3021310298-s20621668242.html"
         pack_size: "100 g"
         observed_price_sgd: 2.95
+        observed_price_date: "2026-11-19"
     notes: "Approved from recent orders; normally ordered at quantity 2."
 
   - id: vanilla_pouch_yoghurt
@@ -1258,6 +1345,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3021273489-s20621638512.html"
         pack_size: "100 g"
         observed_price_sgd: 2.95
+        observed_price_date: "2026-11-19"
     notes: "Approved from recent orders; normally ordered at quantity 2."
 
   - id: bacon
@@ -1274,6 +1362,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303774238-s537474478.html"
         pack_size: "220 g"
         observed_price_sgd: 5.80
+        observed_price_date: "2026-11-19"
     notes: "Added 2026-11-10 to distinguish bacon from bacon bits per household preference."
 
   - id: bacon_bits
@@ -1290,6 +1379,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303308883-s536644918.html"
         pack_size: "190 g"
         observed_price_sgd: 5.00
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order on 2026-07-23."
   - id: hummus
     category: chilled
@@ -1305,6 +1395,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301076940-s527122147.html"
         pack_size: "220 g"
         observed_price_sgd: 6.45
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Delphi Fresh Low Fat Hummus Dip Gluten and Dairy Free Vegan by Atasco"
         item_id: "376230637"
@@ -1312,6 +1403,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i376230637-s881004221.html"
         pack_size: "170 g"
         observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
     notes: "RedMart Deli hummus dip is rank 1; Delphi Fresh low fat hummus dip added as rank 2 from 2026-10-16 review."
 
   - id: farfalle_pasta
@@ -1331,6 +1423,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2980397599-s20460798700.html"
         pack_size: "500 g"
         observed_price_sgd: 4.20
+        observed_price_date: "2026-11-19"
     notes: "Sainsbury's Farfalle retained per household preference; farfalle shape is preferred by family."
 
   - id: penne_pasta
@@ -1349,7 +1442,8 @@ items:
         sku_id: "17543955796"
         canonical_url: "https://www.lazada.sg/products/i2679295013-s17543955796.html"
         pack_size: "500 g"
-        observed_price_sgd: 2.97
+        observed_price_sgd: 3.80
+        observed_price_date: "2026-11-19"
     notes: "Added 2026-11-10 per household preference for wholewheat penne pasta."
 
   - id: fusilli_pasta
@@ -1369,6 +1463,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2679222571-s17543981707.html"
         pack_size: "500 g"
         observed_price_sgd: 3.40
+        observed_price_date: "2026-11-19"
     notes: "Added 2026-11-10 per household preference for wholewheat fusilli / curly pasta."
 
   - id: pork_belly
@@ -1385,6 +1480,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1465666773-s6803678353.html"
         pack_size: "300 g"
         observed_price_sgd: 6.50
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Ksp Australia Fresh Pork Belly"
         item_id: "584736184"
@@ -1392,6 +1488,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i584736184-s1680318217.html"
         pack_size: "300 g"
         observed_price_sgd: 9.61
+        observed_price_date: "2026-11-19"
     notes: "RedMart Pork Belly Sukiyaki 300g approved as rank 1 from 2026-11-10 review; Ksp Australia fresh pork belly preserved as rank 2 fallback."
 
   - id: sweet_corn
@@ -1407,6 +1504,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301108870-s527088996.html"
         pack_size: "550 g"
         observed_price_sgd: 1.95
+        observed_price_date: "2026-11-19"
     notes: "Uses the approved family word 'corn'; default quantity 2 follows the 2026-07-22 order."
 
   - id: orange_popsicles
@@ -1422,6 +1520,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2636787021-s16831159291.html"
         pack_size: "4 per pack"
         observed_price_sgd: 9.90
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order on 2026-07-22."
 
   - id: 100plus_frozen
@@ -1436,7 +1535,8 @@ items:
         sku_id: "4001518146"
         canonical_url: "https://www.lazada.sg/products/i1060284099-s4001518146.html"
         pack_size: "4 x 75 ml"
-        observed_price_sgd: 4.95
+        observed_price_sgd: 5.85
+        observed_price_date: "2026-11-19"
     notes: "Kept distinct from the catalogued 100PLUS canned isotonic drink. The RedMart SKU is a 4-bar multipack (live SKU property 'Items Per Each' = 4; checked 2026-11-17)."
 
   - id: remedy_sodaly_guava
@@ -1451,7 +1551,8 @@ items:
         sku_id: "17039227072"
         canonical_url: "https://www.lazada.sg/products/i2645682408-s17039227072.html"
         pack_size: "4 x 250 ml"
-        observed_price_sgd: 9.90
+        observed_price_sgd: 11.20
+        observed_price_date: "2026-11-19"
     notes: "Approved counterpart to Remedy Yuzu; default quantity 2 follows the 2026-07-21 order."
 
   - id: mission_mini_wraps
@@ -1467,21 +1568,24 @@ items:
         sku_id: "7596924443"
         canonical_url: "https://www.lazada.sg/products/i1615916091-s7596924443.html"
         pack_size: "300 g"
-        observed_price_sgd: 5.45
+        observed_price_sgd: 5.55
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Mission Mini Wrap - Pumpkin 8 Per Pack"
         item_id: "3045639894"
         sku_id: "20781429055"
         canonical_url: "https://www.lazada.sg/products/i3045639894-s20781429055.html"
         pack_size: "300 g"
-        observed_price_sgd: 5.45
+        observed_price_sgd: 5.55
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "Mission Mini Wrap - Original 8 Per Pack"
         item_id: "1615822839"
         sku_id: "7596916496"
         canonical_url: "https://www.lazada.sg/products/i1615822839-s7596916496.html"
         pack_size: "300 g"
-        observed_price_sgd: 5.45
+        observed_price_sgd: 5.55
+        observed_price_date: "2026-11-19"
     notes: "Approved as one mini-wrap concept; Wholemeal ranks first because its observed quantity was 3, followed by Pumpkin at 2 and Original at 1."
 
   - id: sweet_potatoes
@@ -1498,6 +1602,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301094909-s527116279.html"
         pack_size: "500 g"
         observed_price_sgd: 2.33
+        observed_price_date: "2026-11-19"
     notes: "Kept distinct from ordinary potatoes."
 
   - id: sliced_mozzarella
@@ -1515,6 +1620,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3017773997-s20598552745.html"
         pack_size: "250 g"
         observed_price_sgd: 8.90
+        observed_price_date: "2026-11-19"
     notes: "Approved from the 2026-07-18 whiteboard/order and kept distinct from shredded mozzarella."
 
   - id: disinfectant_wipes
@@ -1532,6 +1638,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304014624-s538118961.html"
         pack_size: "35 wipes (258 g)"
         observed_price_sgd: 4.59
+        observed_price_date: "2026-11-19"
     notes: "Approved from the 2026-07-18 whiteboard/order; separate from toilet wipes and dry wipes."
 
   - id: floor_cleaner
@@ -1549,14 +1656,16 @@ items:
         sku_id: "527190523"
         canonical_url: "https://www.lazada.sg/products/i301120477-s527190523.html"
         pack_size: "3 L"
-        observed_price_sgd: 7.50
+        observed_price_sgd: 7.95
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "RedMart Anti Bacterial Lavender Floor Cleaner 2L"
         item_id: "301194057"
         sku_id: "527232835"
         canonical_url: "https://www.lazada.sg/products/i301194057-s527232835.html"
         pack_size: "2 L"
-        observed_price_sgd: 3.96
+        observed_price_sgd: 4.30
+        observed_price_date: "2026-11-19"
     notes: "The approved Magiclean 3 L product from the 2026-09-09 order is preferred; the existing RedMart 2 L product remains a fallback."
 
   - id: lotus_biscoff
@@ -1575,6 +1684,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i328720557-s699598527.html"
         pack_size: "312.5 g"
         observed_price_sgd: 8.83
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order placed on 2026-09-09; 'biscoffi' preserves the photographed household spelling."
 
   - id: cream_cleanser
@@ -1593,6 +1703,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303382284-s536724690.html"
         pack_size: "500 ml"
         observed_price_sgd: 1.40
+        observed_price_date: "2026-11-19"
     notes: "Approved from a past RedMart order placed on 2026-09-09; the household uses 'Cif' for this selected RedMart cream-cleanser substitute."
 
   - id: pickles
@@ -1610,13 +1721,15 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3460760756-s22950211750.html"
         pack_size: "340 g"
         observed_price_sgd: 4.90
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Monoprix Extra Fine Cornichons Gherkins Pickles 185G"
         item_id: "603356148"
         sku_id: "1758618646"
         canonical_url: "https://www.lazada.sg/products/i603356148-s1758618646.html"
         pack_size: "185 g"
-        observed_price_sgd: 4.14
+        observed_price_sgd: 5.40
+        observed_price_date: "2026-11-19"
     notes: "Sainsbury's Cornichons 340g approved as rank 1 from 2026-11-10 review; Monoprix cornichons preserved as rank 2 fallback."
 
   - id: milkfish
@@ -1641,6 +1754,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i305088846-s541218569.html"
         pack_size: "440 g"
         observed_price_sgd: 12.50
+        observed_price_date: "2026-11-19"
       - rank: 2
         title: "Sarangani Bay Baby Milkfish Marinated - Frozen"
         item_id: "305098671"
@@ -1648,6 +1762,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i305098671-s541212740.html"
         pack_size: "400 g"
         observed_price_sgd: 11.00
+        observed_price_date: "2026-11-19"
       - rank: 3
         title: "Sarangani Bay Boneless Milkfish Unseasoned - Frozen"
         item_id: "305086900"
@@ -1655,6 +1770,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i305086900-s541194972.html"
         pack_size: "320 g"
         observed_price_sgd: 9.00
+        observed_price_date: "2026-11-19"
     notes: "Added from the three user-selected product tabs on 2026-08-08; ranked by pack mass from largest to smallest."
 
   - id: smoked_paprika
@@ -1671,6 +1787,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i3460704895-s22950236937.html"
         pack_size: "44 g"
         observed_price_sgd: 3.10
+        observed_price_date: "2026-11-19"
     notes: "Maps whiteboard item 'Paprika'; approved from 2026-10-16 RedMart order."
 
   - id: floor_wet_wipes
@@ -1688,6 +1805,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2813938737-s19422601883.html"
         pack_size: "3 x 15 pcs"
         observed_price_sgd: 9.20
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-10-16 catalog review."
 
   - id: prosecco
@@ -1704,6 +1822,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304346621-s538562708.html"
         pack_size: "750 ml"
         observed_price_sgd: 29.50
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-10-16 catalog review with default quantity 4."
 
   - id: baby_wipes
@@ -1719,6 +1838,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i303092295-s536342985.html"
         pack_size: "24 x 80 pcs"
         observed_price_sgd: 52.90
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-10-16 catalog review."
 
   - id: bread
@@ -1734,6 +1854,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301104861-s527110376.html"
         pack_size: "320 g"
         observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-10-16 catalog review."
 
   - id: babaganoush
@@ -1750,6 +1871,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i301148899-s527246114.html"
         pack_size: "180 g"
         observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-10-16 catalog review."
 
   - id: dark_chocolate
@@ -1765,6 +1887,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i1902102159-s10164941506.html"
         pack_size: "100 g"
         observed_price_sgd: 8.80
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-10-16 catalog review."
 
   - id: quinoa
@@ -1780,6 +1903,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i2477407851-s14772392349.html"
         pack_size: "500 g"
         observed_price_sgd: 8.15
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-10-16 catalog review with default quantity 2."
 
   - id: salmon
@@ -1794,7 +1918,8 @@ items:
         sku_id: "18617396655"
         canonical_url: "https://www.lazada.sg/products/i2745574268-s18617396655.html"
         pack_size: "900 g (2 x 450 g)"
-        observed_price_sgd: 25.71
+        observed_price_sgd: 29.90
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-11-11 order-history review (RedMart orders placed 2026-11-09..2026-11-11); canonical page verified 2026-11-11 (h1 + item/sku)."
 
   - id: broccoli
@@ -1809,7 +1934,8 @@ items:
         sku_id: "527120201"
         canonical_url: "https://www.lazada.sg/products/i301088922-s527120201.html"
         pack_size: "280 g"
-        observed_price_sgd: 3.36
+        observed_price_sgd: 3.95
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-11-11 order-history review; canonical page verified 2026-11-11 (h1 + item/sku, pack 280 g)."
 
   - id: asparagus
@@ -1825,6 +1951,7 @@ items:
         canonical_url: "https://www.lazada.sg/products/i304974672-s541102087.html"
         pack_size: "100 g"
         observed_price_sgd: 2.65
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-11-11 order-history review (bought qty 3 on 11 Nov); canonical page verified 2026-11-11 (h1 + item/sku, pack 100 g)."
 
   - id: disinfectant_spray
@@ -1839,7 +1966,8 @@ items:
         sku_id: "527184810"
         canonical_url: "https://www.lazada.sg/products/i301154269-s527184810.html"
         pack_size: "450 ml"
-        observed_price_sgd: 9.04
+        observed_price_sgd: 10.39
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-11-11 order-history review; canonical page verified 2026-11-11. Separate item from disinfectant_wipes (Clorox wipes) — aliases stay distinct."
 
   - id: baby_spinach
@@ -1854,7 +1982,8 @@ items:
         sku_id: "10772039078"
         canonical_url: "https://www.lazada.sg/products/i1988693563-s10772039078.html"
         pack_size: "100 g"
-        observed_price_sgd: 3.77
+        observed_price_sgd: 4.10
+        observed_price_date: "2026-11-19"
     notes: "Approved from 2026-11-11 order-history review; canonical page verified 2026-11-11. 'salad' alias stays with lettuce — this item uses baby spinach only."
 
 # Household baskets map one spoken word to a deliberate mix of catalog items.

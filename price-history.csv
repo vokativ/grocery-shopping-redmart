@@ -1,0 +1,517 @@
+date,store,catalog_item_id,rank,product_id,title,pack_size,price_sgd,source
+2026-07-07,redmart,apple_juice,1,i2895095689-s20067927281,RedMart NFC 100% Apple Juice 1L (Not from concentrate),1 L,4.50,catalog-baseline
+2026-07-07,redmart,apple_juice_boxes,1,i303950799-s538088354,Marigold 100% Apple Juice (6 X 200ML),6 x 200 ml,5.29,catalog-baseline
+2026-07-07,redmart,apples,1,i301072998-s527094932,Granny Smith Green Apples,1 kg,4.95,catalog-baseline
+2026-07-07,redmart,avocado,1,i301100809-s527084959,Mexico/USA Hass Avocado 4 pcs (Airflown),450 g,8.95,catalog-baseline
+2026-07-07,redmart,big_garbage_bags,1,i303292174-s536598345,RedMart 50L HDPE Garbage Bag With Handle Ties - Black Trash Bag,15 Per Pack,2.44,catalog-baseline
+2026-07-07,redmart,capsicum,1,i327262071-s692076794,RedMart Traffic Light Capsicum Bell Peppers 3s,450 g,4.35,catalog-baseline
+2026-07-07,redmart,cheese_sticks,1,i301156968-s527256419,Arla Cheese Kid Sticks 108G (6 x 18G),108 g,7.85,catalog-baseline
+2026-07-07,redmart,chicken_breast,1,i787612808-s2590912925,FarmFresh Chicken Breast Boneless,200 g,2.62,catalog-baseline
+2026-07-07,redmart,coconut_oil,1,i303180934-s536444588,Marca Leon Coconut Oil 1 Ltr,1 L,9.65,catalog-baseline
+2026-07-07,redmart,cream_cheese,1,i301134724-s527214748,Emborg Cream Cheese 200G (New Look),200 g,4.33,catalog-baseline
+2026-07-07,redmart,cucumber,1,i327250341-s692072902,RedMart Japanese Cucumber,400 g,1.80,catalog-baseline
+2026-07-07,redmart,dishwashing_liquid,1,i301192074-s527276152,RedMart Antibacterial Dish Washing Liquid - Lemon Fragrance,750 ml,1.90,catalog-baseline
+2026-07-07,redmart,eggs,1,i301088929-s527120220,RedMart 15 Eggs 15 X 60G,15 x 60 g,4.65,catalog-baseline
+2026-07-07,redmart,feta_cheese,1,i2443619723-s14475877469,Supervalu Greek Feta Cheese 200G,200 g,8.02,catalog-baseline
+2026-07-07,redmart,fresh_milk,1,i301076934-s527122109,Farmhouse Fresh Milk 946ML,946 ml,3.73,catalog-baseline
+2026-07-07,redmart,ground_beef,1,i301098923-s527128205,RedMart Fresh Premium Minced Beef - Australia,300 g,9.10,catalog-baseline
+2026-07-07,redmart,ground_chicken,1,i3464540910-s22966857377,RedMart Minced Chicken IQF - Frozen,500 g,5.95,catalog-baseline
+2026-07-07,redmart,ground_pork,1,i304074281-s538202297,RedMart Australian Chilled Minced Pork (Freezer Ready Packaging),500 g,6.95,catalog-baseline
+2026-07-07,redmart,ham,1,i318264428-s611366135,RedMart Smoked Chicken Ham,150 g,4.40,catalog-baseline
+2026-07-07,redmart,kimchi,2,i1167012126-s4607296865,CJ Sliced Cabbage Kimchi Korean Banchan 500g (Tube),500 g,8.90,catalog-baseline
+2026-07-07,redmart,kitchen_towel,1,i301082945-s527114260,RedMart Strong and Absorbent 2Ply Kitchen Paper Towel - 6 Rolls,6 x 60 Per Pack,4.55,catalog-baseline
+2026-07-07,redmart,kiwi,1,i301108865-s527088978,Green Kiwi Fruit 6s,440 g,5.04,catalog-baseline
+2026-07-07,redmart,lemon,1,i1548788612-s7249264792,RedMart Unwaxed Lemons,650 g,5.15,catalog-baseline
+2026-07-07,redmart,lettuce,1,i2367366756-s13842110206,Uncle Jack's Butterhead Lettuce,200 g,2.25,catalog-baseline
+2026-07-07,redmart,olive_oil,1,i301196092-s527266381,RedMart Extra Virgin Olive Oil (EVOO)- 1L,1 L,18.81,catalog-baseline
+2026-07-07,redmart,oranges,1,i1142960678-s4461922707,RedMart Easy Peel Mandarin Orange,500 g,4.50,catalog-baseline
+2026-07-07,redmart,papaya,1,i301130721-s527192914,Sumifru Solo Papaya,730 g,3.48,catalog-baseline
+2026-07-07,redmart,pears,1,i301073000-s527094935,Australia Packham Pears,1 kg,4.95,catalog-baseline
+2026-07-07,redmart,pepsi_black,1,i303940576-s538054013,Pepsi Zero Sugar Cola Soda (24 X 320ML) - Carton - Packaging may vary,24 x 320 ml,17.82,catalog-baseline
+2026-07-07,redmart,persil_powder,1,i304106042-s538220611,Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG,4.5 kg,15.29,catalog-baseline
+2026-07-07,redmart,shredded_mozzarella,1,i301170240-s527260609,Tradition Shredded Mozzarella Cheese,225 g,5.24,catalog-baseline
+2026-07-07,redmart,sliced_cheese,1,i3089420229-s21052862487,RedMart Sliced Edam Cheese (100% Natural Cheese),125 g,4.50,catalog-baseline
+2026-07-07,redmart,sliced_cheese,2,i3089551336-s21053142027,RedMart Australian Sliced Cheddar Cheese (100% Natural Cheese),125 g,4.50,catalog-baseline
+2026-07-07,redmart,spicy_kimchi,1,i2124781720-s12060189079,JIN Spicy Kimchi Korean Banchan,400 g,6.90,catalog-baseline
+2026-07-07,redmart,spring_onion_kimchi,1,i2124778809-s12060083764,JIN Spring Onion Kimchi Korean Banchan,345 g,8.20,catalog-baseline
+2026-07-07,redmart,tissue_box,1,i1105492861-s4268640922,Premier Classic 2-Ply Facial Tissue - 5 Boxes [Design may Vary],200 Per Pack,7.10,catalog-baseline
+2026-07-07,redmart,tissue_box,2,i3345577093-s22380105291,Vinda Classic 2-Ply Facial Tissue Box - 5 Box,90 Per Pack,4.60,catalog-baseline
+2026-07-07,redmart,toilet_tissue,1,i301096855-s527104735,RedMart Luxuriously Soft 3Ply Toilet Tissue Paper - 10 Rolls,10 x 200 Per Pack,5.60,catalog-baseline
+2026-07-07,redmart,toilet_wipes,1,i304170218-s538362363,RedMart Wet & Moist Flushable Toilet Tissue Paper 60 Sheets - Safe to Flush,60 Per Pack,3.70,catalog-baseline
+2026-07-07,redmart,tomato_sauce,1,i305138179-s541230322,Prego Tomato Pasta Sauce Traditional 350g Jar,350 g,3.60,catalog-baseline
+2026-07-07,redmart,tomato_sauce,2,i2679250236-s17544118041,Supervalu Signature Tastes Rustic Passata Tomato Puree,690 g,4.23,catalog-baseline
+2026-07-07,redmart,tortilla_chips,1,i303248836-s536550938,Mission Multigrain Corn Chips,170 g,4.17,catalog-baseline
+2026-07-07,redmart,watermelon,1,i301118012-s527094969,Small Thai Watermelon,1.8 kg,6.95,catalog-baseline
+2026-07-10,redmart,butter,1,i301076866-s527078857,Anchor Unsalted Pure Butter 227G,227 g,5.70,catalog-baseline
+2026-07-10,redmart,cherry_tomatoes,1,i327264049-s692104083,RedMart Cherry Tomato,250 g,1.85,catalog-baseline
+2026-07-10,redmart,dragonfruit,1,i301118003-s527094938,Dragonfruits 2s,2 per pack,3.15,catalog-baseline
+2026-07-10,redmart,fabric_softener,1,i2250924577-s12960073965,Downy Sunrise Fresh Concentrate Fabric Softener 3.5L,3.5 L,14.58,catalog-baseline
+2026-07-10,redmart,mayonnaise,1,i2679295018-s17544099221,Supervalu Real Mayonnaise Free Range Eggs,425 ml,5.06,catalog-baseline
+2026-07-10,redmart,pepsi_black,2,i303966008-s538036500,Pepsi Zero Sugar Cola Soda (4 x 320ML),4 x 320 ml,3.80,catalog-baseline
+2026-07-10,redmart,remedy_sodaly_yuzu,1,i3182702274-s21649460937,Remedy Sodaly Yuzu Lemon - 4 x 250ml,4 x 250 ml,9.40,catalog-baseline
+2026-07-13,redmart,100plus_zero_sugar_isotonic,1,i303720249-s537408441,100PLUS Zero Sugar Isotonic Drink 325ML x 24,24 x 325 ml,13.90,catalog-baseline
+2026-07-23,redmart,100plus_frozen,1,i1060284099-s4001518146,100 Plus Hydration Bars Ice Cream - Frozen,75 ml,4.95,catalog-baseline
+2026-07-23,redmart,apricots,1,i736500715-s2366926481,Turkey Sugar Apricot,350 g,7.95,catalog-baseline
+2026-07-23,redmart,bacon_bits,1,i303308883-s536644918,RedMart Danish Bacon Bits,190 g,5.00,catalog-baseline
+2026-07-23,redmart,blueberries,1,i301082887-s527114118,Blueberries,125 g,2.95,catalog-baseline
+2026-07-23,redmart,carrots,1,i303998239-s538088935,RedMart Carrots 500G Australia,500 g,0.95,catalog-baseline
+2026-07-23,redmart,dishwashing_liquid,2,i301090877-s527132021,Mama Lemon Natural Lemon Fragrance Dishwashing Liquid Refill Pack -600ML,600 ml,1.65,catalog-baseline
+2026-07-23,redmart,disinfectant_wipes,1,i304014624-s538118961,Clorox Disinfecting Cleaning Wipes Crisp Lemon 35s,35 wipes (258 g),4.59,catalog-baseline
+2026-07-23,redmart,dry_wipes,1,i2813838672-s19422513998,RedMart Wiper Dry Sheets / wipes 3 x 20pcs (Lemongrass),3 x 20 pcs,7.55,catalog-baseline
+2026-07-23,redmart,eggs,2,i3229271520-s21867677118,RedMart Fresh Local Eggs (Large) 15X60G,15 x 60 g,5.67,catalog-baseline
+2026-07-23,redmart,farfalle_pasta,1,i2980397599-s20460798700,Sainsbury's Farfalle Pasta 500G,500 g,4.20,catalog-baseline
+2026-07-23,redmart,feta_cheese,2,i2634307789-s16772993862,Kolios Authentic Traditional Greek Feta,150 g,7.40,catalog-baseline
+2026-07-23,redmart,hummus,1,i301076940-s527122147,RedMart Deli Hummus Dip 220G,220 g,6.45,catalog-baseline
+2026-07-23,redmart,kimchi,3,i2991175808-s20508685220,Coook Sliced Mat Cabbage Kimchi Korean Banchan 500G,500 g,7.35,catalog-baseline
+2026-07-23,redmart,mission_mini_wraps,1,i1615916091-s7596924443,Mission Mini Wrap - Wholemeal 8 Per Pack,300 g,5.45,catalog-baseline
+2026-07-23,redmart,mission_mini_wraps,2,i3045639894-s20781429055,Mission Mini Wrap - Pumpkin 8 Per Pack,300 g,5.45,catalog-baseline
+2026-07-23,redmart,mission_mini_wraps,3,i1615822839-s7596916496,Mission Mini Wrap - Original 8 Per Pack,300 g,5.45,catalog-baseline
+2026-07-23,redmart,orange_popsicles,1,i2636787021-s16831159291,Frozt Orange Popsicle Pack Of 4,4 per pack,9.90,catalog-baseline
+2026-07-23,redmart,pork_belly,1,i584736184-s1680318217,Ksp Australia Fresh Pork Belly,300 g,9.61,catalog-baseline
+2026-07-23,redmart,potatoes,1,i301110861-s527092874,Holland Potato,1 kg,1.65,catalog-baseline
+2026-07-23,redmart,remedy_sodaly_guava,1,i2645682408-s17039227072,Remedy Sodaly Guava - Multipack 250ML X 4,4 x 250 ml,9.90,catalog-baseline
+2026-07-23,redmart,rice_crackers,1,i304020688-s538156357,CERES ORGANICS Brown Rice Cakes Original - by Optimo Foods,110 g,4.55,catalog-baseline
+2026-07-23,redmart,rice_paper,1,i304192463-s538360847,Sing Long Rice Paper,100 g,1.56,catalog-baseline
+2026-07-23,redmart,sliced_cheese,3,i303280218-s536586295,Paysan Breton Emmental Sliced Cheese,160 g,6.10,catalog-baseline
+2026-07-23,redmart,sliced_cheese,4,i1043946934-s3897182810,Tradition Sliced Emmental Cheese,125 g,5.04,catalog-baseline
+2026-07-23,redmart,sliced_mozzarella,1,i3017773997-s20598552745,Sainsbury's Mozzarella Cheese Slices 250G,250 g,8.90,catalog-baseline
+2026-07-23,redmart,strawberry_pouch_yoghurt,1,i3021310298-s20621668242,Chobani Kids Pouch Greek Yogurt Strawberry 100G,100 g,2.95,catalog-baseline
+2026-07-23,redmart,sweet_corn,1,i301108870-s527088996,RedMart Sweet Corn 2s,550 g,1.95,catalog-baseline
+2026-07-23,redmart,sweet_potatoes,1,i301094909-s527116279,Japanese Sweet Potato,500 g,2.33,catalog-baseline
+2026-07-23,redmart,vanilla_pouch_yoghurt,1,i3021273489-s20621638512,Chobani Kids Pouch Greek Yogurt Vanilla 100G,100 g,2.95,catalog-baseline
+2026-07-23,redmart,yoghurt,1,i301102820-s527098872,Farmers Union Greek Style All Natural Yoghurt 1KG,1 kg,10.34,catalog-baseline
+2026-08-08,redmart,milkfish,1,i305088846-s541218569,Sarangani Bay Boneless Milkfish Marinated - Frozen,440 g,12.50,catalog-baseline
+2026-08-08,redmart,milkfish,2,i305098671-s541212740,Sarangani Bay Baby Milkfish Marinated - Frozen,400 g,11.00,catalog-baseline
+2026-08-08,redmart,milkfish,3,i305086900-s541194972,Sarangani Bay Boneless Milkfish Unseasoned - Frozen,320 g,9.00,catalog-baseline
+2026-08-10,redmart,floor_cleaner,1,i301194057-s527232835,RedMart Anti Bacterial Lavender Floor Cleaner 2L,2 L,3.96,catalog-baseline
+2026-08-10,redmart,lettuce,2,i301074936-s527080881,Butterhead Lettuce,200 g,3.00,catalog-baseline
+2026-08-10,redmart,low_fat_milk,1,i301084922-s527112326,Farmhouse Low Fat Fresh Milk 946ML,946 ml,3.40,catalog-baseline
+2026-08-10,redmart,onions,1,i491826153-s1352684044,RedMart Brown Onion (Netherlands) Yellow Onion,1 kg,3.39,catalog-baseline
+2026-08-10,redmart,pickles,1,i603356148-s1758618646,Monoprix Extra Fine Cornichons Gherkins Pickles 185G,185 g,4.14,catalog-baseline
+2026-09-09,redmart,avocado,2,i1933997102-s10339963745,RedMart Hass Avocado 3PCS Australia,500 g,9.95,catalog-baseline
+2026-09-09,redmart,cream_cleanser,1,i303382284-s536724690,RedMart Concentrated Cream Cleanser 500ml,500 ml,1.40,catalog-baseline
+2026-09-09,redmart,floor_cleaner,1,i301120477-s527190523,Magiclean Aromatic Lavender Floor Cleaner 3L,3 L,7.50,catalog-baseline
+2026-09-09,redmart,lotus_biscoff,1,i328720557-s699598527,Lotus Biscoff - Caramelized Biscuit Cookies - 312.5G - Non-Gmo Project Verified And Vegan,312.5 g,8.83,catalog-baseline
+2026-09-14,redmart,apples,2,i721442990-s2285408425,RedMart Organic Royal Gala Apples,500 g,5.85,catalog-baseline
+2026-09-14,redmart,cottage_cheese,1,i301150670-s527232247,Bulla Cottage Cheese Plain And Low Fat,200 g,6.60,catalog-baseline
+2026-09-14,redmart,ham,2,i2804375009-s19369866895,RedMart Honey Baked Ham (No added Nitrate And Nitrite),150 g,6.00,catalog-baseline
+2026-09-14,redmart,handwash,1,i301168260-s527252610,RedMart Anti-Bacterial Lavender Foaming Handwash Hand Soap Wash,250 ml,3.15,catalog-baseline
+2026-10-16,redmart,avocado,1,i301100809-s527084959,Mexico/USA Hass Avocado 3/4 pcs (Airflown),450 g,10.95,catalog-baseline
+2026-10-16,redmart,babaganoush,1,i301148899-s527246114,RedMart Deli Babaganoush Eggplant Dip 180G,180 g,5.95,catalog-baseline
+2026-10-16,redmart,baby_wipes,1,i303092295-s536342985,RedMart Gentle Care Baby Wipes (24 X 80PCS) - Case,24 x 80 pcs,52.90,catalog-baseline
+2026-10-16,redmart,bread,1,i301104861-s527110376,RedMart Multigrain Bread Sliced Loaf,320 g,5.95,catalog-baseline
+2026-10-16,redmart,chicken_breast,2,i301090787-s527090735,Kee Song Fresh Chicken Breasts,300 g,5.80,catalog-baseline
+2026-10-16,redmart,cream_cheese,2,i301168071-s527252312,Philadelphia Light Spreadable Cream Cheese 250g,250 g,7.80,catalog-baseline
+2026-10-16,redmart,dark_chocolate,1,i1902102159-s10164941506,Sainsbury's Taste The Difference Dominican Republic 72-Percent Dark Chocolate,100 g,8.80,catalog-baseline
+2026-10-16,redmart,floor_wet_wipes,1,i2813938737-s19422601883,RedMart Wiper Wet Sheets Floor wipes 3 X 15PCS - Lavender,3 x 15 pcs,9.20,catalog-baseline
+2026-10-16,redmart,hummus,2,i376230637-s881004221,Delphi Fresh Low Fat Hummus Dip Gluten and Dairy Free Vegan by Atasco,170 g,5.95,catalog-baseline
+2026-10-16,redmart,kimchi,4,i301072906-s527094684,I'm Kimchi Korean Cabbage Kimchi Banchan,500 g,9.70,catalog-baseline
+2026-10-16,redmart,kimchi,5,i2124749952-s12060187021,JIN White Kimchi Korean Banchan,400 g,8.90,catalog-baseline
+2026-10-16,redmart,papaya,2,i303422444-s536820204,Hong Kong Red Papaya 1.2KG,1.2 kg,4.95,catalog-baseline
+2026-10-16,redmart,prosecco,1,i304346621-s538562708,The Loose Moose Italian Prosecco DOC Sparkling Wine,750 ml,29.50,catalog-baseline
+2026-10-16,redmart,quinoa,1,i2477407851-s14772392349,RedMart Organic Tricolour Quinoa,500 g,8.15,catalog-baseline
+2026-10-16,redmart,shredded_mozzarella,2,i303928154-s537950660,Tradition Shredded Mozzarella Cheese - Frozen 1kg,1 kg,17.90,catalog-baseline
+2026-10-16,redmart,smoked_paprika,1,i3460704895-s22950236937,Sainsbury's Smoked Paprika 44G,44 g,3.10,catalog-baseline
+2026-11-10,redmart,bacon,1,i303774238-s537474478,RedMart Streaky Bacon,220 g,5.80,catalog-baseline
+2026-11-10,redmart,feta_cheese,2,i304208554-s538406503,Sainsbury's Greek Feta Cheese,200 g,9.60,catalog-baseline
+2026-11-10,redmart,fresh_milk,1,i303304089-s536620243,RedMart UHT Full Cream Milk,1 L,2.05,catalog-baseline
+2026-11-10,redmart,fusilli_pasta,1,i2679222571-s17543981707,Supervalu Wholewheat Fusilli Pasta,500 g,3.40,catalog-baseline
+2026-11-10,redmart,lettuce,1,i2149788919-s12237639509,RedMart Baby Romaine Lettuce Salad,300 g,1.95,catalog-baseline
+2026-11-10,redmart,pears,1,i303632649-s537332032,RedMart Packham Pear,600 g,4.00,catalog-baseline
+2026-11-10,redmart,penne_pasta,1,i2679295013-s17543955796,Supervalu Wholewheat Penne Pasta,500 g,2.97,catalog-baseline
+2026-11-10,redmart,pickles,1,i3460760756-s22950211750,Sainsbury's Cornichons 340G,340 g,4.90,catalog-baseline
+2026-11-10,redmart,pork_belly,1,i1465666773-s6803678353,RedMart Pork Belly Sukiyaki Sliced Meat - Frozen,300 g,6.50,catalog-baseline
+2026-11-10,redmart,shredded_mozzarella,1,i303406936-s536776915,RedMart Shredded Mozzarella Cheese,170 g,4.40,catalog-baseline
+2026-11-10,redmart,shredded_mozzarella,3,i303432256-s536800573,RedMart Shredded Mozzarella And Cheddar Cheese,170 g,4.40,catalog-baseline
+2026-11-10,redmart,shredded_mozzarella,4,i304206677-s538390843,Sainsbury's Grated Mozzarella Cheese,250 g,7.95,catalog-baseline
+2026-11-10,redmart,tissue_box,1,i301082942-s527114258,RedMart Silky Soft and White 2Ply Facial Tissue Paper - 5 Boxes,5 Boxes,5.05,catalog-baseline
+2026-11-10,redmart,tomato_sauce,1,i2679171713-s17543999547,Supervalu Tomato Passata,500 g,2.72,catalog-baseline
+2026-11-10,redmart,tomato_sauce,1,i303954354-s538044347,Sainsbury's Passata,500 g,2.50,catalog-baseline
+2026-11-11,redmart,asparagus,1,i304974672-s541102087,Fine Asparagus,100 g,2.65,catalog-baseline
+2026-11-11,redmart,baby_spinach,1,i1988693563-s10772039078,RedMart Baby Spinach Salad Australia (Washed And Ready To Eat),100 g,3.77,catalog-baseline
+2026-11-11,redmart,broccoli,1,i301088922-s527120201,RedMart Broccoli Australia,280 g,3.36,catalog-baseline
+2026-11-11,redmart,disinfectant_spray,1,i301154269-s527184810,Dettol Disinfectant Spray Crisp Breeze 450ML,450 ml,9.04,catalog-baseline
+2026-11-11,redmart,salmon,1,i2745574268-s18617396655,RedMart Premium Salmon Fish Fillet 450G x 2Packs - Frozen,900 g (2 x 450 g),25.71,catalog-baseline
+2026-11-17,redmart,100plus_frozen,1,i1060284099-s4001518146,100 Plus Hydration Bars Ice Cream - Frozen,4 x 75 ml,5.85,redmart-static-page
+2026-11-17,redmart,100plus_zero_sugar_isotonic,1,i303720249-s537408441,100PLUS Zero Sugar Isotonic Drink 325ML x 24,24 x 325 ml,16.80,redmart-static-page
+2026-11-17,redmart,apple_juice,1,i2895095689-s20067927281,RedMart NFC 100% Apple Juice 1L (Not from concentrate),1 L,4.50,redmart-static-page
+2026-11-17,redmart,apple_juice_boxes,1,i303950799-s538088354,Marigold 100% Apple Juice (6 X 200ML),6 x 200 ml,5.29,redmart-static-page
+2026-11-17,redmart,apples,1,i301072998-s527094932,Granny Smith Green Apples,1 kg,4.95,redmart-static-page
+2026-11-17,redmart,asparagus,1,i304974672-s541102087,Fine Asparagus,100 g,2.65,redmart-static-page
+2026-11-17,redmart,avocado,1,i301100809-s527084959,Mexico/USA Hass Avocado 3/4 pcs (Airflown),450 g,10.95,redmart-static-page
+2026-11-17,redmart,avocado,2,i1933997102-s10339963745,RedMart Hass Avocado 3PCS Australia,500 g,13.90,redmart-static-page
+2026-11-17,redmart,babaganoush,1,i301148899-s527246114,RedMart Deli Babaganoush Eggplant Dip 180G,180 g,5.95,redmart-static-page
+2026-11-17,redmart,baby_spinach,1,i1988693563-s10772039078,RedMart Baby Spinach Salad Australia (Washed And Ready To Eat),100 g,4.10,redmart-static-page
+2026-11-17,redmart,baby_wipes,1,i303092295-s536342985,RedMart Gentle Care Baby Wipes (24 X 80PCS) - Case,24 x 80 pcs,52.90,redmart-static-page
+2026-11-17,redmart,bacon,1,i303774238-s537474478,RedMart Streaky Bacon,220 g,5.80,redmart-static-page
+2026-11-17,redmart,bacon_bits,1,i303308883-s536644918,RedMart Danish Bacon Bits,190 g,5.00,redmart-static-page
+2026-11-17,redmart,big_garbage_bags,1,i303292174-s536598345,RedMart 50L HDPE Garbage Bag With Handle Ties - Black Trash Bag,15 Per Pack,3.05,redmart-static-page
+2026-11-17,redmart,blueberries,1,i301082887-s527114118,Blueberries,125 g,2.95,redmart-static-page
+2026-11-17,redmart,bread,1,i301104861-s527110376,RedMart Multigrain Bread Sliced Loaf,320 g,5.95,redmart-static-page
+2026-11-17,redmart,broccoli,1,i301088922-s527120201,RedMart Broccoli Australia,280 g,3.95,redmart-static-page
+2026-11-17,redmart,butter,1,i301076866-s527078857,Anchor Unsalted Pure Butter 227G,227 g,5.70,redmart-static-page
+2026-11-17,redmart,capsicum,1,i327262071-s692076794,RedMart Traffic Light Capsicum Bell Peppers 3s,450 g,4.35,redmart-static-page
+2026-11-17,redmart,carrots,1,i303998239-s538088935,RedMart Carrots 500G Australia,500 g,0.95,redmart-static-page
+2026-11-17,redmart,cheese_sticks,1,i301156968-s527256419,Arla Cheese Kid Sticks 108G (6 x 18G),108 g,7.85,redmart-static-page
+2026-11-17,redmart,cherry_tomatoes,1,i327264049-s692104083,RedMart Cherry Tomato,250 g,1.85,redmart-static-page
+2026-11-17,redmart,chicken_breast,1,i787612808-s2590912925,FarmFresh Chicken Breast Boneless,200 g,3.75,redmart-static-page
+2026-11-17,redmart,chicken_breast,2,i301090787-s527090735,Kee Song Fresh Chicken Breasts,300 g,5.80,redmart-static-page
+2026-11-17,redmart,coconut_oil,1,i303180934-s536444588,Marca Leon Coconut Oil 1 Ltr,1 L,9.95,redmart-static-page
+2026-11-17,redmart,cottage_cheese,1,i301150670-s527232247,Bulla Cottage Cheese Plain And Low Fat,200 g,6.60,redmart-static-page
+2026-11-17,redmart,cream_cheese,1,i301134724-s527214748,Emborg Cream Cheese 200G (New Look),200 g,4.33,redmart-static-page
+2026-11-17,redmart,cream_cheese,2,i301168071-s527252312,Philadelphia Light Spreadable Cream Cheese 250g,250 g,7.80,redmart-static-page
+2026-11-17,redmart,cream_cleanser,1,i303382284-s536724690,RedMart Concentrated Cream Cleanser 500ml,500 ml,1.40,redmart-static-page
+2026-11-17,redmart,cucumber,1,i327250341-s692072902,RedMart Japanese Cucumber,400 g,1.80,redmart-static-page
+2026-11-17,redmart,dark_chocolate,1,i1902102159-s10164941506,Sainsbury's Taste The Difference Dominican Republic 72-Percent Dark Chocolate,100 g,8.80,redmart-static-page
+2026-11-17,redmart,dishwashing_liquid,1,i301192074-s527276152,RedMart Antibacterial Dish Washing Liquid - Lemon Fragrance,750 ml,1.90,redmart-static-page
+2026-11-17,redmart,dishwashing_liquid,2,i301090877-s527132021,Mama Lemon Natural Lemon Fragrance Dishwashing Liquid Refill Pack -600ML,600 ml,1.65,redmart-static-page
+2026-11-17,redmart,disinfectant_spray,1,i301154269-s527184810,Dettol Disinfectant Spray Crisp Breeze 450ML,450 ml,10.39,redmart-static-page
+2026-11-17,redmart,disinfectant_wipes,1,i304014624-s538118961,Clorox Disinfecting Cleaning Wipes Crisp Lemon 35s,35 wipes (258 g),4.59,redmart-static-page
+2026-11-17,redmart,dragonfruit,1,i301118003-s527094938,Dragonfruits 2s,2 per pack,3.15,redmart-static-page
+2026-11-17,redmart,dry_wipes,1,i2813838672-s19422513998,RedMart Wiper Dry Sheets / wipes 3 x 20pcs (Lemongrass),3 x 20 pcs,7.55,redmart-static-page
+2026-11-17,redmart,eggs,1,i301088929-s527120220,RedMart 15 Eggs 15 X 60G,15 x 60 g,5.10,redmart-static-page
+2026-11-17,redmart,eggs,2,i3229271520-s21867677118,RedMart Fresh Local Eggs (Large) 15X60G,15 x 60 g,5.67,redmart-static-page
+2026-11-17,redmart,fabric_softener,1,i2250924577-s12960073965,Downy Sunrise Fresh Concentrate Fabric Softener 3.5L,3.5 L,18.23,redmart-static-page
+2026-11-17,redmart,farfalle_pasta,1,i2980397599-s20460798700,Sainsbury's Farfalle Pasta 500G,500 g,4.20,redmart-static-page
+2026-11-17,redmart,feta_cheese,1,i2634307789-s16772993862,Kolios Authentic Traditional Greek Feta,150 g,7.40,redmart-static-page
+2026-11-17,redmart,feta_cheese,2,i304208554-s538406503,Sainsbury's Greek Feta Cheese,200 g,9.60,redmart-static-page
+2026-11-17,redmart,feta_cheese,3,i2443619723-s14475877469,Supervalu Greek Feta Cheese 200G,200 g,9.20,redmart-static-page
+2026-11-17,redmart,floor_cleaner,1,i301120477-s527190523,Magiclean Aromatic Lavender Floor Cleaner 3L,3 L,7.95,redmart-static-page
+2026-11-17,redmart,floor_cleaner,2,i301194057-s527232835,RedMart Anti Bacterial Lavender Floor Cleaner 2L,2 L,4.30,redmart-static-page
+2026-11-17,redmart,floor_wet_wipes,1,i2813938737-s19422601883,RedMart Wiper Wet Sheets Floor wipes 3 X 15PCS - Lavender,3 x 15 pcs,9.20,redmart-static-page
+2026-11-17,redmart,fresh_milk,1,i303304089-s536620243,RedMart UHT Full Cream Milk,1 L,2.05,redmart-static-page
+2026-11-17,redmart,fresh_milk,2,i301076934-s527122109,Farmhouse Fresh Milk 946ML,946 ml,3.73,redmart-static-page
+2026-11-17,redmart,fusilli_pasta,1,i2679222571-s17543981707,Supervalu Wholewheat Fusilli Pasta,500 g,3.40,redmart-static-page
+2026-11-17,redmart,ground_beef,1,i301098923-s527128205,RedMart Australian Fresh Premium Minced Beef,300 g,9.10,redmart-static-page
+2026-11-17,redmart,ground_chicken,1,i3464540910-s22966857377,RedMart Minced Chicken IQF - Frozen,500 g,5.95,redmart-static-page
+2026-11-17,redmart,ground_pork,1,i304074281-s538202297,RedMart Australia Fresh Minced Pork (Freezer Ready Packaging),500 g,6.95,redmart-static-page
+2026-11-17,redmart,ham,1,i318264428-s611366135,RedMart Smoked Chicken Ham,150 g,4.40,redmart-static-page
+2026-11-17,redmart,ham,2,i2804375009-s19369866895,RedMart Honey Baked Ham (No added Nitrate And Nitrite),150 g,6.00,redmart-static-page
+2026-11-17,redmart,handwash,1,i301168260-s527252610,RedMart Anti-Bacterial Lavender Foaming Handwash Hand Soap Wash,250 ml,3.15,redmart-static-page
+2026-11-17,redmart,hummus,1,i301076940-s527122147,RedMart Deli Hummus Dip 220G,220 g,6.45,redmart-static-page
+2026-11-17,redmart,hummus,2,i376230637-s881004221,Delphi Fresh Low Fat Hummus Dip Gluten and Dairy Free Vegan by Atasco,170 g,5.95,redmart-static-page
+2026-11-17,redmart,kimchi,1,i2124781720-s12060189079,JIN Spicy Kimchi Korean Banchan,400 g,8.60,redmart-static-page
+2026-11-17,redmart,kimchi,2,i1167012126-s4607296865,CJ Sliced Cabbage Kimchi Korean Banchan 500g (Tube),500 g,8.90,redmart-static-page
+2026-11-17,redmart,kimchi,3,i2991175808-s20508685220,Coook Sliced Mat Cabbage Kimchi Korean Banchan 500G,500 g,7.40,redmart-static-page
+2026-11-17,redmart,kimchi,4,i301072906-s527094684,I'm Kimchi Korean Cabbage Kimchi Banchan 500g,500 g,9.70,redmart-static-page
+2026-11-17,redmart,kimchi,5,i2124749952-s12060187021,JIN White Kimchi Korean Banchan,400 g,8.90,redmart-static-page
+2026-11-17,redmart,kitchen_towel,1,i301082945-s527114260,RedMart Strong and Absorbent 2Ply Kitchen Paper Towel - 6 Rolls,6 x 60 Per Pack,4.55,redmart-static-page
+2026-11-17,redmart,kiwi,1,i301108865-s527088978,Green Kiwi Fruit 6s,440 g,5.04,redmart-static-page
+2026-11-17,redmart,lemon,1,i1548788612-s7249264792,RedMart Unwaxed Lemons,650 g,5.15,redmart-static-page
+2026-11-17,redmart,lettuce,1,i2149788919-s12237639509,RedMart Baby Romaine Lettuce Salad,300 g,1.95,redmart-static-page
+2026-11-17,redmart,lettuce,2,i2367366756-s13842110206,Uncle Jack's Butterhead Lettuce,200 g,2.25,redmart-static-page
+2026-11-17,redmart,lettuce,3,i301074936-s527080881,Butterhead Lettuce,200 g,3.00,redmart-static-page
+2026-11-17,redmart,lotus_biscoff,1,i328720557-s699598527,Lotus Biscoff - Caramelized Biscuit Cookies - 312.5G - Non-Gmo Project Verified And Vegan,312.5 g,8.83,redmart-static-page
+2026-11-17,redmart,low_fat_milk,1,i301084922-s527112326,Farmhouse Low Fat Fresh Milk 946ML,946 ml,3.73,redmart-static-page
+2026-11-17,redmart,mayonnaise,1,i2679295018-s17544099221,Supervalu Real Mayonnaise Free Range Eggs,425 ml,5.95,redmart-static-page
+2026-11-17,redmart,milkfish,1,i305088846-s541218569,Sarangani Bay Boneless Milkfish Marinated - Frozen,440 g,12.50,redmart-static-page
+2026-11-17,redmart,milkfish,2,i305098671-s541212740,Sarangani Bay Baby Milkfish Marinated - Frozen,400 g,11.00,redmart-static-page
+2026-11-17,redmart,milkfish,3,i305086900-s541194972,Sarangani Bay Boneless Milkfish Unseasoned - Frozen,320 g,9.00,redmart-static-page
+2026-11-17,redmart,mission_mini_wraps,1,i1615916091-s7596924443,Mission Mini Wrap - Wholemeal 8 Per Pack,300 g,5.55,redmart-static-page
+2026-11-17,redmart,mission_mini_wraps,2,i3045639894-s20781429055,Mission Mini Wrap - Pumpkin 8 Per Pack,300 g,5.55,redmart-static-page
+2026-11-17,redmart,mission_mini_wraps,3,i1615822839-s7596916496,Mission Mini Wrap - Original 8 Per Pack,300 g,5.55,redmart-static-page
+2026-11-17,redmart,olive_oil,1,i301196092-s527266381,RedMart Extra Virgin Olive Oil (EVOO)- 1L,1 L,20.90,redmart-static-page
+2026-11-17,redmart,onions,1,i491826153-s1352684044,RedMart Brown Onion (Netherlands) Yellow Onion,1 kg,3.50,redmart-static-page
+2026-11-17,redmart,orange_popsicles,1,i2636787021-s16831159291,Frozt Orange Popsicle Pack Of 4,4 per pack,9.90,redmart-static-page
+2026-11-17,redmart,oranges,1,i1142960678-s4461922707,RedMart Easy Peel Mandarin Orange,500 g,4.95,redmart-static-page
+2026-11-17,redmart,papaya,1,i301130721-s527192914,Sumifru Solo Papaya,730 g,3.48,redmart-static-page
+2026-11-17,redmart,papaya,2,i303422444-s536820204,Hong Kong Red Papaya 1.2KG,1.2 kg,5.95,redmart-static-page
+2026-11-17,redmart,pears,1,i303632649-s537332032,RedMart Packham Pear,600 g,4.00,redmart-static-page
+2026-11-17,redmart,pears,2,i301073000-s527094935,Australia Packham Pears,1 kg,4.95,redmart-static-page
+2026-11-17,redmart,penne_pasta,1,i2679295013-s17543955796,Supervalu Wholewheat Penne Pasta,500 g,3.80,redmart-static-page
+2026-11-17,redmart,pepsi_black,1,i303940576-s538054013,Pepsi Zero Sugar Cola Soda (24 X 320ML) - Carton - Packaging may vary,24 x 320 ml,17.82,redmart-static-page
+2026-11-17,redmart,pepsi_black,2,i303966008-s538036500,Pepsi Zero Sugar Cola Soda (4 x 320ML),4 x 320 ml,3.80,redmart-static-page
+2026-11-17,redmart,persil_powder,1,i304106042-s538220611,Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG,4.5 kg,15.29,redmart-static-page
+2026-11-17,redmart,pickles,1,i3460760756-s22950211750,Sainsbury's Cornichons 340G,340 g,4.90,redmart-static-page
+2026-11-17,redmart,pickles,2,i603356148-s1758618646,Monoprix Extra Fine Cornichons Gherkins Pickles 185G,185 g,5.40,redmart-static-page
+2026-11-17,redmart,pork_belly,1,i1465666773-s6803678353,RedMart Pork Belly Sukiyaki Sliced Meat - Frozen,300 g,6.50,redmart-static-page
+2026-11-17,redmart,pork_belly,2,i584736184-s1680318217,Ksp Australia Fresh Pork Belly ,300 g,9.61,redmart-static-page
+2026-11-17,redmart,potatoes,1,i301110861-s527092874,Holland Potato,1 kg,1.65,redmart-static-page
+2026-11-17,redmart,prosecco,1,i304346621-s538562708,The Loose Moose Italian Prosecco DOC Sparkling Wine,750 ml,29.50,redmart-static-page
+2026-11-17,redmart,quinoa,1,i2477407851-s14772392349,RedMart Organic Tricolour Quinoa,500 g,8.15,redmart-static-page
+2026-11-17,redmart,remedy_sodaly_guava,1,i2645682408-s17039227072,Remedy Sodaly Guava - Multipack 250ML X 4,4 x 250 ml,11.20,redmart-static-page
+2026-11-17,redmart,remedy_sodaly_yuzu,1,i3182702274-s21649460937,Remedy Sodaly Yuzu Lemon - 4 x 250ml,4 x 250 ml,11.20,redmart-static-page
+2026-11-17,redmart,rice_crackers,1,i304020688-s538156357,CERES ORGANICS Brown Rice Cakes Original - by Optimo Foods,110 g,4.55,redmart-static-page
+2026-11-17,redmart,rice_paper,1,i304192463-s538360847,Sing Long Rice Paper,100 g,1.56,redmart-static-page
+2026-11-17,redmart,salmon,1,i2745574268-s18617396655,RedMart Premium Salmon Fish Fillet 450G x 2Packs - Frozen,900 g (2 x 450 g),29.90,redmart-static-page
+2026-11-17,redmart,shredded_mozzarella,1,i303406936-s536776915,RedMart Shredded Mozzarella Cheese,170 g,4.40,redmart-static-page
+2026-11-17,redmart,shredded_mozzarella,2,i301170240-s527260609,Tradition Shredded Mozzarella Cheese,225 g,5.75,redmart-static-page
+2026-11-17,redmart,shredded_mozzarella,3,i303432256-s536800573,RedMart Shredded Mozzarella And Cheddar Cheese,170 g,4.40,redmart-static-page
+2026-11-17,redmart,shredded_mozzarella,4,i304206677-s538390843,Sainsbury's Grated Mozzarella Cheese,250 g,7.95,redmart-static-page
+2026-11-17,redmart,shredded_mozzarella,5,i303928154-s537950660,Tradition Shredded Mozzarella Cheese - Frozen 1kg,1 kg,17.90,redmart-static-page
+2026-11-17,redmart,sliced_cheese,1,i3089420229-s21052862487,RedMart Sliced Edam Cheese (100% Natural Cheese),125 g,4.50,redmart-static-page
+2026-11-17,redmart,sliced_cheese,2,i3089551336-s21053142027,RedMart Australian Sliced Cheddar Cheese (100% Natural Cheese),125 g,4.50,redmart-static-page
+2026-11-17,redmart,sliced_cheese,4,i1043946934-s3897182810,Tradition Sliced Emmental Cheese,125 g,5.04,redmart-static-page
+2026-11-17,redmart,sliced_mozzarella,1,i3017773997-s20598552745,Sainsbury's Mozzarella Cheese Slices 250G,250 g,8.90,redmart-static-page
+2026-11-17,redmart,smoked_paprika,1,i3460704895-s22950236937,Sainsbury's Smoked Paprika 44G,44 g,3.10,redmart-static-page
+2026-11-17,redmart,spring_onion_kimchi,1,i2124778809-s12060083764,JIN Spring Onion Kimchi Korean Banchan,345 g,8.90,redmart-static-page
+2026-11-17,redmart,strawberry_pouch_yoghurt,1,i3021310298-s20621668242,Chobani Kids Pouch Greek Yogurt Strawberry 100G,100 g,2.95,redmart-static-page
+2026-11-17,redmart,sweet_corn,1,i301108870-s527088996,RedMart Sweet Corn 2s,550 g,1.95,redmart-static-page
+2026-11-17,redmart,sweet_potatoes,1,i301094909-s527116279,Japanese Sweet Potato,500 g,2.33,redmart-static-page
+2026-11-17,redmart,tissue_box,1,i301082942-s527114258,RedMart Silky Soft and White 2Ply Facial Tissue Paper - 5 Boxes,5 Boxes,5.05,redmart-static-page
+2026-11-17,redmart,tissue_box,2,i1105492861-s4268640922,Premier Classic 2-Ply Facial Tissue - 5 Boxes [Design may Vary],200 Per Pack,7.10,redmart-static-page
+2026-11-17,redmart,tissue_box,3,i3345577093-s22380105291,Vinda Classic 2-Ply Facial Tissue Box - 5 Box,90 Per Pack,4.60,redmart-static-page
+2026-11-17,redmart,toilet_tissue,1,i301096855-s527104735,RedMart Luxuriously Soft 3Ply Toilet Tissue Paper - 10 Rolls,10 x 200 Per Pack,5.60,redmart-static-page
+2026-11-17,redmart,toilet_wipes,1,i304170218-s538362363,RedMart Wet & Moist Flushable Toilet Tissue Paper Wet Wipes 60 Sheets - Safe to Flush,60 Per Pack,3.70,redmart-static-page
+2026-11-17,redmart,tomato_sauce,1,i2679171713-s17543999547,Supervalu Tomato Passata,500 g,2.72,redmart-static-page
+2026-11-17,redmart,tomato_sauce,2,i303954354-s538044347,Sainsbury's Passata,500 g,2.50,redmart-static-page
+2026-11-17,redmart,tomato_sauce,3,i305138179-s541230322,Prego Tomato Pasta Sauce Traditional 350g Jar,350 g,3.60,redmart-static-page
+2026-11-17,redmart,tomato_sauce,4,i2679250236-s17544118041,Supervalu Signature Tastes Rustic Passata Tomato Puree,690 g,4.23,redmart-static-page
+2026-11-17,redmart,tortilla_chips,1,i303248836-s536550938,Mission Multigrain Corn Chips,170 g,4.17,redmart-static-page
+2026-11-17,redmart,vanilla_pouch_yoghurt,1,i3021273489-s20621638512,Chobani Kids Pouch Greek Yogurt Vanilla 100G,100 g,2.95,redmart-static-page
+2026-11-17,redmart,watermelon,1,i301118012-s527094969,Small Thai Watermelon,1.8 kg,6.95,redmart-static-page
+2026-11-17,redmart,yoghurt,1,i301102820-s527098872,Farmers Union Greek Style All Natural Yoghurt 1KG,1 kg,11.70,redmart-static-page
+2026-11-17,redmart,zucchini,1,i327266027-s692090585,RedMart Green Zucchini Courgettes,750 g,3.35,redmart-static-page
+2026-11-19,fairprice,100plus_frozen,1,fp-13186860,100 Plus Hydration Bar - Original,4 per pack,4.95,fairprice-api-promo
+2026-11-19,fairprice,100plus_zero_sugar_isotonic,1,fp-12715191,[BCRS] 100 Plus Zero Sugar Can Drink - Original,24 x 325ml (CTN),16.35,fairprice-api-promo
+2026-11-19,fairprice,100plus_zero_sugar_isotonic,2,fp-13281383,[BCRS] 100 Plus Zero Sugar Can Drink - Original,6 x 325ml,5.15,fairprice-api-promo
+2026-11-19,fairprice,apple_juice,1,fp-13235866,FairPrice Juice - Apple,1L,2.42,fairprice-api
+2026-11-19,fairprice,apple_juice,2,fp-10478147,Ceres 100% Juice Packet Drink - Apple,1L,2.45,fairprice-api-promo
+2026-11-19,fairprice,apple_juice,3,fp-434548,Marigold 100% Packet Juice - Apple,1L,2.55,fairprice-api-promo
+2026-11-19,fairprice,apple_juice,4,fp-11114337,F & N Fruit Tree Fresh No Sugar Added Juice - Apple,946ml,2.77,fairprice-api
+2026-11-19,fairprice,apple_juice_boxes,1,fp-13137510,Marigold 100% Packet Juice - Apple,6 x 200ml,4.60,fairprice-api-promo
+2026-11-19,fairprice,baby_spinach,1,fp-13167900,Simply Finest Baby Spinach,300g,2.00,fairprice-api
+2026-11-19,fairprice,baby_spinach,2,fp-13032623,Kok Fah Fresh Vegetable - Baby Spinach ,200g,1.60,fairprice-api
+2026-11-19,fairprice,baby_spinach,3,fp-13183878,Altamura Foglia Sublime Leaves - Baby Spinach,125g,5.30,fairprice-api
+2026-11-19,fairprice,baby_spinach,4,fp-13260383,Live Well Baby Spinach,100g,4.60,fairprice-api
+2026-11-19,fairprice,baby_wipes,1,fp-12714520,FairPrice Baby Wipes with Lid - 100% Pure Water,18 x 80 per pack (CTN),39.00,fairprice-api-promo
+2026-11-19,fairprice,baby_wipes,2,fp-12714521,FairPrice Baby Wipes with Lid - Unscented,18 x 80 per pack (CTN),39.00,fairprice-api-promo
+2026-11-19,fairprice,baby_wipes,3,fp-12714522,FairPrice Baby Wipes with Lid - Scented,18 x 80 per pack (CTN),39.00,fairprice-api-promo
+2026-11-19,fairprice,bacon,1,fp-11320974,FairPrice Bacon - Streaky,200g,4.95,fairprice-api
+2026-11-19,fairprice,bacon,2,fp-11694896,Tradition Bacon - Streaky,270g,6.31,fairprice-api
+2026-11-19,fairprice,bacon,3,fp-13275114,Delicato Streaky Bacon -  Applewood Smoked,200g,6.95,fairprice-api
+2026-11-19,fairprice,bacon_bits,1,fp-13196057,FairPrice Bacon Bits,190g,3.95,fairprice-api
+2026-11-19,fairprice,bacon_bits,2,fp-13035078,Tradition Bacon - Bits,190g,3.92,fairprice-api
+2026-11-19,fairprice,blueberries,1,fp-10632060,Fresh Blueberries,125g,3.95,fairprice-api
+2026-11-19,fairprice,bread,1,fp-10762199,Gardenia Loaf - Nutri Multi-Grain,400g,3.80,fairprice-api
+2026-11-19,fairprice,butter,1,fp-12511510,Anchor Pure New Zealand Block Butter - Unsalted,227g,5.70,fairprice-api
+2026-11-19,fairprice,butter,2,fp-13218508,FairPrice Unsalted Butter,250g,4.55,fairprice-api-promo
+2026-11-19,fairprice,capsicum,1,fp-11620213,Thygrace Traffic Light Premium Bell Pepper Capsicum,450g,4.60,fairprice-api
+2026-11-19,fairprice,carrots,1,fp-13000321,Pasar Prepacked Carrots ,500g,1.10,fairprice-api
+2026-11-19,fairprice,cheese_sticks,1,fp-10639414,Arla Kids Cheese Sticks - Original,6 x 18g,7.20,fairprice-api-promo
+2026-11-19,fairprice,cherry_tomatoes,1,fp-10762156,Pasar Cherry Tomato,500g,3.65,fairprice-api
+2026-11-19,fairprice,cherry_tomatoes,2,fp-13263902,Simply Finest Cherry Tomato Shaker,250g,4.95,fairprice-api
+2026-11-19,fairprice,cherry_tomatoes,3,fp-11039816,ThyGrace Marketing Honey Cherry Tomato,200g,2.45,fairprice-api
+2026-11-19,fairprice,coconut_oil,1,fp-13240137,Coco Republic Coconut Cooking Oil,1L,10.45,fairprice-api
+2026-11-19,fairprice,cucumber,1,fp-10421837,Pasar Japanese Cucumber ,250g,1.50,fairprice-api
+2026-11-19,fairprice,cucumber,2,fp-13097478,Malaysia Natural Fresh Japanese Cucumber,400g,2.40,fairprice-api
+2026-11-19,fairprice,dark_chocolate,1,fp-13026073,Lindt Excellence Chocolate Bar - 70% (Dark),100g,11.95,fairprice-api
+2026-11-19,fairprice,dark_chocolate,2,fp-13130904,Lindt Excellence Chocolate Bar - 78% (Intense Dark),100g,11.95,fairprice-api
+2026-11-19,fairprice,dishwashing_liquid,1,fp-13210280,FairPrice Dishwashing Liquid Detergent Refill - Lemon,600ml,1.46,fairprice-api
+2026-11-19,fairprice,dishwashing_liquid,2,fp-13210277,FairPrice Dishwashing Liquid Detergent Refill - Anti-Bacterial,600ml,1.71,fairprice-api
+2026-11-19,fairprice,dishwashing_liquid,3,fp-10921874,Mama Lemon Dishwashing Liquid Refill - Natural Lemon,600ml,1.50,fairprice-api
+2026-11-19,fairprice,disinfectant_spray,1,fp-10627827,Dettol Disinfectant Spray - Crisp Breeze,450ml,9.00,fairprice-api-promo
+2026-11-19,fairprice,disinfectant_spray,2,fp-13243915,FairPrice Disinfectant Spray - Sky Breeze,450ml,8.02,fairprice-api
+2026-11-19,fairprice,disinfectant_spray,3,fp-13200940,Magiclean Disinfectant Spray - Multi-Purpose,400ml,6.06,fairprice-api
+2026-11-19,fairprice,disinfectant_wipes,1,fp-13144759,Clorox Disinfecting Cleaning Wipes - Crisp Lemon,35 per pack,4.59,fairprice-api
+2026-11-19,fairprice,dry_wipes,1,fp-13104222,Kleen-Up Wiper Sheets - Dry,4 x 15 per pack,8.50,fairprice-api-promo
+2026-11-19,fairprice,dry_wipes,2,fp-725377,Magiclean Wiper Dry Sheet,3 x 20 per pack,13.40,fairprice-api-promo
+2026-11-19,fairprice,eggs,1,fp-13190663,Pasar Fresh Eggs - Large,10 per pack,3.78,fairprice-api
+2026-11-19,fairprice,eggs,2,fp-13065350,Dasoon Premium Fresh Eggs,900g (15 per pack),4.70,fairprice-api
+2026-11-19,fairprice,eggs,3,fp-13104178,Seng Choon Large Eggs,630g (10 per pack),4.24,fairprice-api
+2026-11-19,fairprice,fabric_softener,1,fp-13216049,Downy Sunrise Fresh Concentrate Fabric Conditioner Softener Refill,3.5L,12.90,fairprice-api-promo
+2026-11-19,fairprice,farfalle_pasta,1,fp-13217102,La Molisana Farfalle Rigate,500g,3.63,fairprice-api
+2026-11-19,fairprice,farfalle_pasta,2,fp-13165408,Barilla Italian Pasta - Farfalle,500g,3.88,fairprice-api
+2026-11-19,fairprice,feta_cheese,1,fp-13196767,President Cheese - Original Greek Feta,150g,6.95,fairprice-api-promo
+2026-11-19,fairprice,floor_cleaner,1,fp-11953931,Magiclean Floor Cleaner - Aromatic Lavender,3L,7.95,fairprice-api
+2026-11-19,fairprice,floor_cleaner,2,fp-10735801,Magiclean Floor Cleaner - Aromatic Lavender,2L,6.65,fairprice-api
+2026-11-19,fairprice,fresh_milk,1,fp-13290817,FairPrice UHT Milk - Full Cream,1L,2.05,fairprice-api
+2026-11-19,fairprice,fresh_milk,2,fp-12529008,Marigold UHT Packet Milk - Full Cream,1L,2.92,fairprice-api
+2026-11-19,fairprice,fresh_milk,3,fp-13022014,F & N Magnolia Fresh Milk,946ml,3.63,fairprice-api
+2026-11-19,fairprice,fresh_milk,4,fp-458564,Farmhouse Milk - Fresh,946ml,3.73,fairprice-api
+2026-11-19,fairprice,fusilli_pasta,1,fp-13185361,FairPrice Whole Wheat Pasta - Fusilli,500g,2.59,fairprice-api
+2026-11-19,fairprice,fusilli_pasta,2,fp-11855071,San Remo Wholemeal Pasta - Spirals,500g,2.25,fairprice-api-promo
+2026-11-19,fairprice,fusilli_pasta,3,fp-13167741,Barilla Italian Pasta - Whole Wheat Fusilli,500g,3.99,fairprice-api
+2026-11-19,fairprice,ground_chicken,1,fp-13224927,Amir's Premium Frozen Meat - Minced Chicken,300g,4.15,fairprice-api-promo
+2026-11-19,fairprice,ground_pork,1,fp-13280658,Pasar Fresh Malaysia Lean Minced Pork,300g,5.80,fairprice-api-promo
+2026-11-19,fairprice,ham,1,fp-13270266,Delicato Chicken Breast - Smoked,90g,3.10,fairprice-api
+2026-11-19,fairprice,handwash,1,fp-13277511,Fairprice Anti-Bacterial Foaming Hand Soap Refill - Peach Delight,200ml,2.00,fairprice-api
+2026-11-19,fairprice,hummus,1,fp-13209203,Chris Dip & Spread - Hommus,200g,7.55,fairprice-api
+2026-11-19,fairprice,kimchi,1,fp-13281216,Jin Kimchi - Spicy,400g,8.60,fairprice-api
+2026-11-19,fairprice,kimchi,2,fp-12561382,CJ Bibigo Korean Sliced Kimchi,500g,8.10,fairprice-api
+2026-11-19,fairprice,kimchi,3,fp-13186858,I'm Kimchi Korean Cabbage Kimchi,500g,8.50,fairprice-api-promo
+2026-11-19,fairprice,kitchen_towel,1,fp-13084758,FairPrice Premium Kitchen Towel Rolls,6 per pack,4.70,fairprice-api-promo
+2026-11-19,fairprice,kitchen_towel,2,fp-13180765,FairPrice Ultra Oil Lite Kitchen Towel,6 x 60 per pack,5.91,fairprice-api
+2026-11-19,fairprice,kitchen_towel,3,fp-13267235,Vinda Classic Towel Rolls - Multi Purpose (2ply),6 x 60 per pack,4.95,fairprice-api-promo
+2026-11-19,fairprice,kiwi,1,fp-13045571,Zespri New Zealand Kiwifruit - Green,4 - 6 per pack,5.55,fairprice-api
+2026-11-19,fairprice,lemon,1,fp-13218308,CGPL South Africa Lemon,750g,2.85,fairprice-api
+2026-11-19,fairprice,lettuce,1,fp-11208122,Pasar Mini Romaine ,300g,1.95,fairprice-api
+2026-11-19,fairprice,lotus_biscoff,1,fp-13015789,Lotus Biscoff Biscuit - Original Caramalised,312.5g,7.90,fairprice-api-promo
+2026-11-19,fairprice,low_fat_milk,1,fp-497108,Farmhouse Milk - Low Fat,946ml,3.73,fairprice-api
+2026-11-19,fairprice,low_fat_milk,2,fp-13290797,FairPrice UHT Milk - Low Fat,1L,2.05,fairprice-api
+2026-11-19,fairprice,low_fat_milk,3,fp-10668151,Greenfields Fresh Milk - Low Fat,1L,3.51,fairprice-api
+2026-11-19,fairprice,low_fat_milk,4,fp-319948,F & N Magnolia Low Fat Hi-Cal Milk - Fresh,946ml,3.63,fairprice-api
+2026-11-19,fairprice,mayonnaise,1,fp-13286647,Hellmann's Real Mayonnaise,460ml,6.10,fairprice-api-promo
+2026-11-19,fairprice,mission_mini_wraps,1,fp-13195540,Mission Mini Wraps - Wholemeal,8 per pack,5.55,fairprice-api
+2026-11-19,fairprice,mission_mini_wraps,2,fp-13195541,Mission Mini Wraps - Original,8 per pack,5.55,fairprice-api
+2026-11-19,fairprice,mission_mini_wraps,3,fp-13256285,Mission Mini Wraps - Pumpkin,300g,5.55,fairprice-api
+2026-11-19,fairprice,olive_oil,1,fp-10927141,FairPrice Olive Oil - Extra Virgin,1L,17.95,fairprice-api-promo
+2026-11-19,fairprice,olive_oil,2,fp-10173079,Borges Olive Oil - Extra Virgin,1L,24.90,fairprice-api
+2026-11-19,fairprice,onions,1,fp-13057634,Premium Yellow Onion,700g,2.42,fairprice-api
+2026-11-19,fairprice,oranges,1,fp-13096563,Australia Tangold Mandarin,500g,4.95,fairprice-api-promo
+2026-11-19,fairprice,oranges,2,fp-13140720,Outspan Gems Mandarin,500g,4.95,fairprice-api
+2026-11-19,fairprice,penne_pasta,1,fp-13167740,Barilla Itailan Pasta - Whole Wheat Penne Rigate,500g,3.99,fairprice-api
+2026-11-19,fairprice,pepsi_black,1,fp-13287400,[BCRS] Pepsi Can Drink - Zero Sugar,12 x 320ml,10.25,fairprice-api
+2026-11-19,fairprice,persil_powder,1,fp-13141092,Persil Powder Detergent - Anti-Bacterial,4.5kg,14.55,fairprice-api-promo
+2026-11-19,fairprice,pork_belly,1,fp-13209693,Porkee Frozen Pork - Belly Sukiyaki,300g,6.15,fairprice-api
+2026-11-19,fairprice,pork_belly,2,fp-13225856,Tradition Spanish Pork Belly - Shabu Shabu,300g,7.95,fairprice-api
+2026-11-19,fairprice,potatoes,1,fp-13057650,Holland Potato (China),1kg,1.45,fairprice-api
+2026-11-19,fairprice,quinoa,1,fp-13237074,Origins Organic Tri-Color Quinoa,450g,12.45,fairprice-api
+2026-11-19,fairprice,quinoa,2,fp-13096421,Nature's Nutrition Organic Quinoa - Tricolour,500g,9.20,fairprice-api
+2026-11-19,fairprice,rice_paper,1,fp-10606479,Mekong Vietnam Rice Paper - 16cm,100g,1.02,fairprice-api
+2026-11-19,fairprice,salmon,1,fp-13106181,Ocean Fresh Delite Frozen Salmon Portion,500g,19.15,fairprice-api-promo
+2026-11-19,fairprice,salmon,2,fp-13239166,Okeanoss Premium Salmon Portion,400g,18.50,fairprice-api
+2026-11-19,fairprice,shredded_mozzarella,1,fp-13087310,Cowhead Cheese - Mozzarella (Shredded),250g,6.50,fairprice-api-promo
+2026-11-19,fairprice,shredded_mozzarella,2,fp-13248358,Emborg Shredded Cheese - Mozzarella,200g,5.95,fairprice-api-promo
+2026-11-19,fairprice,shredded_mozzarella,3,fp-350182,Perfect Italiano Cheese - Mozzarella (Grated),250g,8.63,fairprice-api
+2026-11-19,fairprice,sliced_mozzarella,1,fp-13275931,Harvest Fields Slice Cheese - Mozzarella,160g,5.85,fairprice-api-promo
+2026-11-19,fairprice,sliced_mozzarella,2,fp-13062293,Arla Cheese Slices - Mozzarella,150g,7.50,fairprice-api-promo
+2026-11-19,fairprice,smoked_paprika,1,fp-13246388,McCormick Paprika Smoked,40g,4.75,fairprice-api-promo
+2026-11-19,fairprice,smoked_paprika,2,fp-13274815,MasterFoods Spices - Smoked Paprika,35g,4.80,fairprice-api
+2026-11-19,fairprice,strawberry_pouch_yoghurt,1,fp-13266556,Chobani Greek Yogurt - Strawberry (No Sugar Added),100g,2.95,fairprice-api
+2026-11-19,fairprice,sweet_potatoes,1,fp-13067743,Vietnam Prepacked Japanese Sweet Potato,750g,3.50,fairprice-api
+2026-11-19,fairprice,tissue_box,1,fp-11654448,FairPrice Facial Tissue 2ply Box,5 x 200 per pack,5.35,fairprice-api
+2026-11-19,fairprice,tissue_box,2,fp-10460254,FairPrice Royal Premium Facial Tissue 2ply Box,5 x 200 per pack,6.06,fairprice-api
+2026-11-19,fairprice,toilet_tissue,1,fp-13277645,FairPrice Bathroom Tissue - Strong (3ply),10 x 200 per pack,5.75,fairprice-api-promo
+2026-11-19,fairprice,toilet_tissue,2,fp-13277644,FairPrice Bathroom Tissue - Lux (4ply),10 x 200 per pack,5.95,fairprice-api-promo
+2026-11-19,fairprice,toilet_tissue,3,fp-13088911,PurSoft Bathroom Tissue Roll - Unscented (3 ply),10 x 220 per pack,5.70,fairprice-api-promo
+2026-11-19,fairprice,toilet_wipes,1,fp-13188255,Kleenex Wet Toilet Tissue Flushable Wipes - Kids Superior Clean,3 x 20 per pack,3.50,fairprice-api-promo
+2026-11-19,fairprice,toilet_wipes,2,fp-13104565,NuFresh Personal Toilet Wipes Refill,60 per pack,4.94,fairprice-api
+2026-11-19,fairprice,toilet_wipes,3,fp-13072776,Kleenex Wet Toilet Tissue Flushable Wipes,40 per pack,3.87,fairprice-api
+2026-11-19,fairprice,tomato_sauce,1,fp-12361778,Cirio Passata (Sieved Tomato),700g,4.29,fairprice-api
+2026-11-19,fairprice,tomato_sauce,2,fp-13093587,Prego Pasta Sauce - Traditional Tomato,350g,2.95,fairprice-api-promo
+2026-11-19,fairprice,tortilla_chips,1,fp-13095707,Mission Tortilla Chips - Multigrain,170g,4.17,fairprice-api
+2026-11-19,fairprice,vanilla_pouch_yoghurt,1,fp-13266555,Chobani Greek Yogurt - Vanilla (No Sugar Added),100g,2.95,fairprice-api
+2026-11-19,fairprice,watermelon,1,fp-13196980,Fresh Mini Thailand Watermelon,1.2kg,5.30,fairprice-api
+2026-11-19,fairprice,yoghurt,1,fp-155863,Farmers Union Greek Style Yoghurt - Natural,1kg,9.65,fairprice-api-promo
+2026-11-19,fairprice,yoghurt,2,fp-13250348,Meiji Greek Style Yoghurt - Natural,1kg,7.95,fairprice-api-promo
+2026-11-19,fairprice,yoghurt,3,fp-13275936,Marigold Greek Style Yoghurt - Natural,1kg,8.25,fairprice-api-promo
+2026-11-19,redmart,100plus_frozen,1,i1060284099-s4001518146,100 Plus Hydration Bars Ice Cream - Frozen,4 x 75 ml,5.85,redmart-static-page
+2026-11-19,redmart,100plus_zero_sugar_isotonic,1,i303720249-s537408441,100PLUS Zero Sugar Isotonic Drink 325ML x 24,24 x 325 ml,16.80,redmart-static-page
+2026-11-19,redmart,apple_juice,1,i2895095689-s20067927281,RedMart NFC 100% Apple Juice 1L (Not from concentrate),1 L,4.50,redmart-static-page
+2026-11-19,redmart,apple_juice_boxes,1,i303950799-s538088354,Marigold 100% Apple Juice (6 X 200ML),6 x 200 ml,5.29,redmart-static-page
+2026-11-19,redmart,apples,1,i301072998-s527094932,Granny Smith Green Apples,1 kg,4.95,redmart-static-page
+2026-11-19,redmart,asparagus,1,i304974672-s541102087,Fine Asparagus,100 g,2.65,redmart-static-page
+2026-11-19,redmart,avocado,1,i301100809-s527084959,Mexico/USA Hass Avocado 3/4 pcs (Airflown),450 g,10.95,redmart-static-page
+2026-11-19,redmart,avocado,2,i1933997102-s10339963745,RedMart Hass Avocado 3PCS Australia,500 g,13.90,redmart-static-page
+2026-11-19,redmart,babaganoush,1,i301148899-s527246114,RedMart Deli Babaganoush Eggplant Dip 180G,180 g,5.95,redmart-static-page
+2026-11-19,redmart,baby_spinach,1,i1988693563-s10772039078,RedMart Baby Spinach Salad Australia (Washed And Ready To Eat),100 g,4.10,redmart-static-page
+2026-11-19,redmart,baby_wipes,1,i303092295-s536342985,RedMart Gentle Care Baby Wipes (24 X 80PCS) - Case,24 x 80 pcs,52.90,redmart-static-page
+2026-11-19,redmart,bacon,1,i303774238-s537474478,RedMart Streaky Bacon,220 g,5.80,redmart-static-page
+2026-11-19,redmart,bacon_bits,1,i303308883-s536644918,RedMart Danish Bacon Bits,190 g,5.00,redmart-static-page
+2026-11-19,redmart,big_garbage_bags,1,i303292174-s536598345,RedMart 50L HDPE Garbage Bag With Handle Ties - Black Trash Bag,15 Per Pack,3.05,redmart-static-page
+2026-11-19,redmart,blueberries,1,i301082887-s527114118,Blueberries,125 g,2.95,redmart-static-page
+2026-11-19,redmart,bread,1,i301104861-s527110376,RedMart Multigrain Bread Sliced Loaf,320 g,5.95,redmart-static-page
+2026-11-19,redmart,broccoli,1,i301088922-s527120201,RedMart Broccoli Australia,280 g,3.95,redmart-static-page
+2026-11-19,redmart,butter,1,i301076866-s527078857,Anchor Unsalted Pure Butter 227G,227 g,5.70,redmart-static-page
+2026-11-19,redmart,capsicum,1,i327262071-s692076794,RedMart Traffic Light Capsicum Bell Peppers 3s,450 g,4.35,redmart-static-page
+2026-11-19,redmart,carrots,1,i303998239-s538088935,RedMart Carrots 500G Australia,500 g,0.95,redmart-static-page
+2026-11-19,redmart,cheese_sticks,1,i301156968-s527256419,Arla Cheese Kid Sticks 108G (6 x 18G),108 g,7.85,redmart-static-page
+2026-11-19,redmart,cherry_tomatoes,1,i327264049-s692104083,RedMart Cherry Tomato,250 g,1.85,redmart-static-page
+2026-11-19,redmart,chicken_breast,1,i787612808-s2590912925,FarmFresh Chicken Breast Boneless,200 g,3.75,redmart-static-page
+2026-11-19,redmart,chicken_breast,2,i301090787-s527090735,Kee Song Fresh Chicken Breasts,300 g,5.80,redmart-static-page
+2026-11-19,redmart,coconut_oil,1,i303180934-s536444588,Marca Leon Coconut Oil 1 Ltr,1 L,9.95,redmart-static-page
+2026-11-19,redmart,cottage_cheese,1,i301150670-s527232247,Bulla Cottage Cheese Plain And Low Fat,200 g,6.60,redmart-static-page
+2026-11-19,redmart,cream_cheese,1,i301134724-s527214748,Emborg Cream Cheese 200G (New Look),200 g,4.33,redmart-static-page
+2026-11-19,redmart,cream_cheese,2,i301168071-s527252312,Philadelphia Light Spreadable Cream Cheese 250g,250 g,7.80,redmart-static-page
+2026-11-19,redmart,cream_cleanser,1,i303382284-s536724690,RedMart Concentrated Cream Cleanser 500ml,500 ml,1.40,redmart-static-page
+2026-11-19,redmart,cucumber,1,i327250341-s692072902,RedMart Japanese Cucumber,400 g,1.80,redmart-static-page
+2026-11-19,redmart,dark_chocolate,1,i1902102159-s10164941506,Sainsbury's Taste The Difference Dominican Republic 72-Percent Dark Chocolate,100 g,8.80,redmart-static-page
+2026-11-19,redmart,dishwashing_liquid,1,i301192074-s527276152,RedMart Antibacterial Dish Washing Liquid - Lemon Fragrance,750 ml,1.90,redmart-static-page
+2026-11-19,redmart,dishwashing_liquid,2,i301090877-s527132021,Mama Lemon Natural Lemon Fragrance Dishwashing Liquid Refill Pack -600ML,600 ml,1.65,redmart-static-page
+2026-11-19,redmart,disinfectant_spray,1,i301154269-s527184810,Dettol Disinfectant Spray Crisp Breeze 450ML,450 ml,10.39,redmart-static-page
+2026-11-19,redmart,disinfectant_wipes,1,i304014624-s538118961,Clorox Disinfecting Cleaning Wipes Crisp Lemon 35s,35 wipes (258 g),4.59,redmart-static-page
+2026-11-19,redmart,dragonfruit,1,i301118003-s527094938,Dragonfruits 2s,2 per pack,3.15,redmart-static-page
+2026-11-19,redmart,dry_wipes,1,i2813838672-s19422513998,RedMart Wiper Dry Sheets / wipes 3 x 20pcs (Lemongrass),3 x 20 pcs,7.55,redmart-static-page
+2026-11-19,redmart,eggs,1,i301088929-s527120220,RedMart 15 Eggs 15 X 60G,15 x 60 g,5.10,redmart-static-page
+2026-11-19,redmart,eggs,2,i3229271520-s21867677118,RedMart Fresh Local Eggs (Large) 15X60G,15 x 60 g,5.67,redmart-static-page
+2026-11-19,redmart,fabric_softener,1,i2250924577-s12960073965,Downy Sunrise Fresh Concentrate Fabric Softener 3.5L,3.5 L,18.23,redmart-static-page
+2026-11-19,redmart,farfalle_pasta,1,i2980397599-s20460798700,Sainsbury's Farfalle Pasta 500G,500 g,4.20,redmart-static-page
+2026-11-19,redmart,feta_cheese,1,i2634307789-s16772993862,Kolios Authentic Traditional Greek Feta,150 g,7.40,redmart-static-page
+2026-11-19,redmart,feta_cheese,2,i304208554-s538406503,Sainsbury's Greek Feta Cheese,200 g,9.60,redmart-static-page
+2026-11-19,redmart,floor_cleaner,1,i301120477-s527190523,Magiclean Aromatic Lavender Floor Cleaner 3L,3 L,7.95,redmart-static-page
+2026-11-19,redmart,floor_cleaner,2,i301194057-s527232835,RedMart Anti Bacterial Lavender Floor Cleaner 2L,2 L,4.30,redmart-static-page
+2026-11-19,redmart,floor_wet_wipes,1,i2813938737-s19422601883,RedMart Wiper Wet Sheets Floor wipes 3 X 15PCS - Lavender,3 x 15 pcs,9.20,redmart-static-page
+2026-11-19,redmart,fresh_milk,1,i303304089-s536620243,RedMart UHT Full Cream Milk,1 L,2.05,redmart-static-page
+2026-11-19,redmart,fresh_milk,2,i301076934-s527122109,Farmhouse Fresh Milk 946ML,946 ml,3.73,redmart-static-page
+2026-11-19,redmart,fusilli_pasta,1,i2679222571-s17543981707,Supervalu Wholewheat Fusilli Pasta,500 g,3.40,redmart-static-page
+2026-11-19,redmart,ground_beef,1,i301098923-s527128205,RedMart Australian Fresh Premium Minced Beef,300 g,9.10,redmart-static-page
+2026-11-19,redmart,ground_chicken,1,i3464540910-s22966857377,RedMart Minced Chicken IQF - Frozen,500 g,5.95,redmart-static-page
+2026-11-19,redmart,ground_pork,1,i304074281-s538202297,RedMart Australia Fresh Minced Pork (Freezer Ready Packaging),500 g,6.95,redmart-static-page
+2026-11-19,redmart,ham,1,i318264428-s611366135,RedMart Smoked Chicken Ham,150 g,4.40,redmart-static-page
+2026-11-19,redmart,ham,2,i2804375009-s19369866895,RedMart Honey Baked Ham (No added Nitrate And Nitrite),150 g,6.00,redmart-static-page
+2026-11-19,redmart,handwash,1,i301168260-s527252610,RedMart Anti-Bacterial Lavender Foaming Handwash Hand Soap Wash,250 ml,3.15,redmart-static-page
+2026-11-19,redmart,hummus,1,i301076940-s527122147,RedMart Deli Hummus Dip 220G,220 g,6.45,redmart-static-page
+2026-11-19,redmart,hummus,2,i376230637-s881004221,Delphi Fresh Low Fat Hummus Dip Gluten and Dairy Free Vegan by Atasco,170 g,5.95,redmart-static-page
+2026-11-19,redmart,kimchi,1,i2124781720-s12060189079,JIN Spicy Kimchi Korean Banchan,400 g,8.60,redmart-static-page
+2026-11-19,redmart,kimchi,2,i1167012126-s4607296865,CJ Sliced Cabbage Kimchi Korean Banchan 500g (Tube),500 g,8.90,redmart-static-page
+2026-11-19,redmart,kimchi,3,i2991175808-s20508685220,Coook Sliced Mat Cabbage Kimchi Korean Banchan 500G,500 g,7.40,redmart-static-page
+2026-11-19,redmart,kimchi,4,i301072906-s527094684,I'm Kimchi Korean Cabbage Kimchi Banchan 500g,500 g,9.70,redmart-static-page
+2026-11-19,redmart,kimchi,5,i2124749952-s12060187021,JIN White Kimchi Korean Banchan,400 g,8.90,redmart-static-page
+2026-11-19,redmart,kitchen_towel,1,i301082945-s527114260,RedMart Strong and Absorbent 2Ply Kitchen Paper Towel - 6 Rolls,6 x 60 Per Pack,4.55,redmart-static-page
+2026-11-19,redmart,kiwi,1,i301108865-s527088978,Green Kiwi Fruit 6s,440 g,5.04,redmart-static-page
+2026-11-19,redmart,lemon,1,i1548788612-s7249264792,RedMart Unwaxed Lemons,650 g,5.15,redmart-static-page
+2026-11-19,redmart,lettuce,1,i2149788919-s12237639509,RedMart Baby Romaine Lettuce Salad,300 g,1.95,redmart-static-page
+2026-11-19,redmart,lettuce,2,i2367366756-s13842110206,Uncle Jack's Butterhead Lettuce,200 g,2.25,redmart-static-page
+2026-11-19,redmart,lettuce,3,i301074936-s527080881,Butterhead Lettuce,200 g,3.00,redmart-static-page
+2026-11-19,redmart,lotus_biscoff,1,i328720557-s699598527,Lotus Biscoff - Caramelized Biscuit Cookies - 312.5G - Non-Gmo Project Verified And Vegan,312.5 g,8.83,redmart-static-page
+2026-11-19,redmart,low_fat_milk,1,i301084922-s527112326,Farmhouse Low Fat Fresh Milk 946ML,946 ml,3.73,redmart-static-page
+2026-11-19,redmart,mayonnaise,1,i2679295018-s17544099221,Supervalu Real Mayonnaise Free Range Eggs,425 ml,5.95,redmart-static-page
+2026-11-19,redmart,milkfish,1,i305088846-s541218569,Sarangani Bay Boneless Milkfish Marinated - Frozen,440 g,12.50,redmart-static-page
+2026-11-19,redmart,milkfish,2,i305098671-s541212740,Sarangani Bay Baby Milkfish Marinated - Frozen,400 g,11.00,redmart-static-page
+2026-11-19,redmart,milkfish,3,i305086900-s541194972,Sarangani Bay Boneless Milkfish Unseasoned - Frozen,320 g,9.00,redmart-static-page
+2026-11-19,redmart,mission_mini_wraps,1,i1615916091-s7596924443,Mission Mini Wrap - Wholemeal 8 Per Pack,300 g,5.55,redmart-static-page
+2026-11-19,redmart,mission_mini_wraps,2,i3045639894-s20781429055,Mission Mini Wrap - Pumpkin 8 Per Pack,300 g,5.55,redmart-static-page
+2026-11-19,redmart,mission_mini_wraps,3,i1615822839-s7596916496,Mission Mini Wrap - Original 8 Per Pack,300 g,5.55,redmart-static-page
+2026-11-19,redmart,olive_oil,1,i301196092-s527266381,RedMart Extra Virgin Olive Oil (EVOO)- 1L,1 L,20.90,redmart-static-page
+2026-11-19,redmart,onions,1,i491826153-s1352684044,RedMart Brown Onion (Netherlands) Yellow Onion,1 kg,3.50,redmart-static-page
+2026-11-19,redmart,orange_popsicles,1,i2636787021-s16831159291,Frozt Orange Popsicle Pack Of 4,4 per pack,9.90,redmart-static-page
+2026-11-19,redmart,oranges,1,i1142960678-s4461922707,RedMart Easy Peel Mandarin Orange,500 g,4.95,redmart-static-page
+2026-11-19,redmart,papaya,1,i301130721-s527192914,Sumifru Solo Papaya,730 g,3.48,redmart-static-page
+2026-11-19,redmart,papaya,2,i303422444-s536820204,Hong Kong Red Papaya 1.2KG,1.2 kg,5.95,redmart-static-page
+2026-11-19,redmart,pears,1,i303632649-s537332032,RedMart Packham Pear,600 g,4.00,redmart-static-page
+2026-11-19,redmart,pears,2,i301073000-s527094935,Australia Packham Pears,1 kg,4.95,redmart-static-page
+2026-11-19,redmart,penne_pasta,1,i2679295013-s17543955796,Supervalu Wholewheat Penne Pasta,500 g,3.80,redmart-static-page
+2026-11-19,redmart,pepsi_black,1,i303940576-s538054013,Pepsi Zero Sugar Cola Soda (24 X 320ML) - Carton - Packaging may vary,24 x 320 ml,17.82,redmart-static-page
+2026-11-19,redmart,pepsi_black,2,i303966008-s538036500,Pepsi Zero Sugar Cola Soda (4 x 320ML),4 x 320 ml,3.80,redmart-static-page
+2026-11-19,redmart,persil_powder,1,i304106042-s538220611,Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG,4.5 kg,15.29,redmart-static-page
+2026-11-19,redmart,pickles,1,i3460760756-s22950211750,Sainsbury's Cornichons 340G,340 g,4.90,redmart-static-page
+2026-11-19,redmart,pickles,2,i603356148-s1758618646,Monoprix Extra Fine Cornichons Gherkins Pickles 185G,185 g,5.40,redmart-static-page
+2026-11-19,redmart,pork_belly,1,i1465666773-s6803678353,RedMart Pork Belly Sukiyaki Sliced Meat - Frozen,300 g,6.50,redmart-static-page
+2026-11-19,redmart,pork_belly,2,i584736184-s1680318217,Ksp Australia Fresh Pork Belly ,300 g,9.61,redmart-static-page
+2026-11-19,redmart,potatoes,1,i301110861-s527092874,Holland Potato,1 kg,1.65,redmart-static-page
+2026-11-19,redmart,prosecco,1,i304346621-s538562708,The Loose Moose Italian Prosecco DOC Sparkling Wine,750 ml,29.50,redmart-static-page
+2026-11-19,redmart,quinoa,1,i2477407851-s14772392349,RedMart Organic Tricolour Quinoa,500 g,8.15,redmart-static-page
+2026-11-19,redmart,remedy_sodaly_guava,1,i2645682408-s17039227072,Remedy Sodaly Guava - Multipack 250ML X 4,4 x 250 ml,11.20,redmart-static-page
+2026-11-19,redmart,remedy_sodaly_yuzu,1,i3182702274-s21649460937,Remedy Sodaly Yuzu Lemon - 4 x 250ml,4 x 250 ml,11.20,redmart-static-page
+2026-11-19,redmart,rice_crackers,1,i304020688-s538156357,CERES ORGANICS Brown Rice Cakes Original - by Optimo Foods,110 g,4.55,redmart-static-page
+2026-11-19,redmart,rice_paper,1,i304192463-s538360847,Sing Long Rice Paper,100 g,1.56,redmart-static-page
+2026-11-19,redmart,salmon,1,i2745574268-s18617396655,RedMart Premium Salmon Fish Fillet 450G x 2Packs - Frozen,900 g (2 x 450 g),29.90,redmart-static-page
+2026-11-19,redmart,shredded_mozzarella,1,i303406936-s536776915,RedMart Shredded Mozzarella Cheese,170 g,4.40,redmart-static-page
+2026-11-19,redmart,shredded_mozzarella,2,i301170240-s527260609,Tradition Shredded Mozzarella Cheese,225 g,5.75,redmart-static-page
+2026-11-19,redmart,shredded_mozzarella,3,i303432256-s536800573,RedMart Shredded Mozzarella And Cheddar Cheese,170 g,4.40,redmart-static-page
+2026-11-19,redmart,shredded_mozzarella,4,i304206677-s538390843,Sainsbury's Grated Mozzarella Cheese,250 g,7.95,redmart-static-page
+2026-11-19,redmart,shredded_mozzarella,5,i303928154-s537950660,Tradition Shredded Mozzarella Cheese - Frozen 1kg,1 kg,17.90,redmart-static-page
+2026-11-19,redmart,sliced_cheese,1,i3089420229-s21052862487,RedMart Sliced Edam Cheese (100% Natural Cheese),125 g,4.50,redmart-static-page
+2026-11-19,redmart,sliced_cheese,2,i3089551336-s21053142027,RedMart Australian Sliced Cheddar Cheese (100% Natural Cheese),125 g,4.50,redmart-static-page
+2026-11-19,redmart,sliced_cheese,4,i1043946934-s3897182810,Tradition Sliced Emmental Cheese,125 g,5.04,redmart-static-page
+2026-11-19,redmart,sliced_mozzarella,1,i3017773997-s20598552745,Sainsbury's Mozzarella Cheese Slices 250G,250 g,8.90,redmart-static-page
+2026-11-19,redmart,smoked_paprika,1,i3460704895-s22950236937,Sainsbury's Smoked Paprika 44G,44 g,3.10,redmart-static-page
+2026-11-19,redmart,spring_onion_kimchi,1,i2124778809-s12060083764,JIN Spring Onion Kimchi Korean Banchan,345 g,8.90,redmart-static-page
+2026-11-19,redmart,strawberry_pouch_yoghurt,1,i3021310298-s20621668242,Chobani Kids Pouch Greek Yogurt Strawberry 100G,100 g,2.95,redmart-static-page
+2026-11-19,redmart,sweet_corn,1,i301108870-s527088996,RedMart Sweet Corn 2s,550 g,1.95,redmart-static-page
+2026-11-19,redmart,sweet_potatoes,1,i301094909-s527116279,Japanese Sweet Potato,500 g,2.33,redmart-static-page
+2026-11-19,redmart,tissue_box,1,i301082942-s527114258,RedMart Silky Soft and White 2Ply Facial Tissue Paper - 5 Boxes,5 Boxes,5.05,redmart-static-page
+2026-11-19,redmart,tissue_box,2,i1105492861-s4268640922,Premier Classic 2-Ply Facial Tissue - 5 Boxes [Design may Vary],200 Per Pack,7.10,redmart-static-page
+2026-11-19,redmart,tissue_box,3,i3345577093-s22380105291,Vinda Classic 2-Ply Facial Tissue Box - 5 Box,90 Per Pack,4.60,redmart-static-page
+2026-11-19,redmart,toilet_tissue,1,i301096855-s527104735,RedMart Luxuriously Soft 3Ply Toilet Tissue Paper - 10 Rolls,10 x 200 Per Pack,5.60,redmart-static-page
+2026-11-19,redmart,toilet_wipes,1,i304170218-s538362363,RedMart Wet & Moist Flushable Toilet Tissue Paper Wet Wipes 60 Sheets - Safe to Flush,60 Per Pack,3.70,redmart-static-page
+2026-11-19,redmart,tomato_sauce,1,i2679171713-s17543999547,Supervalu Tomato Passata,500 g,2.72,redmart-static-page
+2026-11-19,redmart,tomato_sauce,2,i303954354-s538044347,Sainsbury's Passata,500 g,2.50,redmart-static-page
+2026-11-19,redmart,tomato_sauce,3,i305138179-s541230322,Prego Tomato Pasta Sauce Traditional 350g Jar,350 g,3.60,redmart-static-page
+2026-11-19,redmart,tomato_sauce,4,i2679250236-s17544118041,Supervalu Signature Tastes Rustic Passata Tomato Puree,690 g,4.23,redmart-static-page
+2026-11-19,redmart,tortilla_chips,1,i303248836-s536550938,Mission Multigrain Corn Chips,170 g,4.17,redmart-static-page
+2026-11-19,redmart,vanilla_pouch_yoghurt,1,i3021273489-s20621638512,Chobani Kids Pouch Greek Yogurt Vanilla 100G,100 g,2.95,redmart-static-page
+2026-11-19,redmart,watermelon,1,i301118012-s527094969,Small Thai Watermelon,1.8 kg,6.95,redmart-static-page
+2026-11-19,redmart,yoghurt,1,i301102820-s527098872,Farmers Union Greek Style All Natural Yoghurt 1KG,1 kg,11.70,redmart-static-page
+2026-11-19,redmart,zucchini,1,i327266027-s692090585,RedMart Green Zucchini Courgettes,750 g,3.35,redmart-static-page
