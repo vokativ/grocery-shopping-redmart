@@ -211,7 +211,7 @@ To add a single new item from an open page:
 
 ## Price tracking
 
-Observed prices are refreshed by a read-only static page fetch followed by a catalog and history update. The household asked for this as routine maintenance: it needs no catalog review page, never touches the cart or the logged-in session, and is separate from the [Catalog Changes Contract](../AGENTS.md#catalog-changes-contract) approval flow for adding or removing products.
+Observed prices are refreshed by a read-only static page fetch followed by a catalog and history update. The household asked for this as routine maintenance: it needs no catalog review page, never touches the cart or the logged-in session, and is separate from the [Catalog Changes Contract](../AGENTS.md#catalog-changes-contract) approval flow for adding or removing products. **A price refresh is RedMart-only by default.** Refresh FairPrice prices or run the FairPrice comparison only when the household explicitly asks for it ([FairPrice backup rows](#fairprice-backup-rows)).
 
 ```bash
 node tools/fetch-redmart-prices.mjs --out /tmp/redmart-prices.json     # ~3–5 s per product
@@ -244,7 +244,7 @@ Rows are sorted by date, store, item id, then rank, with one row per (date, stor
 
 ### FairPrice backup rows
 
-The household decided **not** to use FairPrice for carts; `docs/fairprice/cart-rules.md` is inactive and no shopping tool reads FairPrice data. `experiments/fairprice/backup-catalog.yaml` is a generated reference of ranked FairPrice substitutes per catalog item. FairPrice rows enter `price-history.csv` only as a by-product of regenerating it:
+The household decided **not** to use FairPrice for carts; `docs/fairprice/cart-rules.md` is inactive and no shopping tool reads FairPrice data. `experiments/fairprice/backup-catalog.yaml` is a generated reference of ranked FairPrice substitutes per catalog item. Run the commands below, or `compare.mjs`, **only when the household explicitly asks for a FairPrice comparison**; an ordinary price refresh skips them. FairPrice rows enter `price-history.csv` only as a by-product of regenerating the backup catalog. The substitute mapping has not been reviewed by the household yet, so treat any FairPrice total as indicative.
 
 ```bash
 node experiments/fairprice/fetch-prices.mjs --out experiments/fairprice/snapshots/<date>/fairprice-prices.json

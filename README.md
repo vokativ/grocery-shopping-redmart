@@ -177,7 +177,7 @@ The agent also waits for the progressively loaded product page, checks when the 
 
 ## 💸 Keeping prices current
 
-RedMart prices drift. Ask the agent to “refresh the prices” now and then. It looks up each saved product on its public page at a gentle pace, updates the price and the date it was last checked in your catalog, and adds a line for every product to `price-history.csv`, a plain spreadsheet-style file you can open in Excel or Numbers. Over time that file shows how your usual groceries move in cost, and the agent can point out anything that has risen noticeably. A refresh never touches your cart, and it stops and tells you if Lazada shows a verification check.
+RedMart prices drift. Ask the agent to “refresh the prices” now and then. It looks up each saved product on its public page at a gentle pace, updates the price and the date it was last checked in your catalog, and adds a line for every product to `price-history.csv`, a plain spreadsheet-style file you can open in Excel or Numbers. Over time that file shows how your usual groceries move in cost, and the agent can point out anything that has risen noticeably. A refresh never touches your cart, and it stops and tells you if Lazada shows a verification check. It only checks RedMart; ask explicitly if you also want the FairPrice comparison.
 
 ## 🔒 You remain in control
 
