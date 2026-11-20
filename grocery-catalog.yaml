@@ -160,6 +160,34 @@ items:
         observed_price_date: "2026-11-19"
     notes: "Smoked chicken ham remains first; the honey baked ham from the 2026-09-14 order is the approved fallback."
 
+  - id: sausages
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - sausages
+      - sausage
+      - chicken sausage
+      - cheese sausage
+      - chipolatas
+    preferred_products:
+      - rank: 1
+        title: "RedMart Smoked Chicken Cheese Sausage"
+        item_id: "3182770724"
+        sku_id: "21650554677"
+        canonical_url: "https://www.lazada.sg/products/i3182770724-s21650554677.html"
+        pack_size: "300 g"
+        observed_price_sgd: 8.50
+        observed_price_date: "2026-11-20"
+      - rank: 2
+        title: "RedMart Mild Pork Chipolatas Sausages - Frozen"
+        item_id: "303182973"
+        sku_id: "536456204"
+        canonical_url: "https://www.lazada.sg/products/i303182973-s536456204.html"
+        pack_size: "400 g"
+        observed_price_sgd: 9.24
+        observed_price_date: "2026-11-20"
+    notes: "Child-friendly, non-spicy sausages. Chicken cheese sausage first; mild pork chipolatas are the approved fallback (added 2026-11-20 at user request). Avoid the spicy chorizo."
+
   - id: chicken_breast
     category: chilled
     default_quantity: 2
