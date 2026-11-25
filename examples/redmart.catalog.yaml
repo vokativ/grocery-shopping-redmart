@@ -1,0 +1,406 @@
+# Example RedMart catalog: a trimmed copy of one household's real grocery-catalog.yaml.
+#
+# Titles, item/SKU ids, URLs, prices and dates are real (snapshot taken from the
+# maintainer's catalog, so prices are stale and ids may no longer be sold).
+# It is meant to show every catalog feature on a small file: ranked backup
+# products, `alias_product_ranks` (see sliced_cheese and apples), a
+# `household_baskets` entry (remedy_sodaly_mix, whose members are also items),
+# per-item notes, and default quantities.
+#
+# How to use it:
+#   cp examples/redmart.catalog.yaml grocery-catalog.local.yaml
+#   then edit the copy (replace the products with your own). Never edit
+#   grocery-catalog.yaml: that is the maintainer's personal catalog.
+#
+# Validate:
+#   node tools/validate-catalog.mjs --catalog examples/redmart.catalog.yaml
+catalog_version: 2
+store:
+  platform: redmart
+  name: RedMart on Lazada Singapore
+  country: Singapore
+  canonical_url_pattern: "https://www.lazada.sg/products/i<item_id>-s<sku_id>.html"
+  notes:
+    - Use canonical_url for shopping runs.
+    - Ignore long tracking and search parameters such as spm, priceCompare, search, request_id, and observed referrers.
+    - observed_price_sgd is the latest observed price on observed_price_date (refreshed by tools/track-prices.mjs; history in price-history.csv), not a buying rule.
+    - Prefer products available for delivery today or tomorrow. Two days from now is acceptable. More than two days from now needs human review.
+
+items:
+  - id: rice_crackers
+    category: pantry_snacks
+    default_quantity: 3
+    aliases:
+      - rice crackers
+      - brown rice crackers
+      - rice cakes
+    preferred_products:
+      - rank: 1
+        title: "CERES ORGANICS Brown Rice Cakes Original - by Optimo Foods"
+        item_id: "304020688"
+        sku_id: "538156357"
+        canonical_url: "https://www.lazada.sg/products/i304020688-s538156357.html"
+        pack_size: "110 g"
+        observed_price_sgd: 4.55
+        observed_price_date: "2026-11-19"
+    notes: "Rebuilt from the approved 2026-07-23 order review; the former black rice crackers product was explicitly excluded."
+
+  - id: big_garbage_bags
+    category: household
+    default_quantity: 2
+    aliases:
+      - big garbage bags
+      - garbage bags
+      - trash bags
+      - bin bags
+      - black trash bags
+    preferred_products:
+      - rank: 1
+        title: "RedMart 50L HDPE Garbage Bag With Handle Ties - Black Trash Bag"
+        item_id: "303292174"
+        sku_id: "536598345"
+        canonical_url: "https://www.lazada.sg/products/i303292174-s536598345.html"
+        pack_size: "15 Per Pack"
+        observed_price_sgd: 3.05
+        observed_price_date: "2026-11-19"
+    notes: "Default quantity is 2 from the 2026-07-07 cart."
+
+  - id: persil_powder
+    category: household
+    default_quantity: 1
+    aliases:
+      - persil powder
+      - detergent
+      - laundry detergent
+      - persil detergent
+      - washing powder
+      - persil
+      - personal powder
+    preferred_products:
+      - rank: 1
+        title: "Persil Anti-Bacterial Low Suds Powder Detergent 4.5KG"
+        item_id: "304106042"
+        sku_id: "538220611"
+        canonical_url: "https://www.lazada.sg/products/i304106042-s538220611.html"
+        pack_size: "4.5 kg"
+        observed_price_sgd: 15.29
+        observed_price_date: "2026-11-19"
+    notes: "Use this for whiteboard text like 'persil powder'."
+
+  - id: eggs
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - eggs
+      - egg
+      - large eggs
+    preferred_products:
+      - rank: 1
+        title: "RedMart 15 Eggs 15 X 60G"
+        item_id: "301088929"
+        sku_id: "527120220"
+        canonical_url: "https://www.lazada.sg/products/i301088929-s527120220.html"
+        pack_size: "15 x 60 g"
+        observed_price_sgd: 5.10
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "RedMart Fresh Local Eggs (Large) 15X60G"
+        item_id: "3229271520"
+        sku_id: "21867677118"
+        canonical_url: "https://www.lazada.sg/products/i3229271520-s21867677118.html"
+        pack_size: "15 x 60 g"
+        observed_price_sgd: 5.67
+        observed_price_date: "2026-11-19"
+    notes: "The long-running RedMart 15 Eggs SKU remains first; the fresh local large-eggs SKU from the 2026-07-23 order is the approved fallback."
+
+  - id: ham
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - ham
+      - chicken ham
+      - smoked chicken ham
+    preferred_products:
+      - rank: 1
+        title: "RedMart Smoked Chicken Ham"
+        item_id: "318264428"
+        sku_id: "611366135"
+        canonical_url: "https://www.lazada.sg/products/i318264428-s611366135.html"
+        pack_size: "150 g"
+        observed_price_sgd: 4.40
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "RedMart Honey Baked Ham (No added Nitrate And Nitrite)"
+        item_id: "2804375009"
+        sku_id: "19369866895"
+        canonical_url: "https://www.lazada.sg/products/i2804375009-s19369866895.html"
+        pack_size: "150 g"
+        observed_price_sgd: 6.00
+        observed_price_date: "2026-11-19"
+    notes: "Smoked chicken ham remains first; the honey baked ham from the 2026-09-14 order is the approved fallback."
+
+  - id: sausages
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - sausages
+      - sausage
+      - chicken sausage
+      - cheese sausage
+      - chipolatas
+    preferred_products:
+      - rank: 1
+        title: "RedMart Smoked Chicken Cheese Sausage"
+        item_id: "3182770724"
+        sku_id: "21650554677"
+        canonical_url: "https://www.lazada.sg/products/i3182770724-s21650554677.html"
+        pack_size: "300 g"
+        observed_price_sgd: 8.50
+        observed_price_date: "2026-11-20"
+      - rank: 2
+        title: "RedMart Mild Pork Chipolatas Sausages - Frozen"
+        item_id: "303182973"
+        sku_id: "536456204"
+        canonical_url: "https://www.lazada.sg/products/i303182973-s536456204.html"
+        pack_size: "400 g"
+        observed_price_sgd: 9.24
+        observed_price_date: "2026-11-20"
+    notes: "Child-friendly, non-spicy sausages. Chicken cheese sausage first; mild pork chipolatas are the approved fallback (added 2026-11-20 at user request). Avoid the spicy chorizo."
+
+  - id: watermelon
+    category: produce
+    default_quantity: 1
+    aliases:
+      - watermelon
+      - small watermelon
+      - thai watermelon
+    preferred_products:
+      - rank: 1
+        title: "Small Thai Watermelon"
+        item_id: "301118012"
+        sku_id: "527094969"
+        canonical_url: "https://www.lazada.sg/products/i301118012-s527094969.html"
+        pack_size: "1.8 kg"
+        observed_price_sgd: 6.95
+        observed_price_date: "2026-11-19"
+    notes: "Maps generic 'watermelon'."
+
+  - id: sliced_cheese
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - sliced cheese
+      - cheese slices
+      - cheddar slices
+      - edam slices
+      - emmental cheese
+      - emmental slices
+    alias_product_ranks:
+      cheddar slices: [2]
+      edam slices: [1]
+      emmental cheese: [4]
+      emmental slices: [4]
+    preferred_products:
+      - rank: 1
+        title: "RedMart Sliced Edam Cheese (100% Natural Cheese)"
+        item_id: "3089420229"
+        sku_id: "21052862487"
+        canonical_url: "https://www.lazada.sg/products/i3089420229-s21052862487.html"
+        pack_size: "125 g"
+        observed_price_sgd: 4.50
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "RedMart Australian Sliced Cheddar Cheese (100% Natural Cheese)"
+        item_id: "3089551336"
+        sku_id: "21053142027"
+        canonical_url: "https://www.lazada.sg/products/i3089551336-s21053142027.html"
+        pack_size: "125 g"
+        observed_price_sgd: 4.50
+        observed_price_date: "2026-11-19"
+      - rank: 4
+        title: "Tradition Sliced Emmental Cheese"
+        item_id: "1043946934"
+        sku_id: "3897182810"
+        canonical_url: "https://www.lazada.sg/products/i1043946934-s3897182810.html"
+        pack_size: "125 g"
+        observed_price_sgd: 5.04
+        observed_price_date: "2026-11-19"
+    notes: "Generic sliced cheese uses Edam first, cheddar second, then Tradition Emmental, now the only Emmental option. Ranks are kept at 1, 2 and 4 after Paysan Breton Emmental Sliced Cheese (rank 3) was removed on 2026-11-19 as no longer sold."
+
+  - id: dishwashing_liquid
+    category: household
+    default_quantity: 1
+    aliases:
+      - dishwashing liquid
+      - dish washing liquid
+      - dish soap
+      - washing up liquid
+    preferred_products:
+      - rank: 1
+        title: "RedMart Antibacterial Dish Washing Liquid - Lemon Fragrance"
+        item_id: "301192074"
+        sku_id: "527276152"
+        canonical_url: "https://www.lazada.sg/products/i301192074-s527276152.html"
+        pack_size: "750 ml"
+        observed_price_sgd: 1.90
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "Mama Lemon Natural Lemon Fragrance Dishwashing Liquid Refill Pack -600ML"
+        item_id: "301090877"
+        sku_id: "527132021"
+        canonical_url: "https://www.lazada.sg/products/i301090877-s527132021.html"
+        pack_size: "600 ml"
+        observed_price_sgd: 1.65
+        observed_price_date: "2026-11-19"
+    notes: "RedMart lemon dishwashing liquid remains first; the approved Mama Lemon refill is the ranked fallback."
+
+  - id: handwash
+    category: household
+    default_quantity: 2
+    aliases:
+      - handwash
+      - hand wash
+    preferred_products:
+      - rank: 1
+        title: "RedMart Anti-Bacterial Lavender Foaming Handwash Hand Soap Wash"
+        item_id: "301168260"
+        sku_id: "527252610"
+        canonical_url: "https://www.lazada.sg/products/i301168260-s527252610.html"
+        pack_size: "250 ml"
+        observed_price_sgd: 3.15
+        observed_price_date: "2026-11-19"
+    notes: "Approved from the 2026-09-14 RedMart order with the reviewed default quantity of 2."
+
+  - id: toilet_tissue
+    category: household
+    default_quantity: 1
+    aliases:
+      - toilet tissue
+      - toilet paper
+      - toilet rolls
+    preferred_products:
+      - rank: 1
+        title: "RedMart Luxuriously Soft 3Ply Toilet Tissue Paper - 10 Rolls"
+        item_id: "301096855"
+        sku_id: "527104735"
+        canonical_url: "https://www.lazada.sg/products/i301096855-s527104735.html"
+        pack_size: "10 x 200 Per Pack"
+        observed_price_sgd: 5.60
+        observed_price_date: "2026-11-19"
+    notes: "Maps the 2026-07-03 whiteboard item 'toilet tissue'."
+
+  - id: apples
+    category: produce
+    default_quantity: 1
+    aliases:
+      - apples
+      - apple
+      - green apples
+      - granny smith apples
+    alias_product_ranks:
+      green apples: [1]
+      granny smith apples: [1]
+    preferred_products:
+      - rank: 1
+        title: "Granny Smith Green Apples"
+        item_id: "301072998"
+        sku_id: "527094932"
+        canonical_url: "https://www.lazada.sg/products/i301072998-s527094932.html"
+        pack_size: "1 kg"
+        observed_price_sgd: 4.95
+        observed_price_date: "2026-11-19"
+    notes: "Generic apples use Granny Smith; explicit green/Granny Smith apples use Granny Smith only. RedMart Organic Royal Gala Apples (the only red option) removed 2026-11-19 as no longer sold, so an explicit red apples request is unmatched and left to the Local Recommendation Pass."
+
+  - id: fresh_milk
+    category: chilled
+    default_quantity: 2
+    aliases:
+      - fresh milk
+      - milk
+      - full cream milk
+    preferred_products:
+      - rank: 1
+        title: "RedMart UHT Full Cream Milk"
+        item_id: "303304089"
+        sku_id: "536620243"
+        canonical_url: "https://www.lazada.sg/products/i303304089-s536620243.html"
+        pack_size: "1 L"
+        observed_price_sgd: 2.05
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "Farmhouse Fresh Milk 946ML"
+        item_id: "301076934"
+        sku_id: "527122109"
+        canonical_url: "https://www.lazada.sg/products/i301076934-s527122109.html"
+        pack_size: "946 ml"
+        observed_price_sgd: 3.73
+        observed_price_date: "2026-11-19"
+    notes: "RedMart UHT Full Cream Milk approved as rank 1 from 2026-11-10 review; Farmhouse fresh milk preserved as rank 2 fallback."
+
+  - id: remedy_sodaly_yuzu
+    category: beverages
+    default_quantity: 2
+    aliases:
+      - remedy yuzu
+      - yuzu soda
+      - yuzu sodaly
+      - remedy sodaly yuzu
+    preferred_products:
+      - rank: 1
+        title: "Remedy Sodaly Yuzu Lemon - 4 x 250ml"
+        item_id: "3182702274"
+        sku_id: "21649460937"
+        canonical_url: "https://www.lazada.sg/products/i3182702274-s21649460937.html"
+        pack_size: "4 x 250 ml"
+        observed_price_sgd: 11.20
+        observed_price_date: "2026-11-19"
+    notes: "Default quantity follows the repeated order-detail quantity seen in a past order."
+
+  - id: remedy_sodaly_guava
+    category: beverages
+    default_quantity: 2
+    aliases:
+      - guava sodaly
+    preferred_products:
+      - rank: 1
+        title: "Remedy Sodaly Guava - Multipack 250ML X 4"
+        item_id: "2645682408"
+        sku_id: "17039227072"
+        canonical_url: "https://www.lazada.sg/products/i2645682408-s17039227072.html"
+        pack_size: "4 x 250 ml"
+        observed_price_sgd: 11.20
+        observed_price_date: "2026-11-19"
+    notes: "Approved counterpart to Remedy Yuzu; default quantity 2 follows the 2026-07-21 order."
+
+  - id: bread
+    category: bakery
+    default_quantity: 1
+    aliases:
+      - bread
+    preferred_products:
+      - rank: 1
+        title: "RedMart Multigrain Bread Sliced Loaf"
+        item_id: "301104861"
+        sku_id: "527110376"
+        canonical_url: "https://www.lazada.sg/products/i301104861-s527110376.html"
+        pack_size: "320 g"
+        observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
+    notes: "Approved from 2026-10-16 catalog review."
+
+# Household baskets map one spoken word to a deliberate mix of catalog items.
+# `default_quantity` is the TOTAL number of packs, spread across `members` in declared
+# order (earliest members absorb an odd remainder). Flavour-specific aliases on the
+# member items keep working and always resolve to that single flavour.
+household_baskets:
+  - id: remedy_sodaly_mix
+    category: beverages
+    default_quantity: 2
+    aliases:
+      - sodaly
+      - sodalys
+      - remedy sodaly
+    members:
+      - item: remedy_sodaly_guava
+      - item: remedy_sodaly_yuzu
+    notes: "The household says 'Sodaly' without a flavour and wants a mix. The generic word deliberately defaults to 2 packs TOTAL, one of each flavour, even though each flavour-specific alias still defaults to 2 packs of that flavour on its own. Guava is declared first, so an odd total gives Guava the extra pack. Say 'yuzu sodaly' or 'guava sodaly' for a single flavour."

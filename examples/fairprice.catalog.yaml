@@ -1,0 +1,248 @@
+# EXPERIMENTAL example FairPrice catalog (platform: fairprice). There is no tested FairPrice
+# cart procedure yet; this file only shows the catalog shape and validates.
+#
+# Every product is real data from the 2026-11-19 FairPrice snapshot in
+# experiments/fairprice/backup-catalog.yaml, mapped to the item ids, aliases and default
+# quantities of the maintainer's RedMart catalog. Items with no acceptable FairPrice
+# substitute in that snapshot (e.g. sliced_cheese, apples, sausages) are left out.
+# Prices are a dated reference (2026-11-19), not a buying rule.
+#
+# How to use it:
+#   mkdir -p catalogs/fairprice && cp examples/fairprice.catalog.yaml catalogs/fairprice/<handle>.yaml
+#   (or cp examples/fairprice.catalog.yaml grocery-catalog.local.yaml), then replace store_id
+#   with your own FairPrice store id and edit the products. Never edit grocery-catalog.yaml.
+#
+# Validate:
+#   node tools/validate-catalog.mjs --catalog examples/fairprice.catalog.yaml
+catalog_version: 2
+store:
+  platform: fairprice
+  name: "NTUC FairPrice online (www.fairprice.com.sg)"
+  country: Singapore
+  store_id: "<YOUR_STORE_ID>"
+  identity: article_id
+  canonical_url_pattern: "https://www.fairprice.com.sg/product/<slug>"
+  notes:
+    - "slug is a mutable hint: re-resolve via the product API before use."
+    - "store_id placeholder means not configured: replace it with your own store id."
+    - "Prices are a dated reference (snapshot date 2026-11-19), not a buying rule."
+    - "Marketplace items (article ids starting 90) can push the delivery slot."
+    - "Experimental: there is no tested FairPrice cart procedure."
+
+items:
+  - id: persil_powder
+    category: household
+    default_quantity: 1
+    aliases:
+      - persil powder
+      - detergent
+      - laundry detergent
+      - persil detergent
+      - washing powder
+      - persil
+      - personal powder
+    preferred_products:
+      - rank: 1
+        title: "Persil Powder Detergent - Anti-Bacterial"
+        article_id: "13141092"
+        slug: "persil-powder-detergent---anti-bacterial-13141092"
+        pack_size: "4.5kg"
+        observed_price_sgd: 14.55
+        observed_price_date: "2026-11-19"
+    notes: "Use this for whiteboard text like 'persil powder'. Same brand, variant and size as the RedMart product (the FairPrice listing name omits 'Low Suds')."
+
+  - id: eggs
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - eggs
+      - egg
+      - large eggs
+    preferred_products:
+      - rank: 1
+        title: "Pasar Fresh Eggs - Large"
+        article_id: "13190663"
+        slug: "pasar-fresh-eggs-large-10-per-pack-13190663"
+        pack_size: "10 per pack"
+        observed_price_sgd: 3.78
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "Dasoon Premium Fresh Eggs"
+        article_id: "13065350"
+        pack_size: "900g (15 per pack)"
+        observed_price_sgd: 4.70
+        observed_price_date: "2026-11-19"
+      - rank: 3
+        title: "Seng Choon Large Eggs"
+        article_id: "13104178"
+        slug: "seng-choon-large-eggs-10s-630g-13104178"
+        pack_size: "630g (10 per pack)"
+        observed_price_sgd: 4.24
+        observed_price_date: "2026-11-19"
+    notes: "Pasar house-brand eggs first, Dasoon (the only 15-count pack) second, Seng Choon local large eggs third. packs_per_redmart_pack: rank 1 is 1.5 (10 eggs per pack vs 15), rank 2 is 1, rank 3 is 1.5."
+
+  - id: ham
+    category: chilled
+    default_quantity: 1
+    aliases:
+      - ham
+      - chicken ham
+      - smoked chicken ham
+    preferred_products:
+      - rank: 1
+        title: "Delicato Chicken Breast - Smoked"
+        article_id: "13270266"
+        slug: "delicato-chicken-breast-smoked-90g-13270266"
+        pack_size: "90g"
+        observed_price_sgd: 3.10
+        observed_price_date: "2026-11-19"
+    notes: "Closest house-brand equivalent to RedMart Smoked Chicken Ham (sliced smoked chicken breast). packs_per_redmart_pack: 1.6667 (90 g vs 150 g)."
+
+  - id: watermelon
+    category: produce
+    default_quantity: 1
+    aliases:
+      - watermelon
+      - small watermelon
+      - thai watermelon
+    preferred_products:
+      - rank: 1
+        title: "Fresh Mini Thailand Watermelon"
+        article_id: "13196980"
+        slug: "fresh-mini-thailand-watermelon-1-per-pack-13196980"
+        pack_size: "1.2kg"
+        observed_price_sgd: 5.30
+        observed_price_date: "2026-11-19"
+    notes: "Maps generic 'watermelon'. Whole mini Thai watermelon, the closest in origin and size. packs_per_redmart_pack: 1.5 (1.2 kg vs 1.8 kg)."
+
+  - id: dishwashing_liquid
+    category: household
+    default_quantity: 1
+    aliases:
+      - dishwashing liquid
+      - dish washing liquid
+      - dish soap
+      - washing up liquid
+    preferred_products:
+      - rank: 1
+        title: "FairPrice Dishwashing Liquid Detergent Refill - Lemon"
+        article_id: "13210280"
+        slug: "fairprice-dishwashing-liquid-detergent-refill-lemon-600ml-13210280"
+        pack_size: "600ml"
+        observed_price_sgd: 1.46
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "FairPrice Dishwashing Liquid Detergent Refill - Anti-Bacterial"
+        article_id: "13210277"
+        slug: "fairprice-dishwashing-liquid-detergent-refill-antibac-600ml-13210277"
+        pack_size: "600ml"
+        observed_price_sgd: 1.71
+        observed_price_date: "2026-11-19"
+      - rank: 3
+        title: "Mama Lemon Dishwashing Liquid Refill - Natural Lemon"
+        article_id: "10921874"
+        slug: "mama-lemon-dishwashing-liquid-refill-lemon-600ml-10921874"
+        pack_size: "600ml"
+        observed_price_sgd: 1.50
+        observed_price_date: "2026-11-19"
+    notes: "FairPrice lemon refill first, anti-bacterial refill second, Mama Lemon refill third. packs_per_redmart_pack: 1.25 for every rank (600 ml vs 750 ml)."
+
+  - id: handwash
+    category: household
+    default_quantity: 2
+    aliases:
+      - handwash
+      - hand wash
+    preferred_products:
+      - rank: 1
+        title: "Fairprice Anti-Bacterial Foaming Hand Soap Refill - Peach Delight"
+        article_id: "13277511"
+        slug: "fairprice-anti-bacterial-foaming-hand-soap-refill-peach-delight-200ml-13277511"
+        pack_size: "200ml"
+        observed_price_sgd: 2.00
+        observed_price_date: "2026-11-19"
+    notes: "Anti-bacterial and foaming, but Peach Delight scent: no lavender foaming variant was found. packs_per_redmart_pack: 1.25 (200 ml vs 250 ml)."
+
+  - id: toilet_tissue
+    category: household
+    default_quantity: 1
+    aliases:
+      - toilet tissue
+      - toilet paper
+      - toilet rolls
+    preferred_products:
+      - rank: 1
+        title: "FairPrice Bathroom Tissue - Strong (3ply)"
+        article_id: "13277645"
+        slug: "fairprice-bathroom-tissue-strong-3ply-10-x-200-per-pack-13277645"
+        pack_size: "10 x 200 per pack"
+        observed_price_sgd: 5.75
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "FairPrice Bathroom Tissue - Lux (4ply)"
+        article_id: "13277644"
+        slug: "fairprice-bathroom-tissue-lux-4ply-10-x-200-per-pack-13277644"
+        pack_size: "10 x 200 per pack"
+        observed_price_sgd: 5.95
+        observed_price_date: "2026-11-19"
+      - rank: 3
+        title: "PurSoft Bathroom Tissue Roll - Unscented (3 ply)"
+        article_id: "13088911"
+        slug: "pursoft-bathroom-tissue-roll-unscented-3-ply-10-x-220-per-pack-13088911"
+        pack_size: "10 x 220 per pack"
+        observed_price_sgd: 5.70
+        observed_price_date: "2026-11-19"
+    notes: "Maps the 2026-07-03 whiteboard item 'toilet tissue'. packs_per_redmart_pack: ranks 1 and 2 are 1; rank 3 is 0.9091 (10 x 220 vs 10 x 200 sheets)."
+
+  - id: fresh_milk
+    category: chilled
+    default_quantity: 2
+    aliases:
+      - fresh milk
+      - milk
+      - full cream milk
+    preferred_products:
+      - rank: 1
+        title: "FairPrice UHT Milk - Full Cream"
+        article_id: "13290817"
+        slug: "fairprice-uht-milk-full-cream-1l-13290817"
+        pack_size: "1L"
+        observed_price_sgd: 2.05
+        observed_price_date: "2026-11-19"
+      - rank: 2
+        title: "Marigold UHT Packet Milk - Full Cream"
+        article_id: "12529008"
+        slug: "marigold-uht-milk-full-cream-1lt-12529008"
+        pack_size: "1L"
+        observed_price_sgd: 2.92
+        observed_price_date: "2026-11-19"
+      - rank: 3
+        title: "F & N Magnolia Fresh Milk"
+        article_id: "13022014"
+        slug: "f-n-magnolia-fresh-milk-946ml-13022014"
+        pack_size: "946ml"
+        observed_price_sgd: 3.63
+        observed_price_date: "2026-11-19"
+      - rank: 4
+        title: "Farmhouse Milk - Fresh"
+        article_id: "458564"
+        slug: "farmhouse-milk-fresh-1l-458564"
+        pack_size: "946ml"
+        observed_price_sgd: 3.73
+        observed_price_date: "2026-11-19"
+    notes: "UHT full cream milk first (direct counterpart to the RedMart UHT 1 L), then fresh 946 ml milks. packs_per_redmart_pack: ranks 1 and 2 are 1; ranks 3 and 4 are 1.0571 (946 ml vs 1 L)."
+
+  - id: bread
+    category: bakery
+    default_quantity: 1
+    aliases:
+      - bread
+    preferred_products:
+      - rank: 1
+        title: "Gardenia Loaf - Nutri Multi-Grain"
+        article_id: "10762199"
+        slug: "gardenia-loaf-nutri-multi-grain-400g-10762199"
+        pack_size: "400g"
+        observed_price_sgd: 3.80
+        observed_price_date: "2026-11-19"
+    notes: "Closest true multigrain sliced loaf. packs_per_redmart_pack: 0.8 (400 g vs 320 g)."

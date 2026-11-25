@@ -197,6 +197,15 @@ items:
         promo: null
         observed_price_date: "2026-11-19"
         notes: "DELICATO Chicken Breast - Smoked 90g (Singapore, Leong Hup Food): sliced smoked chicken-breast deli meat, the closest FPG house-brand equivalent to RedMart Smoked Chicken Ham. Ingredient list on the…"
+  - catalog_item_id: sausages
+    default_quantity: 1
+    redmart_reference:
+      rank: 1
+      title: RedMart Smoked Chicken Cheese Sausage
+      pack_size: 300 g
+    status: no_substitute
+    fairprice_products: []
+    reasons_excluded: []
   - catalog_item_id: chicken_breast
     default_quantity: 2
     redmart_reference:

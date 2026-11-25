@@ -614,6 +614,25 @@ mappings:
         requirement_conflict: false
         notes: "Jill's Sausages Honey Baked Ham (Nitrite Free) 200g (Singapore): the only honey baked nitrite-free ham on FairPrice, matches rank 2 requirement but MARKETPLACE third-party seller. (Added by verifier.)"
     notes: "Searched: smoked chicken ham, chicken ham, honey baked ham, honey ham, smoked ham, smoked chicken, turkey ham, no nitrite ham, delicato/fairprice/pasar-filtered ham. Rank 1 best non-marketplace match is Delicato Chicken Breast - Smoked 90g (nitrite-free ingredients); marketplace Jill's Smoked Chicken Ham (Nitrite Free) 200g is the only 'ham'-labelled smoked chicken. Rank 2 (honey baked, no nitrite) has no non-marketplace match: FairPrice Honey Baked Ham 13225979 contains nitrite; FairPrice Free Range Baked Ham 13166852 (200g) not chosen (pork, nitrite status unstated)."
+  - catalog_item_id: sausages
+    concept: child-friendly sausages (chicken cheese sausage 300 g; mild pork chipolatas fallback)
+    redmart_ranks:
+      - 1
+      - 2
+    redmart_reference:
+      rank: 1
+      title: RedMart Smoked Chicken Cheese Sausage
+      pack_size: 300 g
+      observed_price_sgd: 8.5
+      item_id: "3182770724"
+      sku_id: "21650554677"
+      quantity:
+        value: 300
+        unit: g
+    household_requirement: Child-friendly, non-spicy sausages; chicken cheese sausage first, mild pork chipolatas as the approved fallback; avoid spicy chorizo.
+    status: no_match
+    fairprice: []
+    notes: "Not yet evaluated: item added 2026-11-20, after the 2026-11-17/19 FairPrice snapshots; no FairPrice candidate has been reviewed."
   - catalog_item_id: chicken_breast
     concept: chicken breast, boneless (fresh)
     redmart_ranks:
