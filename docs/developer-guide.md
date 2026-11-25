@@ -22,6 +22,7 @@ cd grocery-shopping-redmart
 npm install
 npm test
 npm run validate
+npm run catalogs -- list
 npm run dry-run -- --file examples/grocery-list.txt
 ```
 
@@ -29,10 +30,10 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 
 ## Repository map
 
-- `grocery-catalog.yaml` — household aliases, quantities, ranked canonical products, and household baskets.
-- `AGENTS.md` — browser-operating, seeding, verification, and safety rules.
+- `grocery-catalog.yaml` — the maintainer's personal RedMart catalog (protected; household aliases, quantities, ranked canonical products, and household baskets). `price-history.csv` is its protected history. See [Platforms and catalogs](#platforms-and-catalogs).
+- `AGENTS.md` — starts with the [Platform And Catalog Gate](../AGENTS.md#platform-and-catalog-gate), then the browser-operating, seeding, verification, and safety rules for RedMart.
 - `.env.example` — template for optional household login credentials used for automated sign-in.
-- `tools/catalog.mjs` — catalog loading, validation, exact aliases, alias-specific eligibility, local discovery hints, and basket expansion.
+- `tools/catalog.mjs` — catalog loading, platform-neutral validation, exact aliases, alias-specific eligibility, local discovery hints, and basket expansion; dispatches product identity checks to `tools/platforms/`.
 - `docs/browser-connections.md` — shared connection hierarchy, compatibility matrix, and source references.
 - `tools/dry-run.mjs` — credential-free proposed-cart diagnostic.
 - `tools/cdp-cart.mjs` — paced, exact-SKU product-page and cart reader/stepper for a visible loopback-CDP Chrome session (Node 22+).
@@ -48,7 +49,14 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - `tools/price-history.mjs` — read/merge/write module for `price-history.csv`.
 - `price-history.csv` — dated RedMart (and FairPrice reference) price observations; see [Price tracking](#price-tracking).
 - `docs/fairprice/` — experimental NTUC FairPrice research (site structure, private labels, catalog mapping, price comparison). Start with [`fork-guide.md`](fairprice/fork-guide.md) for forkers and contributors. `cart-rules.md` holds **inactive** rules: the household does not use FairPrice for carts.
-- `experiments/fairprice/` — `catalog-mapping.yaml`, `fetch-prices.mjs` (price snapshot), `build-backup-catalog.mjs` (generates the reference `backup-catalog.yaml` of ranked FairPrice substitutes and its price-history rows), `compare.mjs` (RedMart vs FairPrice comparison) and dated `snapshots/`; not used by any shopping tool.
+- `experiments/fairprice/` — `catalog-mapping.yaml`, `fetch-prices.mjs` (price snapshot), `build-backup-catalog.mjs` (generates the reference `backup-catalog.yaml` of ranked FairPrice substitutes and its price-history rows), `compare.mjs` (RedMart vs FairPrice comparison) and dated `snapshots/`; not used by any shopping tool. `backup-catalog.yaml` is protected.
+- `tools/resolve-catalog.mjs` — the single place that decides which catalog is active (`resolveCatalog`), reads and writes the selection file, and maps a catalog to its history file (`historyPathFor`).
+- `tools/catalogs.mjs` — CLI: `list`, `select`, `current`, `clear` (`npm run catalogs -- <cmd>`).
+- `tools/platforms/` — `index.mjs` (platform map, `platformOf`, `platformStatus`) plus one module per platform (`redmart.mjs`, `fairprice.mjs`).
+- `procedures/fairprice.md` — experimental FairPrice stub the gate hands off to; links into `docs/fairprice/`.
+- `catalogs/<platform>/<handle>.yaml` and [`catalogs/README.md`](../catalogs/README.md) — opt-in shared catalogs; each must declare `store.platform` and is validated in CI.
+- `examples/redmart.catalog.yaml`, `examples/fairprice.catalog.yaml` — example catalogs to copy; `examples/grocery-list.txt` — sample list.
+- `scripts/check-protected-paths.sh` — CI guard that fails a fork PR touching protected paths.
 
 ## Validation rules
 
@@ -60,9 +68,9 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - Aliases and preferred product lists are present.
 - Product ranks are positive and unique within an item.
 - Optional `alias_product_ranks` maps existing item aliases to nonempty, distinct existing ranks; normalized alias keys cannot collide.
-- Item and SKU IDs contain digits.
-- Canonical URLs match the stored item and SKU IDs.
-- Item/SKU pairs do not collide across the catalog.
+- RedMart catalogs: item and SKU IDs contain digits, canonical URLs match the stored item and SKU IDs, and item/SKU pairs do not collide across the catalog.
+- FairPrice catalogs: `article_id` is present, digits only (a YAML number is accepted) and unique; `canonical_url`, when present, starts with `https://www.fairprice.com.sg/product/`.
+- `store.platform`, when present, is a supported platform; a missing value means `redmart`.
 - `household_baskets`, when present, is an array.
 - Basket IDs are unique and do not collide with item IDs.
 - Basket default quantities are positive integers.
@@ -80,9 +88,95 @@ Live RedMart behavior cannot be tested in CI because it depends on a household's
 Every `selection.candidates` array retains **all** approved products in ascending rank order, with exact catalog item/SKU IDs and canonical URLs. Optional `alias_product_ranks` maps a specific alias to its compatible ranks (for example `cheddar slices: [2]` under sliced cheese). For those aliases, `eligible_candidates` contains only compatible products in catalog rank order, and the proposal fields use its first product. Generic aliases and basket members retain their original preferences. This is an additive version-2 extension; consumers must honor `eligible_candidates` when present. Neither matching nor a dry run checks live availability. `node tools/dry-run.mjs --json "feta cheese"` exposes the complete result without human-table output; use it to initialize an agent manifest, not as proof of a filled cart.
 
 
+## Platforms and catalogs
+
+The repository ships one maintainer catalog and supports any number of other catalogs, each for one platform. Only `redmart` is active; `fairprice` is experimental and has identity validation but no cart tooling.
+
+### Catalog resolution
+
+`tools/resolve-catalog.mjs` is the only module that picks the catalog; every tool that loads one calls `resolveCatalog` and prints the path and source. Order, first match wins:
+
+1. `--catalog <path>` flag (relative to the current directory).
+2. `GROCERY_CATALOG` environment variable (relative to the repository root).
+3. The `catalog` entry in `.grocery-selection.local.json`, written by `node tools/catalogs.mjs select <path>`.
+4. `grocery-catalog.local.yaml`, if it exists.
+5. `grocery-catalog.yaml` (the maintainer's catalog).
+
+A flag, env var, or selection that names a missing file is an error; resolution never falls through silently. A malformed selection file is also an error. The selection file records `catalog`, `platform`, `acknowledged_experimental`, and `selected_at`. Note that a selection overrides an existing `grocery-catalog.local.yaml`; `node tools/catalogs.mjs list` says so in its notes.
+
+```bash
+npm run catalogs -- list [--json]                     # candidates, active catalog, needs_choice
+npm run catalogs -- select <path> [--acknowledge-experimental]
+npm run catalogs -- current [--expect-platform <p>]   # exit 2 platform mismatch, 3 experimental not acknowledged
+npm run catalogs -- clear
+npm run validate -- --catalog <path>                  # repeatable
+npm run dry-run -- --catalog <path> --file examples/grocery-list.txt
+```
+
+`list` reports `needs_choice: true` only when no flag, no `GROCERY_CATALOG`, and no selection file exist. That is the signal the agent's first-run protocol in the [gate](../AGENTS.md#platform-and-catalog-gate) uses to ask the user which catalog to use.
+
+### Platform dispatch
+
+A catalog selects its platform with `store.platform` (missing means `redmart`, so the maintainer's catalog needs no edit). `tools/platforms/index.mjs` exports `platforms` (name to module), `platformOf(catalog)`, and `platformStatus(name)` (`"active"`, `"experimental"`, or `undefined`). Each platform module exports `{ name, validateProduct(product, at, ctx), selectionFields(product) }`:
+
+- `validateProduct` pushes error strings onto `ctx.errors` and uses `ctx.seenIdentities` to detect duplicates. The RedMart messages are asserted by tests; do not reword them.
+- `selectionFields` returns the identity fields copied into a match selection: `{ canonical_url }` for RedMart; `{ article_id, slug?, marketplace? }` for FairPrice.
+
+`validateCatalog` in `tools/catalog.mjs` keeps the platform-neutral checks (version, ids, quantities, aliases, ranks, baskets) and dispatches product identity to the platform module. `store.platform` values outside the map fail validation with `store.platform "<x>" is not supported; supported: redmart, fairprice`.
+
+FairPrice catalogs use `catalog_version: 2` and `store: {platform: fairprice, name, country, store_id, identity: article_id, canonical_url_pattern, notes[]}`. `store_id` is a string; the placeholder `"<YOUR_STORE_ID>"` means not configured. Products are identified by `article_id`; see `examples/fairprice.catalog.yaml`.
+
+### Price history paths
+
+`historyPathFor(catalogPath)` maps the maintainer's catalog to `price-history.csv` and every other catalog to `<catalog without .yaml>.price-history.local.csv` in the same directory. `tools/track-prices.mjs` and `tools/fetch-redmart-prices.mjs` refuse non-RedMart catalogs, and `track-prices` also refuses anything under `examples/`. An explicit `--history` wins.
+
+### Protected paths and the CI guard
+
+Fork pull requests must not touch `grocery-catalog.yaml`, `price-history.csv`, or `experiments/fairprice/backup-catalog.yaml`. Those are the maintainer's real data and the regression baseline for the dry-run output, and edits make every later upstream merge conflict. `scripts/check-protected-paths.sh` enforces this in CI. Forks put their data in `grocery-catalog.local.yaml` (git-ignored along with `*.local.yaml`, `*.local.csv`, and `.grocery-selection.local.json`) or in `catalogs/<platform>/<handle>.yaml`, which CI validates. The maintainer can change protected files in their own commits.
+
+### Keeping tests hermetic
+
+Tests pass explicit catalog paths and never depend on `GROCERY_CATALOG`, the selection file, or a `grocery-catalog.local.yaml` that happens to exist on the developer's machine. Tests of `resolveCatalog` give it an explicit `env` and a temporary `root`. A test that needs a different catalog writes it to a temp directory; it never edits the root catalog.
+
+### Adding a platform
+
+Checklist, in order:
+
+1. **Catalog schema.** Decide the identity field and write an example, for instance:
+
+   ```yaml
+   catalog_version: 2
+   store:
+     platform: <name>
+     name: <Retailer name>
+     country: SG
+     identity: <identity_field>
+   items:
+     - id: eggs
+       category: dairy
+       default_quantity: 1
+       aliases: [eggs]
+       preferred_products:
+         - rank: 1
+           title: <Product title>
+           <identity_field>: "<id>"
+           pack_size: 12 pack
+   ```
+
+2. **Module.** Add `tools/platforms/<name>.mjs` exporting `name`, `validateProduct`, and `selectionFields`, and register it in `tools/platforms/index.mjs`.
+3. **Status.** Add the platform to `platformStatus` as `experimental` until a supervised cart run on a real household has passed; only then mark it `active`.
+4. **Procedure.** Write `procedures/<name>.md` and wire the new platform into the [gate](../AGENTS.md#platform-and-catalog-gate). An experimental platform must make the agent tell the user and get explicit confirmation first.
+5. **Docs.** Document the site behaviour and safety boundary under `docs/<name>/`, and update the README fork section and this guide.
+6. **Example catalog.** Add `examples/<name>.catalog.yaml`; the catalog listing and CI validation pick it up.
+7. **Tests.** Cover identity validation (valid, missing, malformed, duplicate), `selectionFields`, and a dry-run over the example catalog, all with explicit paths. Keep the RedMart `--json` dry-run output byte-identical.
+
+Begin with the platform module and a documented workflow. Extract shared abstractions only after two working implementations show what is common.
+
 ## Catalog maintenance
 
 Use this flow when adapting the repository for a new household (initial seeding) or adding products from a later RedMart order (incremental updates). Both paths use the same candidate JSON structure, reusable HTML review page, approval payload, canonical-product resolution, and catalog validation rules.
+
+This flow is written for the RedMart workflow. Wherever it says `grocery-catalog.yaml`, read "the active RedMart catalog" (see [Catalog resolution](#catalog-resolution)): the maintainer's file for the maintainer, `grocery-catalog.local.yaml` or `catalogs/redmart/<handle>.yaml` for a fork.
 
 ### Choose the entry point
 
@@ -220,14 +314,16 @@ node tools/track-prices.mjs --redmart /tmp/redmart-prices.json             # wri
 npm run validate
 ```
 
+Both tools use the resolved catalog and print its path and source; pass `--catalog <path>` to be explicit. History goes to `historyPathFor(catalog)` (see [Price history paths](#price-history-paths)); `--history <path>` overrides it.
+
 - **Fetch.** `tools/fetch-redmart-prices.mjs` requests each preferred product's canonical page once, with 3–5 s jittered spacing (`--delay-min`/`--delay-max`), and writes a bare JSON array snapshot. Each row has a `status` of `ok`, `identity_mismatch`, `unavailable`, `challenge`, or `error`; only `ok` rows carry a trusted `price_sgd`. After **2 consecutive Baxia/punish challenges** it stops; do not retry, work around, or reduce the spacing. Wait and ask the human, or try again later.
-- **Track.** `tools/track-prices.mjs` updates `observed_price_sgd` in `grocery-catalog.yaml` only when the observed price changed, and sets `observed_price_date` on every observed product. It appends rows to `price-history.csv` and prints each change plus the full-catalog value before and after. `--date` overrides the snapshot's Asia/Singapore date; `--dry-run` writes nothing.
+- **Track.** `tools/track-prices.mjs` updates `observed_price_sgd` in the resolved catalog only when the observed price changed, and sets `observed_price_date` on every observed product. It appends rows to the catalog's price history and prints each change plus the full-catalog value before and after. `--date` overrides the snapshot's Asia/Singapore date; `--dry-run` writes nothing.
 - **`observed_price_date`.** A quoted `YYYY-MM-DD` string after `observed_price_sgd`; it is the last date the price was **checked**, not the date it last changed. `validate-catalog` does not check it. `tools/track-prices.mjs` owns writing it; do not edit it by hand.
 - **Rises.** The tracker only records. When the report shows notable rises, tell the household which products moved and by how much; do not change ranks, aliases, or quantities because of price. A rank change is a preference change and goes through catalog review.
 
 ### `price-history.csv`
 
-UTF-8 RFC 4180 CSV at the repository root. Header: `date,store,catalog_item_id,rank,product_id,title,pack_size,price_sgd,source`.
+UTF-8 RFC 4180 CSV. For the maintainer's catalog it is `price-history.csv` at the repository root; any other catalog writes `<catalog>.price-history.local.csv` beside itself. Header: `date,store,catalog_item_id,rank,product_id,title,pack_size,price_sgd,source`.
 
 | Column | Meaning |
 |---|---|
@@ -355,7 +451,7 @@ I can join several two-hour working sessions: yes/no
 I can validate matching, availability, quantities, cart behavior, and safety: yes/no
 ```
 
-Begin with a retailer-specific adapter or documented workflow. Extract shared abstractions only after a second real implementation demonstrates what is common.
+Begin with a retailer-specific adapter or documented workflow, following [Adding a platform](#adding-a-platform). Extract shared abstractions only after a second real implementation demonstrates what is common.
 
 ## Tester and launch materials
 

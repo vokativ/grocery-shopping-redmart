@@ -1,5 +1,28 @@
 # Agent Instructions
 
+## Platform And Catalog Gate
+
+Do this first, before any other step in this file or any browser work.
+
+1. Run `node tools/catalogs.mjs list --json`.
+2. If `needs_choice` is true (no selection yet), ask the user ONE question, then run `node tools/catalogs.mjs select <path>` with their answer. Add `--acknowledge-experimental` only after the user confirmed an experimental platform. Template:
+
+   > Which catalog should I use? (a) `<path>` — `<label>`, `<platform>`, `<store name>`, `<N>` items; (b) … Default: `<grocery-catalog.local.yaml if present, else grocery-catalog.yaml>`. You can say "switch catalog" at any time.
+
+   List non-example candidates only. Mention the demo/example catalogs only if the user asks for a demo or no non-example catalog exists.
+3. If the request names a platform that differs from the active catalog's (`node tools/catalogs.mjs current --expect-platform <platform>` exits 2), settle that with the user before anything else.
+4. Follow the platform status below. `current` exits 3 while an experimental platform is not yet confirmed.
+5. State the active catalog (path, platform, source) in every proposed cart header. "Switch catalog", or naming another platform, re-runs steps 1-4.
+6. Never edit, overwrite, or delete another household's catalog. Build a new one as `grocery-catalog.local.yaml` or `catalogs/<platform>/<handle>.yaml`.
+
+| Platform | Status | What to do |
+|---|---|---|
+| `redmart` | active | Continue with the rest of this file. |
+| `fairprice` | experimental | Tell the user it is experimental and untested end to end, get their explicit confirmation, then STOP reading this file and follow [procedures/fairprice.md](procedures/fairprice.md). |
+| any other store | not supported | Say so and stop. |
+
+If the active platform is not `redmart`, STOP reading this file here and follow the matching `procedures/<platform>.md`. Do not run `tools/dry-run.mjs` or `tools/cdp-cart.mjs` for it unless that procedure says so.
+
 Use these instructions when setting up this repository for a household or filling a RedMart/Lazada cart from this repository. Less common branches live in [docs/cart-procedures.md](docs/cart-procedures.md) and are equally binding when reached.
 
 If your file-reading tool fails, read this file and any linked doc with the shell (`cat AGENTS.md`). Do not start browser work without having read this whole file.
@@ -9,7 +32,7 @@ If your file-reading tool fails, read this file and any linked doc with the shel
 These rules apply regardless of model, reasoning level, or harness. The harness changes the control channel, not the shopping decisions. Catalog work uses the separate approval flow below.
 
 1. **Transcribe.** Record every grocery line and explicit quantity. Keep the original wording beside any confident spelling normalization.
-2. **Match.** Run `node tools/dry-run.mjs --json "<comma-separated list>"`. Read each selection's complete `candidates` chain (and `eligible_candidates` when present), not only rank 1. Do the **Local Recommendation Pass** for misses and material differences.
+2. **Match.** Run `node tools/dry-run.mjs --json "<comma-separated list>"`; catalog tools use the selected catalog (order: `--catalog` flag, `GROCERY_CATALOG`, the selection file, `grocery-catalog.local.yaml`, then `grocery-catalog.yaml`). Read each selection's complete `candidates` chain (and `eligible_candidates` when present), not only rank 1. Do the **Local Recommendation Pass** for misses and material differences.
 3. **Propose.** Show a compact proposed cart in chat (item, product, target quantity, basket allocations) before any browser action. An explicit cart-fill request already authorizes confident matches and their approved ranked backups, so proceed without a second approval prompt. Unmatched entries do not block the rest.
 4. **Baseline.** Read the current cart once and record exact item/SKU/quantity rows. Keep one manifest entry per requested concept or basket member: candidate chain, candidate observations, selected SKU, target quantity, and mutation state (`not-attempted`, `confirmed`, `uncertain`). A catalog match and an available SKU are different facts.
 5. **Select and add, one product at a time.** Apply **Product Choice And Availability**, then the **Product-Page Quantity Workflow**, at the pace in **Browser Pace And Silent No-Ops**. When a candidate is unavailable or too late, check the next eligible rank automatically.
@@ -89,6 +112,8 @@ Every command prints JSON. `goto`/`product` report `item_id`/`sku_id`, `heading`
 
 Catalog modifications (initial seeding, order-history updates, or single additions) must keep the catalog valid and respect household preferences. Full procedure: [Catalog maintenance](docs/developer-guide.md#catalog-maintenance).
 
+Catalog tools use the selected catalog (resolution order in the gate and Everyday Flow step 2). Create new catalogs as `grocery-catalog.local.yaml` or `catalogs/<platform>/<handle>.yaml`; never overwrite the bundled root `grocery-catalog.yaml` unless the user says it is their own catalog.
+
 1. **Human-only approval:** substantial changes use `templates/redmart-catalog-review-template.html`, rendered by `tools/render-catalog-review.mjs` and served on loopback by `tools/serve-catalog-review.mjs`. Never click `Approve`, invoke its handler, or synthesize an approved payload. Read `#catalog-review-approved-payload` only after the human approves in the browser.
 2. **Exact identity:** resolve every candidate to an `item_id`/`sku_id` pair by opening `https://www.lazada.sg/products/i<item_id>-s<sku_id>.html` and verifying the settled title, pack size, and variant. Never insert from overview cards, JavaScript links, or item-only pages. Check for duplicates and record title drift.
 3. **Aliases:** natural household terms, globally unique. Use `alias_product_ranks` to restrict specific aliases (e.g. `cheddar slices: [2]` under sliced cheese). `household_baskets` are for intentional multi-item mixes (2+ distinct existing members, no nesting).
@@ -97,7 +122,7 @@ Catalog modifications (initial seeding, order-history updates, or single additio
 6. **Price refresh:** RedMart only by default. Run `node tools/fetch-redmart-prices.mjs --out <snapshot.json>` then `node tools/track-prices.mjs --redmart <snapshot.json>`. It updates `observed_price_sgd`/`observed_price_date` and appends `price-history.csv`; no review page is needed, it never touches the cart, and it stops on a Baxia/punish challenge (hand it to the human). Report notable price rises. Refresh FairPrice prices or run the FairPrice comparison only when the user explicitly asks for it. See [Price tracking](docs/developer-guide.md#price-tracking).
 7. **Boundaries:** never order, pick delivery slots, or pay during catalog work. Alcohol can be catalogued normally.
 
-FairPrice rules in `docs/fairprice/cart-rules.md` are **INACTIVE**; never use them unless the user explicitly reactivates FairPrice. If the user (for example a forked household) wants to use FairPrice, read [docs/fairprice/fork-guide.md](docs/fairprice/fork-guide.md) first: it states what exists and what does not (no FairPrice browser tooling or catalog), and the safety boundary stays unchanged.
+FairPrice stays **experimental**. The rules in `docs/fairprice/cart-rules.md` apply only after the user has selected a FairPrice catalog and explicitly confirmed it (that selection and confirmation are the explicit reactivation); then follow [procedures/fairprice.md](procedures/fairprice.md), not this file. Without that, never use them. If the user (for example a forked household) wants to use FairPrice, read [docs/fairprice/fork-guide.md](docs/fairprice/fork-guide.md) first: it states what exists and what does not (no FairPrice browser tooling), and the safety boundary stays unchanged.
 
 ## Cart Request Interpretation
 

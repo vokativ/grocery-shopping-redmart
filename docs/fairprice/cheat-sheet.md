@@ -3,20 +3,21 @@
 Status: **research, not a tested tool.** No FairPrice cart helper exists; `tools/cdp-cart.mjs` is Lazada-only (fork-guide §1).
 Facts: one household, one store, observed 2026-11-17 (site-structure §1); DOM and API re-checked read-only 2026-11-25 (observed 2026-11-25); JS rules are read from the bundle, not exercised live (code).
 Doc build: `946bb0fa…` as of 2026-11-25 (previous `ad741b40…`). FairPrice redeploys; run [Re-check in 5 minutes](#re-check-in-5-minutes) before trusting any row.
-Cart rules in [cart-rules.md](cart-rules.md) are **INACTIVE**; agents ignore them until you reactivate FairPrice in the conversation (cart-rules banner, fork-guide §2.4).
+Cart rules in [cart-rules.md](cart-rules.md) are **INACTIVE** by default; agents ignore them until you select a FairPrice catalog and confirm in the conversation, as the [platform and catalog gate](../../AGENTS.md#platform-and-catalog-gate) requires (cart-rules banner, fork-guide §2.4–§2.5).
 Sources: `site-structure §N` = [site-structure.md](site-structure.md); `cart-rules` = [cart-rules.md](cart-rules.md); `fork-guide §N` = [fork-guide.md](fork-guide.md). `$API` = `https://website-api.omni.fairprice.com.sg/api` (site-structure §1).
 
-## Start here: reactivate FairPrice (copy-paste prompt)
+## Start here: activate FairPrice (copy-paste prompt)
+
+First create and select your catalog ([fork-guide §2.4](fork-guide.md#2-fork-and-get-started)): copy `examples/fairprice.catalog.yaml` to `grocery-catalog.local.yaml`, set your own store id, validate it with `node tools/validate-catalog.mjs --catalog <path>`, then `node tools/catalogs.mjs select <path> --acknowledge-experimental`. Do not edit `AGENTS.md` or the maintainer's `grocery-catalog.yaml`. Then paste:
 
 ```text
-Reactivate FairPrice for this conversation. This repo's AGENTS.md is for RedMart/Lazada: do NOT run tools/dry-run.mjs or tools/cdp-cart.mjs.
-Read docs/fairprice/cheat-sheet.md, then docs/fairprice/site-structure.md and docs/fairprice/cart-rules.md.
+I shop at FairPrice. Follow the platform and catalog gate in AGENTS.md: use my selected FairPrice catalog, tell me what is experimental, and ask me to confirm before starting. Then follow procedures/fairprice.md (this cheat-sheet, docs/fairprice/site-structure.md and docs/fairprice/cart-rules.md); do NOT run tools/cdp-cart.mjs, which is Lazada-only.
 Use my already signed-in Chrome on www.fairprice.com.sg. Work one product at a time, >=2 s between cart clicks, real mouse clicks only.
 Stop with a ready cart. Never choose a delivery slot, enter payment, press Continue/Checkout/Apple Pay/Google Pay, or place an order.
 I will sign in myself; never ask me to paste passwords, OTPs, cookies or tokens into chat.
 ```
 
-Source: fork-guide §2.4 (reactivate explicitly), §4 (safety boundary); AGENTS.md line 1 is RedMart-only (observed 2026-11-25, [INFERENCE] an agent pointed at the repo starts Lazada work unless told).
+Source: fork-guide §2.4 (catalog and selection), §2.5 (activation through the gate), §4 (safety boundary).
 
 ## Plus/minus: what do I click, how long do I wait, how do I know it worked
 

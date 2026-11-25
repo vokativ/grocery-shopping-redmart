@@ -1,6 +1,6 @@
 # FairPrice cart rules (INACTIVE)
 
-> **STATUS: INACTIVE — reference only. The household decided on 2026-11-19 not to use FairPrice for cart filling. Agents must not follow these rules or operate a FairPrice cart unless the user explicitly reactivates FairPrice in the conversation.**
+> **STATUS: INACTIVE — reference only. The maintainer's household decided on 2026-11-19 not to use FairPrice for cart filling. Agents must not follow these rules or operate a FairPrice cart unless the user has selected a FairPrice catalog (`store.platform: fairprice`, see the [platform and catalog gate](../../AGENTS.md#platform-and-catalog-gate)) and explicitly confirms, in the conversation, that they want the experimental FairPrice procedure.**
 
 Forking and want to use this? See the [fork guide](fork-guide.md) for status, setup, browser modes, and contribution ideas.
 
@@ -11,7 +11,7 @@ If reactivated, the RedMart rules still apply wherever this page is silent (tran
 ## Everyday flow
 
 1. **Transcribe** every line and explicit quantity, as in AGENTS.md.
-2. **Match** with `node tools/dry-run.mjs --json "<list>"`. The RedMart catalog drives intent; FairPrice candidates come from the backup catalog (see Candidate source).
+2. **Match** with `node tools/dry-run.mjs --json "<list>"`, which resolves the selected catalog (confirm the printed `Catalog:` line names the FairPrice catalog). That catalog drives intent and supplies the FairPrice candidates (see Candidate source).
 3. **Propose** a compact cart in chat (item, FairPrice product, article id, quantity) before any browser action. Flag marketplace candidates and promo-dependent prices.
 4. **Baseline.** Read `GET $API/cart?isCheckerEnabled=true&isOutOfStockEnabled=true&isSellerCheckerEnabled=true&orderType=DELIVERY` (§5): record `clientItemId`, `q` (string; convert), `isChecked`, `isMKP` per row, plus the cart's "Earliest slot". This is a read-only request issued from the signed-in browser tab (network panel, or an in-page fetch that uses that tab's own session). Never copy cookies or tokens out of the browser, and never call it with curl. Keep a manifest entry per concept with `not-attempted` / `confirmed` / `uncertain`.
 5. **Select and add, one product at a time**, using the sections below.
@@ -21,7 +21,13 @@ If reactivated, the RedMart rules still apply wherever this page is silent (tran
 
 ## Candidate source
 
-Candidates come only from [experiments/fairprice/backup-catalog.yaml](../../experiments/fairprice/backup-catalog.yaml), a generated reference file (`status: inactive`; regenerate with `experiments/fairprice/fetch-prices.mjs` then `experiments/fairprice/build-backup-catalog.mjs`, see [catalog-mapping.md](catalog-mapping.md) §7). Read it per item:
+Candidates come from the **selected FairPrice catalog**: a catalog with `store.platform: fairprice` (see `examples/fairprice.catalog.yaml`) whose products are identified by `article_id`. Read it per item:
+
+- `items[]` carries `default_quantity`, `aliases`, and `preferred_products[]` ordered by `rank` (1 first); each entry has `title`, `article_id`, `pack_size`, and optionally `slug`, `observed_price_sgd`, `observed_price_date`, `marketplace`. `store.store_id` is the household's own store (the placeholder `"<YOUR_STORE_ID>"` means it is not configured yet; stop and ask).
+- `article_id` is the only identity (see Product choice and availability). `observed_price_sgd`/`observed_price_date` and `slug` are hints only; re-read the price and resolve the slug through the API before use.
+- An item with no `preferred_products` for FairPrice is "not catalogued"; never improvise a candidate.
+
+[experiments/fairprice/backup-catalog.yaml](../../experiments/fairprice/backup-catalog.yaml) is **only the maintainer's generated reference** (`status: inactive`; protected; regenerate with `experiments/fairprice/fetch-prices.mjs` then `experiments/fairprice/build-backup-catalog.mjs`, see [catalog-mapping.md](catalog-mapping.md) §7). It is not a source for another household's cart; the notes below describe its format:
 
 - `items[]` is keyed by `catalog_item_id` and carries `default_quantity` and `redmart_reference` (`rank`, `title`, `pack_size`) so the FairPrice pick lines up with the RedMart product it replaces.
 - `status: substitute` means `fairprice_products[]` is a ranked list (`rank` 1 first); `status: no_substitute` means there is none, and `reasons_excluded[]` says why. Report such an item as "not available on FairPrice", never improvise a candidate.

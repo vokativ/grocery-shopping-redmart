@@ -24,6 +24,10 @@ npm run dry-run -- --file examples/grocery-list.txt
 
 Keep changes focused and describe the user-visible behavior, verification performed, and any retailer/browser assumptions. Updates to `grocery-catalog.yaml` should not expose another household's private preferences without explicit consent.
 
+## Catalogs and protected files
+
+Shared catalogs live in `catalogs/<platform>/<handle>.yaml`; see [catalogs/README.md](catalogs/README.md) for naming, the CC0 contribution terms, and the no-personal-data rules. CI validates `catalogs/**/*.yaml`. Pull requests from forks that touch `grocery-catalog.yaml`, `price-history.csv`, or `experiments/fairprice/backup-catalog.yaml` fail CI; those files belong to the maintainer's household.
+
 ## New retailer collaborations
 
 New retailer support needs an active user-collaborator who can provide their own logged-in session, explain their repeat-shopping workflow, join focused working sessions, and validate the result. Begin with retailer-specific instructions or an adapter; do not generalize the architecture until working integrations reveal shared behavior.

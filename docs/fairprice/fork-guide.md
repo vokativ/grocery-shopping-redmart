@@ -2,47 +2,53 @@
 
 For someone who shops at NTUC FairPrice online and wants to try this workflow on their own computer, then maybe contribute what they learn. Read this first; it tells you what exists, what does not, and where to look. For a one-page "what do I click and how do I know it worked", see the [FairPrice cheat sheet](cheat-sheet.md).
 
-## 1. Status: research, not a finished FairPrice helper
+## 1. Status: experimental, not a finished FairPrice helper
 
 | Piece | State |
 |---|---|
-| RedMart workflow (`AGENTS.md`, `tools/`, `grocery-catalog.yaml`) | Maintained and tested by the maintainer. This is what the tools and the catalog schema are built around. |
+| RedMart workflow (`AGENTS.md`, `tools/`, `grocery-catalog.yaml`) | Maintained and tested by the maintainer. `grocery-catalog.yaml` is the maintainer's personal catalog and is protected; do not edit it in a fork. |
 | [cheat-sheet.md](cheat-sheet.md) | One page: what to click on FairPrice pages, the plus/minus stepper, and how to confirm a change worked. |
 | [site-structure.md](site-structure.md) | Observed facts about `www.fairprice.com.sg`: product identity (article id), cart API, stepper behaviour, checkout hazards. One live session, 2026-11-17. |
-| [cart-rules.md](cart-rules.md) | A complete **design** for a FairPrice cart procedure, mirroring `AGENTS.md`. Marked **INACTIVE**: the maintainer's household chose not to use FairPrice carts (2026-11-19). Parts marked *(untested)* were never exercised. |
+| [cart-rules.md](cart-rules.md) | A complete **design** for a FairPrice cart procedure, mirroring `AGENTS.md`. Marked **INACTIVE** for the maintainer's household (2026-11-19). In a fork it applies once you select a FairPrice catalog and explicitly confirm, as the [platform and catalog gate](../../AGENTS.md#platform-and-catalog-gate) describes. Parts marked *(untested)* were never exercised. |
 | [catalog-mapping.md](catalog-mapping.md), [price-comparison-2026-11-17.md](price-comparison-2026-11-17.md), [private-labels.md](private-labels.md) | Research comparing the maintainer's RedMart catalog with FairPrice equivalents. Prices are a dated snapshot. |
-| `experiments/fairprice/` | Scripts that fetch FairPrice prices and generate `backup-catalog.yaml` (ranked FairPrice substitutes for the maintainer's catalog items). No shopping tool reads it. |
-| FairPrice browser tooling | **Does not exist.** `tools/cdp-cart.mjs` is Lazada/RedMart-only. A FairPrice run uses your agent's own browser control (clicks, reads) plus the rules in `cart-rules.md`. |
-| FairPrice catalog for *your* household | **Does not exist.** `grocery-catalog.yaml` and the substitutes are the maintainer's family's products. You build yours. |
+| `experiments/fairprice/` | Scripts that fetch FairPrice prices and generate `backup-catalog.yaml` (ranked FairPrice substitutes for the maintainer's catalog items). It is the maintainer's generated reference and a protected path; no shopping tool reads it. |
+| FairPrice browser tooling | **Does not exist.** `tools/cdp-cart.mjs` is Lazada/RedMart-only. A FairPrice run uses your agent's own browser control (clicks, reads) plus the rules in `cart-rules.md`, reached through [`procedures/fairprice.md`](../../procedures/fairprice.md). |
+| FairPrice catalog for *your* household | **Schema, validator and example exist** (`store.platform: fairprice`, products by `article_id`; see `examples/fairprice.catalog.yaml`). **No tooling builds it** from your order history: you or your agent fill it in. |
 
-Bottom line: you get verified site knowledge and a careful design, not a tested one-command FairPrice cart filler. That is the opening for a contribution.
+Bottom line: you get verified site knowledge, a careful design, and a catalog format your agent can validate, not a tested one-command FairPrice cart filler. That is the opening for a contribution.
 
 ## 2. Fork and get started
 
 1. **Clone or duplicate** the repository into your own space. A GitHub fork of a public repository cannot be made private; if privacy matters (your catalog describes your household's habits), clone it and push to a new **private** repository instead. Never push household data to a public fork.
 2. Install Node 22+ if you will use `tools/cdp-cart.mjs` (it needs Node 22+; the rest of the tools need Node 20+, as in `AGENTS.md`), then run `npm install`. `npm test` and `npm run validate` are only needed before contributing.
-3. Read, in order: [README.md](../../README.md), [AGENTS.md](../../AGENTS.md), [browser connection modes](../browser-connections.md#connection-modes-at-a-glance), then [site-structure.md](site-structure.md) and [cart-rules.md](cart-rules.md).
-4. **Reactivate FairPrice for your household, explicitly.** Agents ignore `cart-rules.md` unless you tell them in the conversation to reactivate it. Paste this into the conversation:
+3. Read, in order: [README.md](../../README.md) (especially [Fork it: platforms and catalogs](../../README.md#fork-it-platforms-and-catalogs)), [AGENTS.md](../../AGENTS.md) (start with its [platform and catalog gate](../../AGENTS.md#platform-and-catalog-gate)), [catalogs/README.md](../../catalogs/README.md), [browser connection modes](../browser-connections.md#connection-modes-at-a-glance), then [site-structure.md](site-structure.md) and [cart-rules.md](cart-rules.md).
+4. **Create and select your FairPrice catalog.** Never edit the maintainer's `grocery-catalog.yaml`; your catalog is your own file.
 
-   ```text
-   Reactivate FairPrice for this household in this conversation. Read docs/fairprice/cheat-sheet.md, docs/fairprice/site-structure.md and docs/fairprice/cart-rules.md first. Use my already-signed-in Chrome profile on 127.0.0.1:9222 (or whichever browser mode I choose). One product at a time, at least 2 seconds apart, real clicks only. Stop before choosing a delivery slot, entering payment, or pressing Checkout/Continue.
+   ```bash
+   cp examples/fairprice.catalog.yaml grocery-catalog.local.yaml    # or catalogs/fairprice/<handle>.yaml to share it
+   node tools/validate-catalog.mjs --catalog grocery-catalog.local.yaml
+   node tools/catalogs.mjs select grocery-catalog.local.yaml --acknowledge-experimental
    ```
 
-   In your fork, also change the `cart-rules.md` status banner from INACTIVE to your own status (for example "experimental, owner: <you>") and replace the RedMart-only parts of your `AGENTS.md` copy, so future agents do not have to guess. RedMart-only sections of `AGENTS.md`:
-   - Everyday Flow: the `tools/dry-run.mjs` and `tools/cdp-cart.mjs` steps.
-   - Loopback CDP: Use The Helper (the helper is Lazada-only).
-   - Catalog Changes Contract (Lazada `item_id`/`sku_id` schema).
-   - Product-Page Quantity Workflow (RedMart selectors; FairPrice selectors differ, see `cart-rules.md`).
+   - Set `store.store_id` to **your own** store id; the placeholder `"<YOUR_STORE_ID>"` means not configured. Never commit it, and never use `165` (the maintainer's). The [cheat sheet](cheat-sheet.md) shows the serviceable-area lookup. Keep `grocery-catalog.local.yaml` (git-ignored) if you do not want it shared.
+   - Build `items[].preferred_products[]` from your FairPrice order history. Products are identified by **article id** (`article_id`, the `clientItemId`), digits only and unique per catalog; `slug`, `pack_size`, `observed_price_sgd` and `marketplace` are optional or informational. Use the review-page idea in [AGENTS.md's Catalog Changes Contract](../../AGENTS.md#catalog-changes-contract) for approval, and never copy the maintainer's products as yours.
+   - `--acknowledge-experimental` records that you know FairPrice support is experimental; the selection is stored in the git-ignored `.grocery-selection.local.json`. Use `node tools/catalogs.mjs list` to see what the tools found and `node tools/catalogs.mjs current` to see what is active.
+   - Test matching without a browser: `node tools/dry-run.mjs --catalog grocery-catalog.local.yaml "2 eggs, milk"`.
 
-   Keep the safety boundary (below) unchanged.
+5. **Activate FairPrice in the conversation.** The gate makes the agent check the selected catalog's platform, tell you FairPrice is experimental and untested, and ask for your explicit confirmation before it follows [`procedures/fairprice.md`](../../procedures/fairprice.md) (which sends it to the cart rules). You do not need to edit `AGENTS.md`. Paste this:
+
+   ```text
+   I shop at FairPrice. Follow the platform and catalog gate in AGENTS.md: use my selected FairPrice catalog, tell me what is experimental, and ask me to confirm before starting. Then follow procedures/fairprice.md (cheat-sheet, site-structure and cart-rules). Use my already-signed-in Chrome profile on 127.0.0.1:9222 (or whichever browser mode I choose). One product at a time, at least 2 seconds apart, real clicks only. Stop before choosing a delivery slot, entering payment, or pressing Checkout/Continue.
+   ```
+
+   If the agent proposes another platform's catalog, say `switch catalog`. In your fork you may change the `cart-rules.md` status banner to your own status (for example "experimental, owner: <you>"); the safety boundary (below) stays unchanged.
 
    **First-run checklist** (you do these, not the agent):
    - Sign in yourself in the visible browser.
    - Confirm it is not a guest cart: a postal-code popup means you are a guest.
    - Confirm the delivery address shown is yours.
-   - Use your own store id, not `165` (the maintainer's); the [cheat sheet](cheat-sheet.md) shows the serviceable-area lookup.
+   - Use your own store id, not `165` (the maintainer's).
    - Stop and clear any OTP or CAPTCHA yourself.
-5. **Build your own catalog** from your FairPrice order history, using the review-page idea in [AGENTS.md's Catalog Changes Contract](../../AGENTS.md#catalog-changes-contract). The current catalog schema and validator expect Lazada-style `item_id`/`sku_id`; FairPrice identifies products by **article id** (`clientItemId`). Expect to adapt the schema or keep a separate FairPrice catalog file; do that as a small, reviewed change, not a rewrite.
 
 ## 3. Pick a browser connection
 
@@ -76,7 +82,7 @@ Good first contributions, in rough order of value:
 1. **Run the untested branches** listed in `site-structure.md` §9 and `cart-rules.md` (liquor hours, bulk popup, multi-seller deliveries, Empty cart behaviour with a *test* cart, unavailable-for-delivery banners) and report what you observed, with dates and a restored baseline.
 2. **Qualify the cart rules end to end** on a real small list: record the agent, model, browser mode, what was confirmed, and every deviation.
 3. **A FairPrice cart helper** analogous to `tools/cdp-cart.mjs` (scoped main-control reads, physical clicks, condition waits, Enter-commit for typed quantities, `GET $API/cart` confirmation, challenge detection). Keep it separate from the RedMart tool.
-4. **Catalog support for article ids** in the schema, validator, and dry-run, with tests, without breaking RedMart.
+4. **Tooling around FairPrice catalogs**: building one from your order history and a FairPrice price refresh. Schema and validation already exist; extend `tools/platforms/fairprice.mjs` rather than the RedMart module, and keep the RedMart output unchanged.
 5. **Corrections** when FairPrice changes its site: update `site-structure.md` with the date and what changed. The API paths are undocumented and may move.
 6. **Your own household's findings**, such as multi-store delivery behaviour, minimum order thresholds, or how marketplace items change slots.
 

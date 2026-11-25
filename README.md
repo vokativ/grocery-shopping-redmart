@@ -95,7 +95,7 @@ The project itself is free. Your AI service may have its own plan or usage costs
 
 ## 🏠 Set it up for your family once
 
-This project includes one family’s catalog as an example. Your agent can create yours from the RedMart orders you have already made.
+This project ships the maintainer's own family catalog (`grocery-catalog.yaml`) as a worked example. Your agent can create yours from the RedMart orders you have already made. Your catalog is saved as `grocery-catalog.local.yaml` (private, ignored by git, picked up automatically) so the bundled one stays untouched. If the bundled catalog really is yours, say so and the agent will update it instead. See [Fork it: platforms and catalogs](#fork-it-platforms-and-catalogs).
 
 Recent orders are a good starting point because they contain the products, pack sizes, and quantities your household actually chose. You review everything before it becomes part of your family catalog.
 
@@ -125,7 +125,7 @@ The same review page also supports small catalog updates. Ask the agent to inspe
 ```text
 Add useful products from my last RedMart order to the household catalog.
 Reuse the existing catalog review page, focus only on that order, and let me
-approve the candidates before you edit grocery-catalog.yaml.
+approve the candidates before you edit my household catalog.
 ```
 
 You can also say: `Compare today's order with my photo. Add missing family words or products, but show preference changes separately.` You should get one review page for the useful differences, not another review of every unchanged purchase. Buying a backup once does not silently make it the new default.
@@ -208,9 +208,40 @@ This does not need to run on your main computer. A spare Mac or Windows laptop c
 
 ## Using FairPrice or another browser setup
 
-FairPrice is **research only** here: the repository documents how its site behaves and holds an inactive cart design, but no tested FairPrice cart tool or catalog. If you shop at FairPrice, fork the project and start with the [FairPrice fork guide](docs/fairprice/fork-guide.md); it says what exists, what you would build, the safety boundary, and what is worth contributing back. There is also a [one-page cheat sheet on FairPrice page structure and the plus/minus stepper](docs/fairprice/cheat-sheet.md).
+FairPrice is **experimental** here: the repository documents how its site behaves, holds an inactive cart design, and supports a FairPrice catalog format (schema, validation, and an example), but there is no tested FairPrice cart tool. If you shop at FairPrice, fork the project and start with the [FairPrice fork guide](docs/fairprice/fork-guide.md); it says what exists, what you would build, the safety boundary, and what is worth contributing back. There is also a [one-page cheat sheet on FairPrice page structure and the plus/minus stepper](docs/fairprice/cheat-sheet.md).
 
 Which browser the agent drives matters more than which retailer. [Browser connection modes](docs/browser-connections.md#connection-modes-at-a-glance) explains the options: the agent app's built-in browser, a relay/extension on your normal Chrome, a **dedicated Chrome profile with debugging on `127.0.0.1`** (a separate, signed-in profile that any agent can control, with copy-paste commands for Linux, macOS, and Windows), OS accessibility, or screenshot-based computer use. If you are not technical, paste the short prompt in that guide and let your agent tell you which option works on your computer.
+
+## Fork it: platforms and catalogs
+
+The project supports one catalog per household and a catalog can belong to a different retailer (a *platform*): `redmart` is active and tested, `fairprice` is experimental. A catalog says which platform it is for in `store.platform` (missing means `redmart`).
+
+```text
+AGENTS.md                          rules for the agent, starting with the platform and catalog gate
+procedures/fairprice.md            experimental FairPrice stub
+grocery-catalog.yaml               the maintainer's personal RedMart catalog (protected)
+price-history.csv                  the maintainer's price history (protected)
+grocery-catalog.local.yaml         YOUR catalog (git-ignored, used automatically when present)
+catalogs/<platform>/<handle>.yaml  optional shared catalogs; must declare store.platform
+examples/redmart.catalog.yaml      small RedMart example to start from
+examples/fairprice.catalog.yaml    FairPrice example
+```
+
+**Do not edit the maintainer's catalog or price history.** They are one household's real data and the project's own regression baseline, so changing them makes later updates conflict. Put your catalog in `grocery-catalog.local.yaml` (stays on your computer) or, if you want to share it, `catalogs/<platform>/<handle>.yaml`. Files named `*.local.yaml`, `*.local.csv`, and `.grocery-selection.local.json` are never committed. Price history for any other catalog goes to `<your-catalog>.price-history.local.csv` next to it.
+
+Start from an example:
+
+```bash
+cp examples/redmart.catalog.yaml grocery-catalog.local.yaml
+node tools/validate-catalog.mjs --catalog grocery-catalog.local.yaml
+node tools/dry-run.mjs --catalog grocery-catalog.local.yaml --file examples/grocery-list.txt
+```
+
+Replace the example products with your own (your agent can do that from your order history; see above). The RedMart example is a trimmed real subset of the maintainer's catalog, and `examples/fairprice.catalog.yaml` shows the FairPrice shape; see the [FairPrice fork guide](docs/fairprice/fork-guide.md) before using it.
+
+**First run.** The first time you say `update my cart`, the agent lists the catalogs it found and asks which platform and catalog to use. Your answer is remembered in `.grocery-selection.local.json`, so it does not ask again. Say `switch catalog` (or name another platform) whenever you want to change. A FairPrice catalog is experimental: the agent tells you so and asks for your explicit confirmation before it follows the FairPrice procedure. These rules live in the [platform and catalog gate](AGENTS.md#platform-and-catalog-gate), and [`catalogs/README.md`](catalogs/README.md) explains the shared catalog folder.
+
+**Merging upstream stays painless** because your own data lives in files the project never ships: pull as usual, and the protected files (`grocery-catalog.yaml`, `price-history.csv`, `experiments/fairprice/backup-catalog.yaml`) change only upstream. A check in CI rejects pull requests that touch them. Developers: see [Platforms and catalogs](docs/developer-guide.md#platforms-and-catalogs).
 
 ## Want to improve it or add another retailer?
 
