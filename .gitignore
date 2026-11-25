@@ -11,3 +11,6 @@ node_modules/
 .env
 .env.*
 !.env.example
+*.local.yaml
+*.local.csv
+.grocery-selection.local.json

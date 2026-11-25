@@ -20,3 +20,29 @@ jobs:
       - run: npm test
       - run: npm run validate
       - run: npm run dry-run -- --file examples/grocery-list.txt
+      - name: Validate example catalogs
+        run: |
+          node tools/validate-catalog.mjs --catalog examples/redmart.catalog.yaml
+          node tools/validate-catalog.mjs --catalog examples/fairprice.catalog.yaml
+      - name: Validate shared catalogs
+        run: |
+          shopt -s nullglob
+          status=0
+          for file in catalogs/*/*.yaml; do
+            node tools/validate-catalog.mjs --catalog "$file" || status=1
+          done
+          exit $status
+
+  protected-paths:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch base branch
+        run: git fetch origin "${{ github.base_ref }}"
+      - name: Check protected paths
+        run: bash scripts/check-protected-paths.sh "origin/${{ github.base_ref }}" HEAD
