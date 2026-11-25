@@ -2,9 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
 import { allocateBasket, loadCatalog, matchList, validateCatalog } from "../tools/catalog.mjs";
 
 const run = promisify(execFile);
+
+const ROOT_CATALOG = new URL("../grocery-catalog.yaml", import.meta.url);
+// The CLI tests resolve the catalog through the environment so a local selection can never change them.
+const DRY_RUN_ENV = { ...process.env, GROCERY_CATALOG: fileURLToPath(ROOT_CATALOG) };
 
 // Members deliberately declare their ranks out of order and carry distinct products, so a
 // regression that picks the wrong rank or attaches the wrong member's product is visible.
@@ -47,12 +52,12 @@ const basketCatalog = () => ({
 const allocationOf = (result) => result.selections.map((selection) => [selection.item_id, selection.quantity]);
 
 test("the repository catalog is valid", async () => {
-  const catalog = await loadCatalog();
+  const catalog = await loadCatalog(ROOT_CATALOG);
   assert.deepEqual(validateCatalog(catalog), []);
 });
 
 test("specific apple and cheese aliases preserve meaning without promoting generic ranks", async () => {
-  const catalog = await loadCatalog();
+  const catalog = await loadCatalog(ROOT_CATALOG);
   const [generic, green, cheddar, cheese, emmental] = matchList(catalog,
     ["apples", "green apples", "cheddar slices", "sliced cheese", "emmental slices"]);
   assert.match(generic.selections[0].product, /Granny Smith/);
@@ -75,7 +80,7 @@ test("specific apple and cheese aliases preserve meaning without promoting gener
 
 test("a rank-restricted alias selects its non-rank-1 product and keeps all candidates visible", async () => {
   // In-memory fixture: re-add a red apple fallback and restrict the explicit alias to it.
-  const catalog = structuredClone(await loadCatalog());
+  const catalog = structuredClone(await loadCatalog(ROOT_CATALOG));
   const apples = catalog.items.find((item) => item.id === "apples");
   apples.aliases.push("red apples");
   apples.alias_product_ranks["red apples"] = [2];
@@ -93,7 +98,7 @@ test("a rank-restricted alias selects its non-rank-1 product and keeps all candi
 });
 
 test("local discovery finds secondary titles and alternate wording without selecting substitutions", async () => {
-  const catalog = await loadCatalog();
+  const catalog = await loadCatalog(ROOT_CATALOG);
   const [cheddar, soap, absent] = matchList(catalog, ["shredded cheddar cheese", "liquid hand soap", "zzzzzz"]);
   for (const result of [cheddar, soap, absent]) {
     assert.equal(result.matched, false);
@@ -133,11 +138,11 @@ test("alias restrictions validate ownership, normalized uniqueness and existing 
 
 test("dry-run text and JSON expose restrictions and recommendation-only misses", async () => {
   const cwd = new URL("..", import.meta.url);
-  const { stdout } = await run(process.execPath, ["tools/dry-run.mjs", "cheddar slices, red apples, shredded cheddar cheese"], { cwd });
+  const { stdout } = await run(process.execPath, ["tools/dry-run.mjs", "cheddar slices, red apples, shredded cheddar cheese"], { cwd, env: DRY_RUN_ENV });
   assert.match(stdout, /cheddar slices: only ranks 2 satisfy this alias/);
   assert.match(stdout, /requires confirmation; no selection made/);
   assert.match(stdout, /Rank 2: RedMart Australian Sliced Cheddar/);
-  const json = await run(process.execPath, ["tools/dry-run.mjs", "--json", "cheddar slices, red apples, shredded cheddar cheese"], { cwd });
+  const json = await run(process.execPath, ["tools/dry-run.mjs", "--json", "cheddar slices, red apples, shredded cheddar cheese"], { cwd, env: DRY_RUN_ENV });
   const [slices, red, cheddar] = JSON.parse(json.stdout);
   assert.equal(slices.selections[0].eligible_candidates[0].rank, 2);
   assert.equal(red.matched, false);
@@ -148,7 +153,7 @@ test("dry-run text and JSON expose restrictions and recommendation-only misses",
 });
 
 test("matching uses exact normalized aliases and quantity overrides", async () => {
-  const catalog = await loadCatalog();
+  const catalog = await loadCatalog(ROOT_CATALOG);
   const results = matchList(catalog, ["EGGS", "2 watermelon", "unknown treat"]);
   assert.equal(results.length, 3);
   assert.equal(results[0].matched, true);
@@ -255,7 +260,7 @@ test("matching preserves rank-sorted approved candidates for ordinary and basket
 });
 
 test("an explicit basket quantity overrides the total and gives the remainder to earlier members", async () => {
-  const catalog = await loadCatalog();
+  const catalog = await loadCatalog(ROOT_CATALOG);
   const [three, one] = matchList(catalog, ["3 sodaly", "1 x sodaly"]);
   assert.deepEqual(
     allocationOf(three),
@@ -462,7 +467,7 @@ test("the dry run prints member rows, ranked approved candidates, and counts inp
   const { stdout } = await run(process.execPath, [
     "tools/dry-run.mjs",
     "Sodaly, eggs, unknown thing, 0 sodaly"
-  ], { cwd: new URL("..", import.meta.url) });
+  ], { cwd: new URL("..", import.meta.url), env: DRY_RUN_ENV });
 
   assert.match(stdout, /availability unverified/);
   assert.match(stdout, /remedy_sodaly_mix → remedy_sodaly_guava/, "member rows must be attributed to their basket");
@@ -488,8 +493,8 @@ test("the dry run JSON output exposes a rank-sorted item/SKU manifest", async ()
     "tools/dry-run.mjs",
     "--json",
     "eggs"
-  ], { cwd: new URL("..", import.meta.url) });
-  assert.equal(stderr, "");
+  ], { cwd: new URL("..", import.meta.url), env: DRY_RUN_ENV });
+  assert.match(stderr, /^Catalog: grocery-catalog\.yaml \(source: (?:env|flag)\)\n$/, "JSON stdout stays pure; the catalog line goes to stderr");
 
   const [result] = JSON.parse(stdout);
   const manifest = result.selections.flatMap((selection) =>
@@ -508,7 +513,7 @@ test("the dry run supports JSON file input and reports malformed invocations cle
     "--json",
     "--file",
     "examples/grocery-list.txt"
-  ], { cwd });
+  ], { cwd, env: DRY_RUN_ENV });
   assert.deepEqual(JSON.parse(stdout).map(({ input }) => input), [
     "eggs",
     "2 watermelon",
@@ -522,7 +527,7 @@ test("the dry run supports JSON file input and reports malformed invocations cle
     [["--not-an-option", "eggs"], /Unknown option: --not-an-option/]
   ]) {
     await assert.rejects(
-      run(process.execPath, ["tools/dry-run.mjs", ...args], { cwd }),
+      run(process.execPath, ["tools/dry-run.mjs", ...args], { cwd, env: DRY_RUN_ENV }),
       (error) => {
         assert.match(error.stderr, message);
         assert.match(error.stderr, /Usage: npm run dry-run/);

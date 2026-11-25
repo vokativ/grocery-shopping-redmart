@@ -6,13 +6,15 @@ import { writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { loadCatalog, validateCatalog } from "./catalog.mjs";
+import { platformOf } from "./platforms/index.mjs";
+import { describeCatalog, resolveCatalog } from "./resolve-catalog.mjs";
 
 export const USER_AGENT =
   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0 Safari/537.36";
 const MAX_CONSECUTIVE_CHALLENGES = 2;
 const REQUEST_TIMEOUT_MS = 30_000;
 
-const USAGE = `Usage: node tools/fetch-redmart-prices.mjs --out <snapshot.json> [--catalog grocery-catalog.yaml] [--delay-min 3] [--delay-max 5]`;
+const USAGE = `Usage: node tools/fetch-redmart-prices.mjs --out <snapshot.json> [--catalog <path>] [--delay-min 3] [--delay-max 5]`;
 
 function parseArgs(argv) {
   const args = { out: null, catalog: undefined, delayMin: 3, delayMax: 5 };
@@ -314,9 +316,21 @@ async function main() {
     process.exit(1);
   }
 
-  const catalog = await loadCatalog(args.catalog);
+  let resolved;
+  try {
+    resolved = resolveCatalog({ flag: args.catalog });
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+  const catalog = await loadCatalog(resolved.path);
   const errors = validateCatalog(catalog);
   if (errors.length) throw new Error(`Catalog is invalid:\n${errors.join("\n")}`);
+  if (platformOf(catalog) !== "redmart") {
+    console.error(`Error: this tool only fetches RedMart prices; ${describeCatalog(resolved)} declares platform "${platformOf(catalog)}"`);
+    process.exit(1);
+  }
+  console.log(`Catalog: ${describeCatalog(resolved)}`);
 
   // The first SIGINT/SIGTERM stops the run and still writes the partial snapshot; a second one kills the process.
   const controller = new AbortController();

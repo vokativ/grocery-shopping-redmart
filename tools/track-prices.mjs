@@ -1,21 +1,29 @@
 #!/usr/bin/env node
-// Record a RedMart price snapshot: append to price-history.csv and refresh observed_price_sgd /
-// observed_price_date in grocery-catalog.yaml, editing YAML nodes in place so nothing else changes.
+// Record a RedMart price snapshot: append to the catalog's price history and refresh observed_price_sgd /
+// observed_price_date in the active catalog, editing YAML nodes in place so nothing else changes.
 import { readFile, rename, rm, writeFile } from "node:fs/promises";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 import { Scalar, parseDocument } from "yaml";
 import { isCalendarDate, mergePriceHistory, readPriceHistory, writePriceHistory } from "./price-history.mjs";
+import { platformOf } from "./platforms/index.mjs";
+import { REPO_ROOT, describeCatalog, historyPathFor, isExampleCatalog, resolveCatalog } from "./resolve-catalog.mjs";
 
-const USAGE = `Usage: node tools/track-prices.mjs --redmart <snapshot.json> [--catalog grocery-catalog.yaml]
-         [--history price-history.csv] [--date YYYY-MM-DD] [--dry-run]`;
+const USAGE = `Usage: node tools/track-prices.mjs --redmart <snapshot.json> [--catalog <path>]
+         [--history <price-history.csv>] [--date YYYY-MM-DD] [--dry-run]
+Without --catalog the active catalog is used (see: node tools/catalogs.mjs current);
+without --history the history file is derived from the catalog.`;
 
 // These options reproduce the repository catalog byte for byte when nothing changed.
 const STRINGIFY_OPTIONS = { lineWidth: 0, flowCollectionPadding: false };
-const DEFAULT_CATALOG = new URL("../grocery-catalog.yaml", import.meta.url);
-const DEFAULT_HISTORY = new URL("../price-history.csv", import.meta.url);
+
+/** Price tracking only supports real RedMart catalogs: examples must stay frozen and other platforms have no snapshot format. */
+export function assertTrackable(catalogPath, platform, root = REPO_ROOT) {
+  if (platform !== "redmart") throw new Error(`price tracking supports only redmart catalogs; ${catalogPath} declares platform "${platform}"`);
+  if (isExampleCatalog(catalogPath, root)) throw new Error(`price tracking refuses example catalogs (${catalogPath}); use your own catalog`);
+}
 
 function parseArgs(argv) {
-  const args = { redmart: null, catalog: fileURLToPath(DEFAULT_CATALOG), history: fileURLToPath(DEFAULT_HISTORY), date: null, dryRun: false };
+  const args = { redmart: null, catalog: undefined, history: undefined, date: null, dryRun: false };
   for (let index = 0; index < argv.length; index += 1) {
     const flag = argv[index];
     if (flag === "--dry-run") args.dryRun = true;
@@ -189,16 +197,34 @@ async function main() {
     process.exit(1);
   }
 
+  let resolved;
+  try {
+    resolved = resolveCatalog({ flag: args.catalog });
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+  const catalogPath = resolved.path;
+  const historyPath = args.history ?? historyPathFor(catalogPath);
+
+  const source = await readFile(catalogPath, "utf8");
+  const doc = parseDocument(source);
+  if (doc.errors.length) throw new Error(`Catalog YAML is invalid:\n${doc.errors.join("\n")}`);
+  try {
+    assertTrackable(catalogPath, platformOf(doc.toJS()));
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+  console.log(`Catalog: ${describeCatalog(resolved)}`);
+  console.log(`History: ${historyPath}`);
+
   const snapshot = JSON.parse(await readFile(args.redmart, "utf8"));
   if (!Array.isArray(snapshot)) throw new Error(`${args.redmart} must contain a JSON array`);
   const date = args.date ?? snapshotDate(snapshot);
 
-  const source = await readFile(args.catalog, "utf8");
-  const doc = parseDocument(source);
-  if (doc.errors.length) throw new Error(`Catalog YAML is invalid:\n${doc.errors.join("\n")}`);
-
   // Read and validate the history and compute every output before touching any file.
-  const existingHistory = readPriceHistory(args.history);
+  const existingHistory = readPriceHistory(historyPath);
   const result = applySnapshot(doc, snapshot, date);
   const merged = mergePriceHistory(existingHistory, result.historyRows, { replaceDateStore: true });
   const catalogOutput = doc.toString(STRINGIFY_OPTIONS);
@@ -208,17 +234,17 @@ async function main() {
   // Stage both files next to their targets, then rename, so a write failure cannot leave them out of sync.
   const staged = [];
   try {
-    const historyTemp = `${args.history}.tmp-${process.pid}`;
+    const historyTemp = `${historyPath}.tmp-${process.pid}`;
     staged.push(historyTemp);
     writePriceHistory(historyTemp, merged);
     let catalogTemp = null;
     if (catalogOutput !== source) {
-      catalogTemp = `${args.catalog}.tmp-${process.pid}`;
+      catalogTemp = `${catalogPath}.tmp-${process.pid}`;
       staged.push(catalogTemp);
       await writeFile(catalogTemp, catalogOutput);
     }
-    await rename(historyTemp, args.history);
-    if (catalogTemp) await rename(catalogTemp, args.catalog);
+    await rename(historyTemp, historyPath);
+    if (catalogTemp) await rename(catalogTemp, catalogPath);
   } finally {
     await Promise.all(staged.map((path) => rm(path, { force: true })));
   }

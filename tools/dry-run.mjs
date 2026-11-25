@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import { readFile } from "node:fs/promises";
 import { loadCatalog, matchList, validateCatalog } from "./catalog.mjs";
+import { describeCatalog, resolveCatalog } from "./resolve-catalog.mjs";
 
-const USAGE = `Usage: npm run dry-run -- [--json] "eggs, 2 watermelon"
-   or: npm run dry-run -- [--json] --file examples/grocery-list.txt`;
+const USAGE = `Usage: npm run dry-run -- [--json] [--catalog <path>] "eggs, 2 watermelon"
+   or: npm run dry-run -- [--json] [--catalog <path>] --file examples/grocery-list.txt`;
 
 function parseArgs(argv) {
   let file = null;
+  let catalog = null;
   let json = false;
   const list = [];
 
@@ -21,6 +23,12 @@ function parseArgs(argv) {
       if (value === undefined || value.startsWith("--")) throw new Error("--file requires a path");
       file = value;
       index += 1;
+    } else if (arg === "--catalog") {
+      const value = argv[index + 1];
+      if (catalog !== null) throw new Error("--catalog may only be specified once");
+      if (value === undefined || value.startsWith("--")) throw new Error("--catalog requires a path");
+      catalog = value;
+      index += 1;
     } else if (arg.startsWith("--")) {
       throw new Error(`Unknown option: ${arg}`);
     } else {
@@ -30,7 +38,7 @@ function parseArgs(argv) {
 
   if (file !== null && list.length > 0) throw new Error("--file cannot be combined with grocery list text");
   if (file === null && !list.join(" ").trim()) throw new Error("Missing grocery list input");
-  return { file, json, list: list.join(" ") };
+  return { file, catalog, json, list: list.join(" ") };
 }
 
 let args;
@@ -41,7 +49,16 @@ try {
   process.exit(1);
 }
 
-const catalog = await loadCatalog();
+let resolved;
+try {
+  resolved = resolveCatalog({ flag: args.catalog ?? undefined });
+} catch (error) {
+  console.error(`Error: ${error.message}`);
+  process.exit(1);
+}
+// --json stdout stays a bare array, so the catalog line goes to stderr there.
+(args.json ? console.error : console.log)(`Catalog: ${describeCatalog(resolved)}`);
+const catalog = await loadCatalog(resolved.path);
 const errors = validateCatalog(catalog);
 if (errors.length) throw new Error(`Catalog is invalid:\n${errors.join("\n")}`);
 const input = args.file ? await readFile(args.file, "utf8") : args.list;

@@ -1,7 +1,10 @@
 import { readFile } from "node:fs/promises";
 import { parse } from "yaml";
+import { platformOf, platforms } from "./platforms/index.mjs";
+import { CANONICAL_URL } from "./platforms/redmart.mjs";
 
-export const CANONICAL_URL = /^https:\/\/www\.lazada\.sg\/products\/i(\d+)-s(\d+)\.html$/;
+export { CANONICAL_URL };
+
 const QUANTITY_PREFIX = /^(\d+)\s+(?:x\s+)?(.+)$/i;
 const QUANTITY_SHAPED_ALIAS = /^\d+\s/;
 
@@ -19,10 +22,15 @@ export function validateCatalog(catalog) {
   const errors = [];
   const itemIds = new Set();
   const basketIds = new Set();
-  const pairs = new Set();
+  const ctx = { errors, seenIdentities: new Set() };
   const aliasOwners = new Map();
 
   if (!catalog || typeof catalog !== "object") return ["catalog must be a YAML object"];
+  const platformName = platformOf(catalog);
+  if (!Object.hasOwn(platforms, platformName)) {
+    return [`store.platform "${platformName}" is not supported; supported: ${Object.keys(platforms).join(", ")}`];
+  }
+  const platform = platforms[platformName];
   if (!Number.isInteger(catalog.catalog_version)) errors.push("catalog_version must be an integer");
   if (!Array.isArray(catalog.items) || catalog.items.length === 0) {
     errors.push("items must be a non-empty array");
@@ -78,17 +86,7 @@ export function validateCatalog(catalog) {
       else if (ranks.has(product.rank)) errors.push(`${productAt}.rank duplicates rank ${product.rank}`);
       else ranks.add(product.rank);
 
-      const itemId = String(product?.item_id ?? "");
-      const skuId = String(product?.sku_id ?? "");
-      if (!/^\d+$/.test(itemId)) errors.push(`${productAt}.item_id must contain digits only`);
-      if (!/^\d+$/.test(skuId)) errors.push(`${productAt}.sku_id must contain digits only`);
-      const match = typeof product?.canonical_url === "string" && product.canonical_url.match(CANONICAL_URL);
-      if (!match) errors.push(`${productAt}.canonical_url is not canonical`);
-      else if (match[1] !== itemId || match[2] !== skuId) errors.push(`${productAt}.canonical_url does not match item_id and sku_id`);
-
-      const pair = `${itemId}:${skuId}`;
-      if (pairs.has(pair)) errors.push(`${productAt} duplicates item/SKU pair ${pair}`);
-      else pairs.add(pair);
+      platform.validateProduct(product, productAt, ctx);
     });
 
     if (item.alias_product_ranks !== undefined) {
@@ -169,7 +167,7 @@ export function allocateBasket(basket, totalQuantity) {
     .filter((allocation) => allocation.quantity > 0);
 }
 
-function buildSelection(item, quantity, alias) {
+function buildSelection(item, quantity, alias, platform) {
   const candidates = item.preferred_products.toSorted((a, b) => a.rank - b.rank);
   const restriction = Object.entries(item.alias_product_ranks ?? {})
     .find(([key]) => normalizeAlias(key) === alias)?.[1];
@@ -181,7 +179,7 @@ function buildSelection(item, quantity, alias) {
     product: product.title,
     pack_size: product.pack_size ?? "—",
     quantity,
-    canonical_url: product.canonical_url,
+    ...platform.selectionFields(product),
     candidates,
     ...(restriction ? { eligible_candidates: eligible } : {})
   };
@@ -227,6 +225,11 @@ export function suggestCatalogItems(catalog, words, limit = 3) {
  * `selections[0]` instead. This shape change is why `catalog_version` moved from 1 to 2.
  */
 export function matchList(catalog, lines) {
+  const platformName = platformOf(catalog);
+  if (!Object.hasOwn(platforms, platformName)) {
+    throw new Error(`store.platform "${platformName}" is not supported; run validateCatalog first`);
+  }
+  const platform = platforms[platformName];
   const itemsById = new Map(catalog.items.map((item) => [item.id, item]));
   const aliasMap = new Map();
   for (const item of catalog.items) {
@@ -258,7 +261,7 @@ export function matchList(catalog, lines) {
         matched: true,
         item_id: hit.entry.id,
         quantity,
-        selections: [buildSelection(hit.entry, quantity, words)]
+        selections: [buildSelection(hit.entry, quantity, words, platform)]
       };
     }
 
@@ -268,7 +271,7 @@ export function matchList(catalog, lines) {
       if (!member) {
         throw new Error(`household basket ${hit.entry.id} references unknown item ${allocation.item}; run validateCatalog first`);
       }
-      return buildSelection(member, allocation.quantity);
+      return buildSelection(member, allocation.quantity, undefined, platform);
     });
     return {
       input: line,
