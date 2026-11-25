@@ -49,6 +49,74 @@ Offer choices in terms of what the user must enable and what the agent gains:
 
 Do not frame CDP as a switch to add casually to a user's normal Chrome shortcut. State that a dedicated profile has separate cookies and sign-in, keep its endpoint on loopback, and let the user choose the relay or accessibility route when preserving the current household session matters more than protocol precision.
 
+## Connection modes at a glance
+
+Pick the first row that works on your computer. All modes must drive a **visible** browser window that you are signed in on; none may be headless.
+
+| Mode | What it is | Good for | Cost / catch |
+|---|---|---|---|
+| 1. Built-in browser | The agent app's own browser (e.g. ChatGPT desktop Browser) | Non-technical users; nothing to install | Only some apps have one; sign in once inside it |
+| 2. Browser relay / extension | An extension in **your normal Chrome** lets the agent use tabs you are already signed in on (OMP Browser Relay, Claude in Chrome, Playwright MCP extension) | Keeping your existing sessions with no profile changes | Per-site permission prompts; must support your exact browser |
+| 3. **Dedicated Chrome profile with loopback debugging** | A separate Chrome profile, started once with `--remote-debugging-port`, that keeps its own sign-ins between runs and listens on `127.0.0.1` only | Agents with no browser or extension (Codex CLI, Claude Code without the extension, scripts such as `tools/cdp-cart.mjs`); most exact page state | You sign in once inside that profile; it is a different session from your everyday Chrome; the debug port gives full browser control to any local program, so use that profile for grocery sites only |
+| 4. OS accessibility | The agent reads and presses native controls via macOS Accessibility, Windows UI Automation, or Linux AT-SPI | Browsers you cannot attach to otherwise (Firefox, Safari) | Page state can be incomplete; needs OS permission |
+| 5. Computer use (screenshots) | The agent looks at the screen and moves the mouse | Last resort; any browser | Slowest, most error-prone; confirm every change with a cart read |
+
+**Browser recommendation.** Use **Google Chrome** (or another Chromium browser your connector explicitly supports) for modes 2 and 3. Firefox and Safari are possible only through modes 4 and 5, or a connector that documents them. Chrome 136+ ignores debugging flags on its default profile folder, so mode 3 always uses its own profile folder (below).
+
+### Recipe: dedicated Chrome profile with loopback debugging (mode 3)
+
+This is the setup the maintainer uses: a separate Chrome profile that stays signed in to the grocery sites and has debugging switched on, so any agent that can speak the Chrome DevTools Protocol (CDP) can drive it. It does not require OMP, a relay, or an extension.
+
+1. A profile with its own `--user-data-dir` is a separate Chrome instance; your everyday Chrome and its sign-ins are untouched.
+2. Start it. The folder is created on first launch; pick any path except Chrome's default one:
+
+   ```bash
+   # Linux
+   google-chrome --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 \
+     --user-data-dir="$HOME/.config/grocery-agent-chrome" https://cart.lazada.sg/cart
+
+   # macOS
+   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+     --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 \
+     --user-data-dir="$HOME/Library/Application Support/grocery-agent-chrome" https://cart.lazada.sg/cart
+   ```
+
+   ```powershell
+   # Windows (PowerShell)
+   & "C:\Program Files\Google\Chrome\Application\chrome.exe" `
+     --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 `
+     --user-data-dir="$env:LOCALAPPDATA\grocery-agent-chrome" https://cart.lazada.sg/cart
+   ```
+
+   For FairPrice use `https://www.fairprice.com.sg/cart` as the start URL.
+3. In that window, sign in to the retailer yourself. Cookies live in the profile folder, so later launches with the same `--user-data-dir` are usually still signed in. Complete OTP/CAPTCHA yourself; never paste them or your password into chat.
+4. Check the endpoint is up (read-only): `curl http://127.0.0.1:9222/json/version` should print JSON containing `Browser` and `webSocketDebuggerUrl`. A reachable endpoint proves the protocol works, not that the right tab is signed in.
+5. Tell the agent: "Use the Chrome profile already running with debugging on 127.0.0.1:9222; do not start another browser." Verify with `curl http://127.0.0.1:9222/json/list` (read-only; lists open tabs of any site, including FairPrice). `node tools/cdp-cart.mjs tabs` lists Lazada tabs only, so it shows nothing for FairPrice (`--endpoint` changes the port).
+
+Rules for this mode:
+
+- **Loopback only.** Never use `--remote-debugging-address=0.0.0.0`, forward the port, or run it on a shared machine. Anything running as your user can control a browser with an open debug port, including its signed-in sessions.
+- **Single purpose.** Use that profile only for grocery shopping; do not install other extensions or browse unrelated sites in it.
+- **Visible and awake.** Keep the window open and in the foreground while the agent works, with the computer awake, online, and unlocked. If you start clicking, the agent should pause.
+- **Stop it when done** if you will not shop again soon: close that Chrome window. The debug port closes with it; the saved sign-in stays in the profile folder.
+- **Separate sessions.** The relay (mode 2) uses your everyday profile's cookies; this profile has its own. Switching modes may mean signing in again.
+
+### If you are not familiar with this
+
+You do not need to understand CDP. Paste this to your agent and let it walk you through the options your own setup offers:
+
+```text
+Read README.md, AGENTS.md and docs/browser-connections.md in this project.
+Tell me which browser connection modes you can use on this computer (built-in
+browser, extension/relay, a Chrome profile with debugging on 127.0.0.1, OS
+accessibility, or computer use). Check read-only what is already running, then
+recommend the least disruptive one and tell me exactly what I need to click or
+run. Do not install anything or restart my browser without asking. Do not
+touch checkout, delivery slots, or payment.
+```
+
+If your agent can only reply in chat and cannot see your screen, ask it for the mode 3 recipe above: it is three copy-and-paste steps and a sign-in.
+
 ## Host discovery and remote use
 
 ### OS-specific structured control

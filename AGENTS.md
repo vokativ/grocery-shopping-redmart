@@ -97,7 +97,7 @@ Catalog modifications (initial seeding, order-history updates, or single additio
 6. **Price refresh:** RedMart only by default. Run `node tools/fetch-redmart-prices.mjs --out <snapshot.json>` then `node tools/track-prices.mjs --redmart <snapshot.json>`. It updates `observed_price_sgd`/`observed_price_date` and appends `price-history.csv`; no review page is needed, it never touches the cart, and it stops on a Baxia/punish challenge (hand it to the human). Report notable price rises. Refresh FairPrice prices or run the FairPrice comparison only when the user explicitly asks for it. See [Price tracking](docs/developer-guide.md#price-tracking).
 7. **Boundaries:** never order, pick delivery slots, or pay during catalog work. Alcohol can be catalogued normally.
 
-FairPrice rules in `docs/fairprice/cart-rules.md` are **INACTIVE**; never use them unless the user explicitly reactivates FairPrice.
+FairPrice rules in `docs/fairprice/cart-rules.md` are **INACTIVE**; never use them unless the user explicitly reactivates FairPrice. If the user (for example a forked household) wants to use FairPrice, read [docs/fairprice/fork-guide.md](docs/fairprice/fork-guide.md) first: it states what exists and what does not (no FairPrice browser tooling or catalog), and the safety boundary stays unchanged.
 
 ## Cart Request Interpretation
 

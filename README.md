@@ -2,6 +2,8 @@
 
 Turn your family grocery list into a prepared RedMart cart—with the products you already know and buy.
 
+Shop at FairPrice instead? Start with the [FairPrice fork guide](docs/fairprice/fork-guide.md).
+
 Send a whiteboard photo, dictate the list, or type it into the ChatGPT desktop app. Its built-in browser keeps the whole workflow in one app: the agent matches your family’s words to your usual groceries, lets each product page finish loading, checks availability, fills the cart, and verifies the exact products and quantities—including items collapsed into promotion groups.
 
 **You stay in control.** The agent stops with the cart ready. You choose the delivery slot, pay, and place the order yourself.
@@ -203,6 +205,12 @@ Your catalog and grocery-list photos describe household preferences. Keep the pr
 ## Use an old laptop if you like
 
 This does not need to run on your main computer. A spare Mac or Windows laptop can act as the family grocery computer if it can run the ChatGPT desktop app, stays plugged in and awake, and remains logged into RedMart in the built-in browser. Keep a Windows host unlocked while it performs browser work.
+
+## Using FairPrice or another browser setup
+
+FairPrice is **research only** here: the repository documents how its site behaves and holds an inactive cart design, but no tested FairPrice cart tool or catalog. If you shop at FairPrice, fork the project and start with the [FairPrice fork guide](docs/fairprice/fork-guide.md); it says what exists, what you would build, the safety boundary, and what is worth contributing back. There is also a [one-page cheat sheet on FairPrice page structure and the plus/minus stepper](docs/fairprice/cheat-sheet.md).
+
+Which browser the agent drives matters more than which retailer. [Browser connection modes](docs/browser-connections.md#connection-modes-at-a-glance) explains the options: the agent app's built-in browser, a relay/extension on your normal Chrome, a **dedicated Chrome profile with debugging on `127.0.0.1`** (a separate, signed-in profile that any agent can control, with copy-paste commands for Linux, macOS, and Windows), OS accessibility, or screenshot-based computer use. If you are not technical, paste the short prompt in that guide and let your agent tell you which option works on your computer.
 
 ## Want to improve it or add another retailer?
 

@@ -47,7 +47,7 @@ The dry run is a developer and diagnostic tool. Normal household users on the pr
 - `tools/track-prices.mjs` — applies a RedMart snapshot to `observed_price_sgd`/`observed_price_date` and appends `price-history.csv`.
 - `tools/price-history.mjs` — read/merge/write module for `price-history.csv`.
 - `price-history.csv` — dated RedMart (and FairPrice reference) price observations; see [Price tracking](#price-tracking).
-- `docs/fairprice/` — experimental NTUC FairPrice research (site structure, private labels, catalog mapping, price comparison). `cart-rules.md` holds **inactive** rules: the household does not use FairPrice for carts.
+- `docs/fairprice/` — experimental NTUC FairPrice research (site structure, private labels, catalog mapping, price comparison). Start with [`fork-guide.md`](fairprice/fork-guide.md) for forkers and contributors. `cart-rules.md` holds **inactive** rules: the household does not use FairPrice for carts.
 - `experiments/fairprice/` — `catalog-mapping.yaml`, `fetch-prices.mjs` (price snapshot), `build-backup-catalog.mjs` (generates the reference `backup-catalog.yaml` of ranked FairPrice substitutes and its price-history rows), `compare.mjs` (RedMart vs FairPrice comparison) and dated `snapshots/`; not used by any shopping tool.
 
 ## Validation rules
